@@ -1,30 +1,1 @@
-package org.firstinspires.ftc.teamcode;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-/**
- * Created by aaronkbutler on 3/10/16.
- */
-public class OutreachTankDrive extends OpMode{
-
-    DcMotor RF,LF,RB,LB;
-
-    @Override
-    public void init() {
-        RF = hardwareMap.dcMotor.get("RF");
-        LF = hardwareMap.dcMotor.get("LF");
-        RB = hardwareMap.dcMotor.get("RB");
-        LB = hardwareMap.dcMotor.get("LB");
-        RF.setDirection(DcMotor.Direction.REVERSE);
-        RB.setDirection(DcMotor.Direction.REVERSE);
-    }
-
-    @Override
-    public void loop() {
-        RF.setPower(gamepad1.right_stick_y);
-        LF.setPower(gamepad1.left_stick_y);
-        RB.setPower(gamepad1.right_stick_y);
-        LB.setPower(gamepad1.left_stick_y);
-    }
-}
+package com.qualcomm.ftcrobotcontroller.opmodes;import com.qualcomm.robotcore.eventloop.opmode.OpMode;import com.qualcomm.robotcore.hardware.DcMotor;/** * Created by AlexBulanov on 3/10/16. */public class OutreachTankDrive extends OpMode{    DcMotor RF,LF,RB,LB;    @Override    public void init() {        RF = hardwareMap.dcMotor.get("RF");        LF = hardwareMap.dcMotor.get("LF");        RB = hardwareMap.dcMotor.get("RB");        LB = hardwareMap.dcMotor.get("LB");        RF.setDirection(DcMotor.Direction.REVERSE);        RB.setDirection(DcMotor.Direction.REVERSE);    }    @Override    public void loop() {        RF.setPower(gamepad1.right_stick_y);        LF.setPower(gamepad1.left_stick_y);        RB.setPower(gamepad1.right_stick_y);        LB.setPower(gamepad1.left_stick_y);    }}
