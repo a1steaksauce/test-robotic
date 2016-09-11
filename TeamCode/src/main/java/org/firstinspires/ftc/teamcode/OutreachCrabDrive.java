@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Created by aaronkbutler on 3/10/16.
  */
+@TeleOp(name="testBot: Teleop Crab", group="testBot")
+//@Disabled//uncommented to enable, comment to disable
 public class OutreachCrabDrive extends OpMode{
 
     DcMotor RF,LF,RB,LB;

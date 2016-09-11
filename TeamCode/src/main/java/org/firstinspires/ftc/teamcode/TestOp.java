@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Created by Eliezer Pearl on 9/9/2016.
  */
+@TeleOp(name="testBot: Teleop Tank 2", group="testBot")
+//@Disabled //uncommented to enable, comment to disable
 public class TestOp extends OpMode{
     final int DEAD_ZONE = 8; //Change this value through debugging
 
