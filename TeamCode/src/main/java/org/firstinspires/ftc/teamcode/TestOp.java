@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by Eliezer Pearl on 9/9/2016.
  */
 @TeleOp(name="testBot: Teleop Tank 2", group="testBot")
-//@Disabled //uncommented to enable, comment to disable
+//@Disabled //uncomment to disable, comment to enable
 public class TestOp extends OpMode{
     final int DEAD_ZONE = 8; //Change this value through debugging
 

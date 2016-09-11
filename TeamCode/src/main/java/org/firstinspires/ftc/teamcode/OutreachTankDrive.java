@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by aaronkbutler on 3/10/16.
  */
 @TeleOp(name="testBot: Telop Tank", group="testBot")
-//@Disabled //uncommented to enable, comment to disable
+//@Disabled //uncomment to disable, comment to enable
 public class OutreachTankDrive extends OpMode{
 
     DcMotor RF,LF,RB,LB;
