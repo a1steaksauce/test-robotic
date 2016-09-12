@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Created by aaronkbutler on 3/10/16.
  */
+@Autonomous(name = "Outreach: OutreachCrabDrive", group = "Outreach")
+@Disabled
 public class OutreachCrabDrive extends OpMode{
 
     DcMotor RF,LF,RB,LB;
-
     @Override
     public void init() {
         RF = hardwareMap.dcMotor.get("RF");
