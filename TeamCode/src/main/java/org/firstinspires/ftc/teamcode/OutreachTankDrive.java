@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Created by aaronkbutler on 3/10/16.
  */
+@TeleOp(name="testBot: Telop Tank", group="testBot")
+//@Disabled //uncomment to disable, comment to enable
 public class OutreachTankDrive extends OpMode{
 
     DcMotor RF,LF,RB,LB;
