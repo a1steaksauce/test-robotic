@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Created by aaronkbutler on 3/10/16.
  */
-@TeleOp(name="testBot: Telop Tank", group="testBot")
+@TeleOp(name="testBot: smelly op fank", group="testBot")
 //@Disabled //uncomment to disable, comment to enable
 public class OutreachTankDrive extends OpMode{
 
