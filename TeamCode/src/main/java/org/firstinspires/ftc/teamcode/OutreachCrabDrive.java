@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * Created by aaronkbutler on 3/10/16.
  */
-@TeleOp(name="TeleOp: Teleop Crab", group="TeleOp")
+@TeleOp(name="Crab Drive", group="TeleOp")
 //@Disabled//uncomment to disable, comment to enable
 public class OutreachCrabDrive extends OpMode{
 
