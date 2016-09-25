@@ -9,14 +9,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Created by aaronkbutler on 3/10/16.
  */
-@TeleOp(name="testBot: smelly op fank", group="testBot")
+@TeleOp(name="Tank Drive", group="TeleOp")
 //@Disabled //uncomment to disable, comment to enable
 public class OutreachTankDrive extends OpMode{
 
     DcMotor RF,LF,RB,LB;
-    Servo silly;
-
-
 
     @Override
     public void init() {
@@ -24,7 +21,6 @@ public class OutreachTankDrive extends OpMode{
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
-        silly = hardwareMap.servo.get("silly");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
     }
@@ -35,11 +31,5 @@ public class OutreachTankDrive extends OpMode{
         LF.setPower(gamepad1.left_stick_y);
         RB.setPower(gamepad1.right_stick_y);
         LB.setPower(gamepad1.left_stick_y);
-
-        if(gamepad1.a){
-            silly.setPosition(silly.getPosition()+0.1);
-        } else if(gamepad1.y){
-            silly.setPosition(silly.getPosition()-0.1);
-        }
     }
 }

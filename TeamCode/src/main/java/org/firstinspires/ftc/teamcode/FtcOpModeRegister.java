@@ -86,6 +86,8 @@ public class FtcOpModeRegister implements OpModeRegister {
        // manager.register("TestTable", DumbTankDrive.class);
         manager.register("AutonomousTestBench", AutonomousTestBench.class);
         manager.register("TestBenchDrive", TestBenchDrive.class);
+        manager.register("CrabDrive", OutreachCrabDrive.class);
+        manager.register("TankDrive", OutreachTankDrive.class);
 
     }
 }
