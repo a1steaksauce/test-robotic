@@ -82,6 +82,7 @@ public class FtcOpModeRegister implements OpModeRegister {
          * Any manual OpMode class registrations should go here.
          */
         manager.register("TestTable", DumbTankDrive.class);
+        manager.register("SICKASSMEMER", Sensors.class);
 
     }
 }
