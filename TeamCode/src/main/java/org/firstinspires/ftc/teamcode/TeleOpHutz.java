@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * Created by Eliezer Pearl on 9/9/2016.
  */
-@TeleOp(name="testBot: Teleop Tank 2", group="testBot")
+@TeleOp(name="mainBot: Teleop Tank 2")
 //@Disabled //uncomment to disable, comment to enable
-public class TestOp extends OpMode{
+public class TeleOpHutz extends OpMode{
     final int DEAD_ZONE = 8; //Change this value through debugging
 
     DcMotor topLeft; //All motor names are given based on location from a top down
@@ -18,7 +18,7 @@ public class TestOp extends OpMode{
     DcMotor botLeft;
     DcMotor botRight;
 
-    public TestOp(){  //just here, don't touch
+    public TeleOpHutz(){  //just here, don't touch
 
     }
 
