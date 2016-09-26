@@ -26,7 +26,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 /**
  * Created by alexbulanov on 9/15/16.
  */
-@TeleOp(name="TestBench TeleOp")
+@TeleOp(name="TestBenchDrive", group="TeleOp")
 public class TestBenchDrive extends OpMode {
 
     DcMotor left;

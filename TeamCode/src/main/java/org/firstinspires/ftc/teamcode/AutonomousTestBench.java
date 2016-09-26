@@ -9,7 +9,7 @@ package org.firstinspires.ftc.teamcode;
 /**
  * Created by alexbulanov on 9/15/16.
  */
-@Autonomous(name="TestBench Autonomous")
+@Autonomous(name="TestBench Autonomous", group="Autonomous")
 
 public class AutonomousTestBench extends LinearOpMode {
 
