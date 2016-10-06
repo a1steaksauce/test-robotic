@@ -24,6 +24,7 @@ public class TeleOpHutz extends LinearOpMode {
     DcMotor flywheel;//operates the gearbox
     /////////////////////////////////////////
     Servo buttonPush;//pushes buttons on beacon
+    Servo angler;
     /////////////////////////////////////////
     UltrasonicSensor us;
     ColorSensor lineTracker; //pointed at floor
@@ -37,10 +38,16 @@ public class TeleOpHutz extends LinearOpMode {
 
     @Override
     public void runOpMode() {  //Executed in a linear format
-        topLeft = hardwareMap.dcMotor.get("topL");        //sets code motors to point to
-        topRight = hardwareMap.dcMotor.get("topR");       //actual ones. use the names
-        botLeft = hardwareMap.dcMotor.get("botL");        //in config as the string vals
-        botRight = hardwareMap.dcMotor.get("botR");
+        topLeft = hardwareMap.dcMotor.get("topLeft");        //sets code motors to point to
+        topRight = hardwareMap.dcMotor.get("topRight");       //actual ones. use the names
+        botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
+        botRight = hardwareMap.dcMotor.get("botRight");
+        flywheel = hardwareMap.dcMotor.get("flywheel");
+        buttonPush = hardwareMap.servo.get("buttonPush");
+        angler = hardwareMap.servo.get("angler");
+        us = hardwareMap.ultrasonicSensor.get("us");
+        lineTracker = hardwareMap.colorSensor.get("lineTracker");
+        beaconDetector = hardwareMap.colorSensor.get("beaconDetector");
 
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         topRight.setDirection(DcMotor.Direction.REVERSE); //left motors are backwards
@@ -74,6 +81,14 @@ public class TeleOpHutz extends LinearOpMode {
             while (gamepad1.right_bumper) {
                 if(buttonPush.getPosition() != -1)
                     buttonPush.setPosition(-1); //or 1... debug
+            }
+            if (gamepad1.x) {
+                if (!(angler.getPosition() == 1))
+                    angler.setPosition(angler.getPosition()+0.05);
+            }
+            if (gamepad1.a) {
+                if (!(angler.getPosition() == -1))
+                    angler.setPosition(angler.getPosition()-0.05);
             }
             buttonPush.setPosition(0.5);
 
