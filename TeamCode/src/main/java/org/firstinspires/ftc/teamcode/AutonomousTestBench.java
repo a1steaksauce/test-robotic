@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -9,7 +9,7 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 /**
  * Created by alexbulanov on 9/15/16.
  */
-@Autonomous(name="TestBench Autonomous")
+@Autonomous(name="TestBench Autonomous", group="Autonomous")
 
 public class AutonomousTestBench extends LinearOpMode {
 
