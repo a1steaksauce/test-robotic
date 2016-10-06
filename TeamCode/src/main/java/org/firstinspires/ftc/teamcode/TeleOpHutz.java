@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 @TeleOp(name="mainBot: Teleop Tank 2")
 //@Disabled //uncomment to disable, comment to enable
 public class TeleOpHutz extends LinearOpMode {
+
     final double DEAD_ZONE = 0.08; //Change this value through debugging
 
     DcMotor topLeft; //All motor names are given based on location from a top down
@@ -22,6 +23,13 @@ public class TeleOpHutz extends LinearOpMode {
     DcMotor botLeft;
     DcMotor botRight;
     DcMotor flywheel;//operates the gearbox
+    public void setZero(){
+        flywheel.setPower(0);
+        topLeft.setPower(0);
+        topRight.setPower(0);
+        botLeft.setPower(0);
+        botRight.setPower(0);
+    }
     /////////////////////////////////////////
     Servo buttonPush;//pushes buttons on beacon
     Servo angler;
@@ -71,26 +79,27 @@ public class TeleOpHutz extends LinearOpMode {
                 botRight.setPower(gamepad1.right_stick_y);
             }
 
-            while (gamepad1.dpad_up){
+            while (gamepad1.dpad_up) {
                 flywheel.setPower(1); //note that this is max power also might need to reverse motor if spins inwards
             }
             while (gamepad1.left_bumper) {
-                if(buttonPush.getPosition() != 1)
+                if (buttonPush.getPosition() != 1)
                     buttonPush.setPosition(1); //or -1... debug
             }
             while (gamepad1.right_bumper) {
-                if(buttonPush.getPosition() != -1)
+                if (buttonPush.getPosition() != -1)
                     buttonPush.setPosition(-1); //or 1... debug
             }
             if (gamepad1.x) {
                 if (!(angler.getPosition() == 1))
-                    angler.setPosition(angler.getPosition()+0.05);
+                    angler.setPosition(angler.getPosition() + 0.05);
             }
             if (gamepad1.a) {
                 if (!(angler.getPosition() == -1))
-                    angler.setPosition(angler.getPosition()-0.05);
+                    angler.setPosition(angler.getPosition() - 0.05);
             }
             buttonPush.setPosition(0.5);
+            setZero();
 
             /*Telemetry is basically System.out.println() for
             robots. For example, telemetry.addData("Text", "*** Robot Data***");
