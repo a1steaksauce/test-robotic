@@ -16,19 +16,22 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 //@Disabled //uncomment to disable, comment to enable
 public class TeleOpHutz extends LinearOpMode {
 
-    final double DEAD_ZONE = 0.08; //Change this value through debugging
+    final double DEAD_ZONE = 0.08; //TODO: CHANGE THIS THROUGH DEBUGGING
 
-    DcMotor topLeft; //All motor names are given based on location from a top down
-    DcMotor topRight;//view of the robot
+    DcMotor topLeft; //all motor names are given based on location from a top down
+    DcMotor topRight; //view of the robot
     DcMotor botLeft;
     DcMotor botRight;
-    DcMotor flywheel;//operates the gearbox
-    public void setZero(){
+    DcMotor flywheel; //operates the gearbox
+    DcMotor steve; //for raising the balls to the gearbox. Name was provided by Elan Ganz
+    public void reset(){
         flywheel.setPower(0);
+        steve.setPower(0);
         topLeft.setPower(0);
         topRight.setPower(0);
         botLeft.setPower(0);
         botRight.setPower(0);
+        buttonPush.setPosition(0.5);
     }
     /////////////////////////////////////////
     Servo buttonPush;//pushes buttons on beacon
@@ -51,6 +54,7 @@ public class TeleOpHutz extends LinearOpMode {
         botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
         botRight = hardwareMap.dcMotor.get("botRight");
         flywheel = hardwareMap.dcMotor.get("flywheel");
+        steve = hardwareMap.dcMotor.get("steve");
         buttonPush = hardwareMap.servo.get("buttonPush");
         angler = hardwareMap.servo.get("angler");
         us = hardwareMap.ultrasonicSensor.get("us");
@@ -58,7 +62,9 @@ public class TeleOpHutz extends LinearOpMode {
         beaconDetector = hardwareMap.colorSensor.get("beaconDetector");
 
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
-        topRight.setDirection(DcMotor.Direction.REVERSE); //left motors are backwards
+        botLeft.setDirection(DcMotor.Direction.REVERSE); //left motors are backwards
+
+        reset();
 
         while (true) {
             /*
@@ -79,35 +85,47 @@ public class TeleOpHutz extends LinearOpMode {
                 botRight.setPower(gamepad1.right_stick_y);
             }
 
-            while (gamepad1.dpad_up) {
-                flywheel.setPower(1); //note that this is max power also might need to reverse motor if spins inwards
+            if (gamepad1.dpad_up) {
+                if (gamepad1.left_trigger != 1) {
+                    steve.setPower(0.5);
+                } else {
+                    steve.setPower(0.9);
+                }
+            } else if (gamepad1.dpad_down) {
+                if (gamepad1.left_trigger != 1) {
+                    steve.setPower(-0.5);
+                } else {
+                    steve.setPower(-0.9);
+                }
             }
-            while (gamepad1.left_bumper) {
-                if (buttonPush.getPosition() != 1)
-                    buttonPush.setPosition(1); //or -1... debug
+            if (gamepad1.dpad_left) {
+                flywheel.setPower(1); //note that this is max power; also TODO: MIGHT NEED TO REVERSE MOTOR IF SPINS INWARDS
+            } else {
+                flywheel.setPower(0);
             }
-            while (gamepad1.right_bumper) {
-                if (buttonPush.getPosition() != -1)
-                    buttonPush.setPosition(-1); //or 1... debug
+            if (gamepad1.left_bumper) {
+                buttonPush.setPosition(0.75); //TODO: THIS IS PROBABLY TOO MUCH; SUBJECT TO CHANGE
             }
-            if (gamepad1.x) {
-                if (!(angler.getPosition() == 1))
-                    angler.setPosition(angler.getPosition() + 0.05);
+            if (gamepad1.right_bumper) {
+                    buttonPush.setPosition(0.25); //TODO: THIS IS PROBABLY TOO MUCH; SUBJECT TO CHANGE
+            }
+            if (gamepad1.y) {
+                if (angler.getPosition() != 1)
+                    angler.setPosition(angler.getPosition() + 0.05); //TODO: MIGHT BE TOO FAST/SLOW; SUBJECT TO CHANGE
             }
             if (gamepad1.a) {
-                if (!(angler.getPosition() == -1))
-                    angler.setPosition(angler.getPosition() - 0.05);
+                if (angler.getPosition() != 0)
+                    angler.setPosition(angler.getPosition() - 0.05); //TODO: MIGHT BE TOO FAST/SLOW; SUBJECT TO CHANGE
             }
-            buttonPush.setPosition(0.5);
-            setZero();
-
+            if (!gamepad1.left_bumper && !gamepad1.left_bumper)
+                buttonPush.setPosition(0.5);
             /*Telemetry is basically System.out.println() for
             robots. For example, telemetry.addData("Text", "*** Robot Data***");
             will display "Text: *** Robot Data***" on the
             driver's station.
             */
-            telemetry.addData("Left joystick Y val", gamepad1.left_stick_y);
-            telemetry.addData("Right joystick Y val", gamepad1.right_stick_y);
+            telemetry.addData("Left joystick Y value:", gamepad1.left_stick_y);
+            telemetry.addData("Right joystick Y value:", gamepad1.right_stick_y);
         }
     }
 }

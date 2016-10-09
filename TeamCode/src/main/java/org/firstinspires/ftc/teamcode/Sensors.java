@@ -31,7 +31,8 @@ public class Sensors extends OpMode {
         telemetry.addData("Color sensor G: ", us.green());
         telemetry.addData("Color sensor B: ", us.blue());
         telemetry.addData("ODS sensor: ", you.getLightDetected());
-        telemetry.addData("US sensor: ", me.getUltrasonicLevel());
+        double inches = me.getUltrasonicLevel() / 3.5;
+        telemetry.addData("US sensor: ", inches);
     }
 
 }
