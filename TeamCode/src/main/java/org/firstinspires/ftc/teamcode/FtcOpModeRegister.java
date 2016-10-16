@@ -31,11 +31,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package org.firstinspires.ftc.teamcode;
 
-import com.google.blocks.ftcrobotcontroller.runtime.BlocksOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeRegistrar;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.ConceptNullOp;
 
@@ -81,7 +78,9 @@ public class FtcOpModeRegister implements OpModeRegister {
         /**
          * Any manual OpMode class registrations should go here.
          */
-
-
+        manager.register("AlephBotsTankDrive", AlephBotsTankDrive.class);
+        manager.register("AutonomousTestBench", AutonomousTestBench.class);
+        manager.register("TestBenchDrive", TestBenchDrive.class);
+        manager.register("TeleopHutzNoSmLift", TeleopHutzNoSmLift.class);
     }
 }
