@@ -21,7 +21,7 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
     DcMotor botRight;
     DcMotor flywheel; //operates the gearbox
     DcMotor otherFly;
-    Servo buttonPush;//pushes buttons on beacon
+    Servo buttonPush; //pushes buttons on beacon
     Servo angler;
     UltrasonicSensor us;
     ColorSensor lineTracker; //pointed at floor
@@ -29,43 +29,50 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
     @Override
     public void runOpMode(){
         topLeft = hardwareMap.dcMotor.get("topLeft");        //sets code motors to point to
-        topRight = hardwareMap.dcMotor.get("topRight");       //actual ones. use the names
+        topRight = hardwareMap.dcMotor.get("topRight");      //actual ones. use the names
         botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
         botRight = hardwareMap.dcMotor.get("botRight");
         flywheel = hardwareMap.dcMotor.get("flywheel");
         otherFly = hardwareMap.dcMotor.get("otherFly");
+        angler = hardwareMap.servo.get("angler");
+        buttonPush = hardwareMap.servo.get("buttonPush");
+
+        topLeft.setDirection(DcMotor.Direction.REVERSE);
+        botLeft.setDirection(DcMotor.Direction.REVERSE);
 
         while(true){
             if (Math.abs(gamepad1.left_stick_y) > DEAD_ZONE) {
                 topLeft.setPower(gamepad1.left_stick_y);
                 botLeft.setPower(gamepad1.left_stick_y);
-            }
-            else if (Math.abs(gamepad1.left_stick_y) <= DEAD_ZONE) {
+            } else if (Math.abs(gamepad1.left_stick_y) <= DEAD_ZONE) {
                 topLeft.setPower(0);
                 botLeft.setPower(0);
-            }
+            }                                                           //Drives robot
             if (Math.abs(gamepad1.right_stick_y) > DEAD_ZONE) {
                 topRight.setPower(gamepad1.right_stick_y);
                 botRight.setPower(gamepad1.right_stick_y);
-            }
-            else if (Math.abs(gamepad1.right_stick_y) <= DEAD_ZONE) {
+            } else if (Math.abs(gamepad1.right_stick_y) <= DEAD_ZONE) {
                 topRight.setPower(0);
                 botRight.setPower(0);
             }
-
             if (gamepad1.right_trigger > DEAD_ZONE) {
                 flywheel.setPower(gamepad1.right_trigger);
                 otherFly.setPower(gamepad1.right_trigger);
-            }
-            else if (gamepad1.right_trigger <= DEAD_ZONE) {
+            } else if (gamepad1.right_trigger <= DEAD_ZONE) {           //Operates flywheels
                 flywheel.setPower(0);
                 otherFly.setPower(0);
             }
             if (gamepad1.dpad_up) {
                 angler.setPosition(angler.getPosition()+INCREMENT);
-            }
-            else if (gamepad1.dpad_down) {
+            } else if (gamepad1.dpad_down) {                            //Angles launcher
                 angler.setPosition(angler.getPosition()-INCREMENT);
+            }
+            if (gamepad1.dpad_left) {
+                buttonPush.setPosition(0.3);
+            } else if (gamepad1.dpad_right) {
+                buttonPush.setPosition(0.7);
+            } else {
+                buttonPush.setPosition(0.5);
             }
         }
     }
