@@ -23,25 +23,27 @@ public class TeleOpHutz extends LinearOpMode {
     DcMotor botLeft;
     DcMotor botRight;
     DcMotor flywheel; //operates the gearbox
-    DcMotor steve; //for raising the balls to the gearbox. Name was provided by Elan Ganz
+    DcMotor otherFly;
+//    DcMotor steve; //for raising the balls to the gearbox. Name was provided by Elan Ganz
     public void reset(){
         flywheel.setPower(0);
-        steve.setPower(0);
+        //steve.setPower(0);
+        otherFly.setPower(0);
         topLeft.setPower(0);
         topRight.setPower(0);
         botLeft.setPower(0);
         botRight.setPower(0);
         buttonPush.setPosition(0.5);
-        handL.setPosition(0.5);
-        handR.setPosition(0.5);
-        handUp.setPosition(1);
+   //     handL.setPosition(0.5);
+    //    handR.setPosition(0.5);
+        //handUp.setPosition(1);
     }
     /////////////////////////////////////////
     Servo buttonPush;//pushes buttons on beacon
     Servo angler;
-    Servo handL;
-    Servo handR;
-    Servo handUp;
+   // Servo handL;
+ //   Servo handR;
+    //Servo handUp;
     /////////////////////////////////////////
     UltrasonicSensor us;
     ColorSensor lineTracker; //pointed at floor
@@ -62,7 +64,8 @@ public class TeleOpHutz extends LinearOpMode {
         botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
         botRight = hardwareMap.dcMotor.get("botRight");
         flywheel = hardwareMap.dcMotor.get("flywheel");
-        steve = hardwareMap.dcMotor.get("steve");
+        //steve = hardwareMap.dcMotor.get("steve");
+        otherFly = hardwareMap.dcMotor.get("otherFly");
         buttonPush = hardwareMap.servo.get("buttonPush");
         angler = hardwareMap.servo.get("angler");
         us = hardwareMap.ultrasonicSensor.get("us");
@@ -100,22 +103,25 @@ public class TeleOpHutz extends LinearOpMode {
                 topLeft.setPower(0);
                 botLeft.setPower(0);
             }
-            if (gamepad1.dpad_up) {
-                if (gamepad1.left_trigger != 1) {
-                    steve.setPower(0.5);
-                } else {
-                    steve.setPower(0.9);
-                }
-            } else if (gamepad1.dpad_down) {
-                if (gamepad1.left_trigger != 1) {
-                    steve.setPower(-0.5);
-                } else {
-                    steve.setPower(-0.9);
-                }
-            }
+     //       if (gamepad1.dpad_up) {
+   //             if (gamepad1.left_trigger != 1) {
+     //               steve.setPower(0.5);
+       //         } else {
+         //           steve.setPower(0.9);
+         //       }
+       //     } else if (gamepad1.dpad_down) {
+            //
+            //         if (gamepad1.left_trigger != 1) {
+            //        steve.setPower(-0.5);
+            //    } else {
+             //       steve.setPower(-0.9);
+             //   }
+           // }
             if (gamepad1.dpad_left) {
+                otherFly.setPower(1);
                 flywheel.setPower(1); //note that this is max power; also TODO: MIGHT NEED TO REVERSE MOTOR IF SPINS INWARDS
             } else {
+                otherFly.setPower(0);
                 flywheel.setPower(0);
             }
             if (gamepad1.left_bumper) {
@@ -136,21 +142,21 @@ public class TeleOpHutz extends LinearOpMode {
             }
             if (gamepad1.dpad_right) {
                 if(up){
-                    handUp.setPosition(1);
+       //             handUp.setPosition(1);
                     up = true;
                 }
                 else{
-                    handUp.setPosition(0.2);
+       //             handUp.setPosition(0.2);
                     up = false;
                 }
             }
             if (gamepad1.left_stick_button) {
-                handL.setPosition(1);
-                handR.setPosition(1);
+        //        handL.setPosition(1);
+      //          handR.setPosition(1);
             }
             if (gamepad1.right_stick_button){
-                handL.setPosition(0);
-                handR.setPosition(0);
+        //        handL.setPosition(0);
+          //      handR.setPosition(0);
             }
             if (!bumperRunning)
                 buttonPush.setPosition(0.5);
