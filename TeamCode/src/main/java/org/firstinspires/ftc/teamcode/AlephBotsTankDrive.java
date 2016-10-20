@@ -41,9 +41,9 @@ public class AlephBotsTankDrive extends OpMode{
         LB.setPower(gamepad1.left_stick_y);
 
         if(gamepad1.a && ButtonPresser.getPosition() < 1.0){
-            ButtonPresser.setPosition(ButtonPresser.getPosition()+0.1);
+            ButtonPresser.setPosition(ButtonPresser.getPosition()+0.01);
         } else if(gamepad1.y && ButtonPresser.getPosition() > 0.0){
-            ButtonPresser.setPosition(ButtonPresser.getPosition()-0.1);
+            ButtonPresser.setPosition(ButtonPresser.getPosition()-0.01);
         }
 
         if (gamepad1.right_bumper) {
