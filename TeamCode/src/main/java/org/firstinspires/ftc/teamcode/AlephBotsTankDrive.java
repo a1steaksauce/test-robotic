@@ -17,6 +17,7 @@ public class AlephBotsTankDrive extends OpMode{
 
     DcMotor RF, LF, RB, LB, Lift;
     Servo ButtonPresser;
+    String running = "Running!";
 
     @Override
     public void init() {
@@ -52,6 +53,7 @@ public class AlephBotsTankDrive extends OpMode{
         else {
             Lift.setPower(0);
         }
+        telemetry.addData("Aleph Bots Robot: ", running);
         telemetry.addData("ButtonPresser position: ", ButtonPresser.getPosition());
     }
 }
