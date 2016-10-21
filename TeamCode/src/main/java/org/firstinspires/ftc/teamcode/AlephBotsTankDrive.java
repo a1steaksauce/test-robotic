@@ -54,6 +54,6 @@ public class AlephBotsTankDrive extends OpMode{
         else {
             Lift.setPower(0);
         }
-        telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
+        telemetry.addData("ButtonPresser position: ", ButtonPresser.getPosition());
     }
 }
