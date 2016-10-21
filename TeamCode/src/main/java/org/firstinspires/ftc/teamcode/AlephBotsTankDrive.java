@@ -15,10 +15,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled //uncomment to disable, comment to enable
 public class AlephBotsTankDrive extends OpMode{
 
-    DcMotor RF,LF,RB,LB,Lift;
+    DcMotor RF, LF, RB, LB, Lift;
     Servo ButtonPresser;
-    final double ONE_UP = 0.1;
-    boolean upMode = false;
 
     @Override
     public void init() {
@@ -41,9 +39,9 @@ public class AlephBotsTankDrive extends OpMode{
         LB.setPower(gamepad1.left_stick_y);
 
         if(gamepad1.a && ButtonPresser.getPosition() < 1.0){
-            ButtonPresser.setPosition(ButtonPresser.getPosition()+0.01);
+            ButtonPresser.setPosition(ButtonPresser.getPosition() + 0.01);
         } else if(gamepad1.y && ButtonPresser.getPosition() > 0.0){
-            ButtonPresser.setPosition(ButtonPresser.getPosition()-0.01);
+            ButtonPresser.setPosition(ButtonPresser.getPosition() - 0.01);
         }
 
         if (gamepad1.right_bumper) {
