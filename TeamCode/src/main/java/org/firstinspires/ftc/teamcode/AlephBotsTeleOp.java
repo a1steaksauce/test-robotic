@@ -11,9 +11,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Created by aaronkbutler on 3/10/16.
  */
-@TeleOp(name="Aleph Bots Tank Drive", group="TeleOp")
+@TeleOp(name="Aleph Bots TeleOp", group="TeleOp")
 //@Disabled //uncomment to disable, comment to enable
-public class AlephBotsTankDrive extends OpMode{
+public class AlephBotsTeleOp extends OpMode{
 
     DcMotor RF, LF, RB, LB, Lift;
     Servo ButtonPresser;
