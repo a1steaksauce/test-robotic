@@ -32,13 +32,16 @@ public class AlephBotsAutonomous extends LinearOpMode{
         ButtonPresser.setPosition(0.01);
 
 
-        drive(1);
+        driveStraight(1.0);
+        moveServo(0.5);
         Thread.sleep(1000);
 
-        turnLeft(1);
+        turnLeft(1.0);
+        moveServo(1.0);
         Thread.sleep(1000);
 
-        turnRight(1);
+        turnRight(1.0);
+        moveServo(0.0);
         Thread.sleep(1000);
 
         stopDrive();
@@ -46,7 +49,7 @@ public class AlephBotsAutonomous extends LinearOpMode{
         waitForStart();
         idle();
     }
-    public void drive(double power) {
+    public void driveStraight(double power) {
         LF.setPower(power);
         LB.setPower(power);
         RF.setPower(power);
@@ -71,5 +74,9 @@ public class AlephBotsAutonomous extends LinearOpMode{
         LB.setPower(0);
         RF.setPower(0);
         RB.setPower(0);
+    }
+
+    public void moveServo(double location) {
+        ButtonPresser.setPosition(location);
     }
 }
