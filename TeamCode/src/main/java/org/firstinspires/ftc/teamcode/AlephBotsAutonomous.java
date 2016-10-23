@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -17,7 +18,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class AlephBotsAutonomous extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
+    LightSensor LightSensor;
+
     String running = "Running!";
+    static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
+    static final double     APPROACH_SPEED  = 0.5;
 
 
     @Override
@@ -28,11 +33,26 @@ public class AlephBotsAutonomous extends LinearOpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
+        LightSensor = hardwareMap.lightSensor.get("LightSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
         ButtonPresser.setPosition(0.01);
+        LightSensor.enableLed(true);
 
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Ready to run");    //
+        telemetry.update();
 
+        while (!isStarted()) {
+
+            // Display the light level while we are waiting to start
+            telemetry.addData("Light Level: ", LightSensor.getLightDetected());
+            telemetry.update();
+            idle();
+        }
+
+        /*
+        //TESTING:
         driveStraight(1.0);
         moveServo(0.5);
         Thread.sleep(3000);
@@ -49,6 +69,20 @@ public class AlephBotsAutonomous extends LinearOpMode{
 
         waitForStart();
         idle();
+        */
+        driveStraight(APPROACH_SPEED);
+
+        // run until the white line is seen OR the driver presses STOP;
+        while (opModeIsActive() && (LightSensor.getLightDetected() < WHITE_THRESHOLD)) {
+
+            // Display the light level while we are looking for the line
+            telemetry.addData("Light Level: ",  LightSensor.getLightDetected());
+            telemetry.update();
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        }
+
+        // Stop all motors
+        stopDrive();
     }
     public void driveStraight(double power) {
         LF.setPower(power);
