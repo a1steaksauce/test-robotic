@@ -6,18 +6,20 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by aaronkbutler on 3/10/16.
  */
-@TeleOp(name="Aleph Bots Tank Drive", group="TeleOp")
+@TeleOp(name="Aleph Bots TeleOp", group="TeleOp")
 //@Disabled //uncomment to disable, comment to enable
-public class AlephBotsTankDrive extends OpMode{
+public class AlephBotsTeleOp extends OpMode{
 
     DcMotor RF, LF, RB, LB, Lift;
     Servo ButtonPresser;
     String running = "Running!";
+    Boolean backwards = false;
 
     @Override
     public void init() {
@@ -34,17 +36,20 @@ public class AlephBotsTankDrive extends OpMode{
 
     @Override
     public void loop() {
+        //DRIVING
         RF.setPower(gamepad1.right_stick_y);
         LF.setPower(gamepad1.left_stick_y);
         RB.setPower(gamepad1.right_stick_y);
         LB.setPower(gamepad1.left_stick_y);
 
-        if(gamepad1.a && ButtonPresser.getPosition() < 1.0){
+        //BUTTON PUSHER
+        if (gamepad1.b && ButtonPresser.getPosition() < 1.0) {
             ButtonPresser.setPosition(ButtonPresser.getPosition() + 0.01);
-        } else if(gamepad1.y && ButtonPresser.getPosition() > 0.0){
+        } else if (gamepad1.x && ButtonPresser.getPosition() > 0.0) {
             ButtonPresser.setPosition(ButtonPresser.getPosition() - 0.01);
         }
 
+        //LIFT
         if (gamepad1.right_bumper) {
             Lift.setPower(0.5);
         } else if (gamepad1.left_bumper) {
@@ -52,6 +57,24 @@ public class AlephBotsTankDrive extends OpMode{
         }
         else {
             Lift.setPower(0);
+        }
+
+        //FLIP
+        if (gamepad1.a) {
+            if (backwards == false) {
+                RF.setDirection(DcMotor.Direction.FORWARD);
+                RB.setDirection(DcMotor.Direction.FORWARD);
+                LF.setDirection(DcMotor.Direction.REVERSE);
+                LB.setDirection(DcMotor.Direction.REVERSE);
+                backwards = true;
+            } else {
+                RF.setDirection(DcMotor.Direction.REVERSE);
+                RB.setDirection(DcMotor.Direction.REVERSE);
+                LF.setDirection(DcMotor.Direction.FORWARD);
+                LB.setDirection(DcMotor.Direction.FORWARD);
+                backwards = false;
+            }
+
         }
         telemetry.addData("Aleph Bots Robot: ", running);
         telemetry.addData("ButtonPresser position: ", ButtonPresser.getPosition());

@@ -79,7 +79,8 @@ public class FtcOpModeRegister implements OpModeRegister {
          * Any manual OpMode class registrations should go here.
          */
         //ALEPH BOTS CODE:
-        manager.register("AlephBotsTankDrive", AlephBotsTankDrive.class);
+        manager.register("AlephBotsTeleOp", AlephBotsTeleOp.class);
+        manager.register("AlephBotsAutonomous", AlephBotsAutonomous.class);
 
         //HUTZBOTS CODE:
         manager.register("TeleopHutzNoSmLift", TeleopHutzNoSmLift.class);
