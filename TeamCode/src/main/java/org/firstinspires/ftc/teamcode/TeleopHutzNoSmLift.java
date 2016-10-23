@@ -92,6 +92,7 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
             }
 
             telemetry.addData("Angler value: ", angler.getPosition());
+            telemetry.addData("Ultrasonic value:", us.getUltrasonicLevel());
             updateTelemetry(telemetry);
         }
     }
