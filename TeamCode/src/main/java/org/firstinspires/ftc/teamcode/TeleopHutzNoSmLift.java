@@ -44,7 +44,7 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
         topLeft.setDirection(DcMotor.Direction.REVERSE);
         botLeft.setDirection(DcMotor.Direction.REVERSE);
         //lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER); no encoder for now
-
+        angler.setPosition(0);
         while(true){
             if (Math.abs(gamepad1.left_stick_y) > DEAD_ZONE) {
                 topLeft.setPower(gamepad1.left_stick_y);
@@ -82,14 +82,17 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
             if (gamepad1.y) {
                 //lift.setTargetPosition(14*CPI);
                 //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lift.setPower(0.2);
+                lift.setPower(0.1);
             } else if (gamepad1.a) {
                 //lift.setTargetPosition(-14*CPI);
                 //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lift.setPower(-0.2);
+                lift.setPower(-0.1);
             } else {
                 lift.setPower(0);
             }
+
+            telemetry.addData("Angler value: ", angler.getPosition());
+            updateTelemetry(telemetry);
         }
     }
 }
