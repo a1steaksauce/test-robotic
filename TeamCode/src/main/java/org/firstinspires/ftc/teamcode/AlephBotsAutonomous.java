@@ -15,13 +15,14 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 @Autonomous(name="Aleph Bots Autonomous", group="Autonomous")
 public class AlephBotsAutonomous extends LinearOpMode{
-    DcMotor RF, LF, RB, LB, Lift;
-    Servo ButtonPresser;
+    DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
+    Servo ButtonPresser = null;
     String running = "Running!";
 
 
     @Override
     public void runOpMode() throws InterruptedException{
+        ButtonPresser = hardwareMap.servo.get("ButtonPresser");
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
@@ -34,15 +35,15 @@ public class AlephBotsAutonomous extends LinearOpMode{
 
         driveStraight(1.0);
         moveServo(0.5);
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
         turnLeft(1.0);
         moveServo(1.0);
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
         turnRight(1.0);
         moveServo(0.0);
-        Thread.sleep(1000);
+        Thread.sleep(3000);
 
         stopDrive();
 
