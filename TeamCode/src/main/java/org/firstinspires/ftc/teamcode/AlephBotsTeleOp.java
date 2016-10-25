@@ -61,21 +61,19 @@ public class AlephBotsTeleOp extends OpMode{
 
         //FLIP
         if (gamepad1.a) {
-            if (backwards == false) {
-                RF.setDirection(DcMotor.Direction.FORWARD);
-                RB.setDirection(DcMotor.Direction.FORWARD);
-                LF.setDirection(DcMotor.Direction.REVERSE);
-                LB.setDirection(DcMotor.Direction.REVERSE);
-                backwards = true;
-            } else {
-                RF.setDirection(DcMotor.Direction.REVERSE);
-                RB.setDirection(DcMotor.Direction.REVERSE);
-                LF.setDirection(DcMotor.Direction.FORWARD);
-                LB.setDirection(DcMotor.Direction.FORWARD);
-                backwards = false;
-            }
-
+            RF.setDirection(DcMotor.Direction.FORWARD);
+            RB.setDirection(DcMotor.Direction.FORWARD);
+            LF.setDirection(DcMotor.Direction.REVERSE);
+            LB.setDirection(DcMotor.Direction.REVERSE);
+            backwards = true;
+        } else if (gamepad1.y) {
+            RF.setDirection(DcMotor.Direction.REVERSE);
+            RB.setDirection(DcMotor.Direction.REVERSE);
+            LF.setDirection(DcMotor.Direction.FORWARD);
+            LB.setDirection(DcMotor.Direction.FORWARD);
+            backwards = false;
         }
+
         telemetry.addData("Aleph Bots Robot:", "running");
         telemetry.addData("Driving backwards?", backwards);
         telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
