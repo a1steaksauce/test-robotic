@@ -26,7 +26,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
 
     static final double     TURN_SPEED    = 0.5;
     static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
-    static final double     APPROACH_SPEED  = 0.5;
+    static final double     FORWARD_SPEED  = 0.6;
 
 
     @Override
@@ -41,6 +41,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
+
         ButtonPresser.setPosition(0.01);
         GroundLightSensor.enableLed(true);
         BeaconLightSensor.enableLed(true);
@@ -76,7 +77,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         waitForStart();
         idle();
         */
-        driveStraight(APPROACH_SPEED);
+        driveStraight(FORWARD_SPEED);
 
         // run until the white line is seen OR the driver presses STOP;
         while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
@@ -91,14 +92,17 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         stopDrive();
 
         turnRight(TURN_SPEED);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
-            telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
+        while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
+
+            // Display the light level while we are looking for the line
+            telemetry.addData("Light Level: ",  GroundLightSensor.getLightDetected());
             telemetry.update();
-            idle();
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
+
+        // Stop all motors
         stopDrive();
-        driveStraight(APPROACH_SPEED);
+        driveStraight(FORWARD_SPEED);
         while (opModeIsActive() && (runtime.seconds() < 3)) {
             telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();

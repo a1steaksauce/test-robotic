@@ -35,6 +35,7 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
         BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
+
         ButtonPresser.setPosition(0.01);
         GroundLightSensor.enableLed(true);
         BeaconLightSensor.enableLed(true);
