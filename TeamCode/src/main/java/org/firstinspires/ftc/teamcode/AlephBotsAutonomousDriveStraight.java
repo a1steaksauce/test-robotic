@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.widget.Button;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,14 +17,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  */
 @Autonomous(name="Aleph Bots Autonomous: Drive Straight", group="Autonomous")
 public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
-    private ElapsedTime runtime = new ElapsedTime();
-
-    static final double     FORWARD_SPEED = 0.6;
-    static final double     TURN_SPEED    = 0.5;
-
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
     LightSensor GroundLightSensor, BeaconLightSensor;
+
+    private ElapsedTime runtime = new ElapsedTime();
+
+    static final double     FORWARD_SPEED  = 0.6;
+    static final double     TURN_SPEED    = 0.5;
 
     public void runOpMode() throws InterruptedException {
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
@@ -37,8 +39,8 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
         RB.setDirection(DcMotor.Direction.REVERSE);
 
         ButtonPresser.setPosition(0.01);
-        GroundLightSensor.enableLed(true);
-        BeaconLightSensor.enableLed(true);
+        //GroundLightSensor.enableLed(true);
+        //BeaconLightSensor.enableLed(true);
         /*
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here

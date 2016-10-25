@@ -21,13 +21,11 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
     Servo ButtonPresser = null;
     LightSensor GroundLightSensor, BeaconLightSensor;
 
-    String running = "Running!";
     private ElapsedTime runtime = new ElapsedTime();
 
+    static final double     FORWARD_SPEED  = 0.6;
     static final double     TURN_SPEED    = 0.5;
     static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
-    static final double     FORWARD_SPEED  = 0.6;
-
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -37,7 +35,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        GroundLightSensor = hardwareMap.lightSensor.get("GroundLightSensor");
+        GroundLightSensor = hardwareMap.lightSensor.get("LightSensor");
         BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
