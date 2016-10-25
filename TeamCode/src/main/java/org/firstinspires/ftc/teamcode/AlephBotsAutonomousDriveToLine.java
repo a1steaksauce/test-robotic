@@ -51,7 +51,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         while (!isStarted()) {
 
             // Display the light level while we are waiting to start
-            telemetry.addData("Light Level: ", GroundLightSensor.getLightDetected());
+            telemetry.addData("Light Level:", GroundLightSensor.getLightDetected());
             telemetry.update();
             idle();
         }
@@ -81,7 +81,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
-            telemetry.addData("Light Level: ",  GroundLightSensor.getLightDetected());
+            telemetry.addData("Light Level:",  GroundLightSensor.getLightDetected());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
@@ -93,7 +93,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
-            telemetry.addData("Light Level: ",  GroundLightSensor.getLightDetected());
+            telemetry.addData("Light Level:",  GroundLightSensor.getLightDetected());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }

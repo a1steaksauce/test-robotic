@@ -41,10 +41,7 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
         ButtonPresser.setPosition(0.01);
         //GroundLightSensor.enableLed(true);
         //BeaconLightSensor.enableLed(true);
-        /*
-         * Initialize the drive system variables.
-         * The init() method of the hardware class does all the work here
-         */
+
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();

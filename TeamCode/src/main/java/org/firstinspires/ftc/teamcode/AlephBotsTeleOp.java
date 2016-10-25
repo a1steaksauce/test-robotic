@@ -76,8 +76,9 @@ public class AlephBotsTeleOp extends OpMode{
             }
 
         }
-        telemetry.addData("Aleph Bots Robot: ", "running");
-        telemetry.addData("Driving backwards? ", backwards);
-        telemetry.addData("ButtonPresser position: ", ButtonPresser.getPosition());
+        telemetry.addData("Aleph Bots Robot:", "running");
+        telemetry.addData("Driving backwards?", backwards);
+        telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
+        telemetry.update();
     }
 }
