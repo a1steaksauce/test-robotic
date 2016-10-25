@@ -19,8 +19,6 @@ public class AlephBotsTeleOp extends OpMode{
 
     DcMotor RF, LF, RB, LB, Lift;
     Servo ButtonPresser;
-    UltrasonicSensor UltraSensor;
-    String running = "Running!";
     Boolean backwards = false;
 
     @Override
@@ -31,7 +29,6 @@ public class AlephBotsTeleOp extends OpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
         ButtonPresser.setPosition(0.01);
@@ -79,10 +76,8 @@ public class AlephBotsTeleOp extends OpMode{
             }
 
         }
-        telemetry.addData("Aleph Bots Robot: ", running);
+        telemetry.addData("Aleph Bots Robot: ", "running");
         telemetry.addData("Driving backwards? ", backwards);
         telemetry.addData("ButtonPresser position: ", ButtonPresser.getPosition());
-        double inches = UltraSensor.getUltrasonicLevel() / 3.5;
-        telemetry.addData("UltraSensor distance: ", inches + "inches");
     }
 }
