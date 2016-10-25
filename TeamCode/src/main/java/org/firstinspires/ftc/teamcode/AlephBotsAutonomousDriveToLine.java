@@ -3,24 +3,28 @@ package org.firstinspires.ftc.teamcode;
 import android.widget.Button;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 /**
  * Created by aaronkbutler on 10/21/16.
  */
-@Autonomous(name="Aleph Bots Autonomous", group="Autonomous")
-public class AlephBotsAutonomous extends LinearOpMode{
+@Autonomous(name="Aleph Bots Autonomous: Drive To Line", group="Autonomous")
+public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
-    LightSensor LightSensor;
+    LightSensor GroundLightSensor, BeaconLightSensor;
 
     String running = "Running!";
+    private ElapsedTime runtime = new ElapsedTime();
+
+    static final double     TURN_SPEED    = 0.5;
     static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
     static final double     APPROACH_SPEED  = 0.5;
 
@@ -33,11 +37,13 @@ public class AlephBotsAutonomous extends LinearOpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        LightSensor = hardwareMap.lightSensor.get("LightSensor");
+        GroundLightSensor = hardwareMap.lightSensor.get("GroundLightSensor");
+        BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
         ButtonPresser.setPosition(0.01);
-        LightSensor.enableLed(true);
+        GroundLightSensor.enableLed(true);
+        BeaconLightSensor.enableLed(true);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -46,7 +52,7 @@ public class AlephBotsAutonomous extends LinearOpMode{
         while (!isStarted()) {
 
             // Display the light level while we are waiting to start
-            telemetry.addData("Light Level: ", LightSensor.getLightDetected());
+            telemetry.addData("Light Level: ", GroundLightSensor.getLightDetected());
             telemetry.update();
             idle();
         }
@@ -73,15 +79,31 @@ public class AlephBotsAutonomous extends LinearOpMode{
         driveStraight(APPROACH_SPEED);
 
         // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive() && (LightSensor.getLightDetected() < WHITE_THRESHOLD)) {
+        while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
-            telemetry.addData("Light Level: ",  LightSensor.getLightDetected());
+            telemetry.addData("Light Level: ",  GroundLightSensor.getLightDetected());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
 
         // Stop all motors
+        stopDrive();
+
+        turnRight(TURN_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.3)) {
+            telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+            idle();
+        }
+        stopDrive();
+        driveStraight(APPROACH_SPEED);
+        while (opModeIsActive() && (runtime.seconds() < 3)) {
+            telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+            idle();
+        }
         stopDrive();
     }
     public void driveStraight(double power) {
