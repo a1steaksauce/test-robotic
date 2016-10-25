@@ -100,6 +100,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
 
         // Stop all motors
         stopDrive();
+
         driveStraight(FORWARD_SPEED);
         while (opModeIsActive() && (runtime.seconds() < 3)) {
             telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
