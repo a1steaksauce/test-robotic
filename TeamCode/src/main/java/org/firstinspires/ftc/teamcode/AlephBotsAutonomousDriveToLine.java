@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
-    LightSensor GroundLightSensor, BeaconLightSensor;
+    LightSensor GroundLightSensor =  null, BeaconLightSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
