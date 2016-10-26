@@ -90,6 +90,12 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         stopDrive();
 
         turnRight(TURN_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+            telemetry.addData("Path", "Spin: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+            idle();
+        }
         while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
