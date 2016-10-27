@@ -66,13 +66,15 @@ public class AlephBotsTeleOp extends OpMode{
             LF.setDirection(DcMotor.Direction.REVERSE);
             LB.setDirection(DcMotor.Direction.REVERSE);
             backwards = true;
-        } else if (gamepad1.y) {
+        }
+        if (gamepad1.y) {
             RF.setDirection(DcMotor.Direction.REVERSE);
             RB.setDirection(DcMotor.Direction.REVERSE);
             LF.setDirection(DcMotor.Direction.FORWARD);
             LB.setDirection(DcMotor.Direction.FORWARD);
             backwards = false;
         }
+
 
         telemetry.addData("Aleph Bots Robot:", "Running!");
         telemetry.addData("Driving backwards?", backwards);
