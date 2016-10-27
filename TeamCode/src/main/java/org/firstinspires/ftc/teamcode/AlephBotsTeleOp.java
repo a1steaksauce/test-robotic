@@ -43,9 +43,9 @@ public class AlephBotsTeleOp extends OpMode{
         LB.setPower(gamepad1.left_stick_y);
 
         //BUTTON PUSHER
-        if (gamepad1.b && ButtonPresser.getPosition() < 1.0) {
+        if (gamepad1.x && ButtonPresser.getPosition() < 1.0) {
             ButtonPresser.setPosition(ButtonPresser.getPosition() + 0.01);
-        } else if (gamepad1.x && ButtonPresser.getPosition() > 0.0) {
+        } else if (gamepad1.b && ButtonPresser.getPosition() > 0.0) {
             ButtonPresser.setPosition(ButtonPresser.getPosition() - 0.01);
         }
 
