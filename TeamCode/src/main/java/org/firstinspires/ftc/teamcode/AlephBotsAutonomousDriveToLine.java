@@ -116,6 +116,11 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
             idle();
         }
         stopDrive();
+        if (BeaconLightSensor.getLightDetected() < 0.5) {
+            ButtonPresser.setPosition(0.01);
+        } else {
+            ButtonPresser.setPosition(1.0);
+        }
     }
     public void driveStraight(double power) {
         LF.setPower(power);
