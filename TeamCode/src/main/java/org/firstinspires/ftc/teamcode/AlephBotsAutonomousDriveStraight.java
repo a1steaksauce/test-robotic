@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
-    LightSensor GroundLightSensor = null, BeaconLightSensor = null;
+    //LightSensor GroundLightSensor = null, BeaconLightSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -33,8 +33,8 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        GroundLightSensor = hardwareMap.lightSensor.get("LightSensor");
-        BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
+        //GroundLightSensor = hardwareMap.lightSensor.get("LightSensor");
+        //BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
 
