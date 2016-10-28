@@ -38,6 +38,7 @@ public class AlephBotsTeleOp extends OpMode{
 
     @Override
     public void loop() {
+        //DRIVE and FLIP
         drive.tankDrive(gamepad1);
         drive.changeDriveMode(gamepad1.left_stick_button, gamepad1.right_stick_button);
 
@@ -58,27 +59,7 @@ public class AlephBotsTeleOp extends OpMode{
             Lift.setPower(0);
         }
 
-        //DRIVING and FLIP
-        /*if (gamepad1.a) {
-            LB.setPower(gamepad1.right_stick_y);
-            RB.setPower(gamepad1.left_stick_y);
-            LF.setPower(gamepad1.right_stick_y);
-            RF.setPower(gamepad1.left_stick_y);
-            backwards = true;
-        } else if (gamepad1.y) {
-            RF.setPower(gamepad1.right_stick_y);
-            LF.setPower(gamepad1.left_stick_y);
-            RB.setPower(gamepad1.right_stick_y);
-            LB.setPower(gamepad1.left_stick_y);
-            backwards = false;
-        } else {
-            RF.setPower(gamepad1.right_stick_y);
-            LF.setPower(gamepad1.left_stick_y);
-            RB.setPower(gamepad1.right_stick_y);
-            LB.setPower(gamepad1.left_stick_y);
-        }*/
-
-
+        //TELEMETRY
         telemetry.addData("Aleph Bots Robot:", "Running!");
         telemetry.addData("Driving Mode:", drive.getDriveMode());
         telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
