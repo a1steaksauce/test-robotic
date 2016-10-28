@@ -51,9 +51,9 @@ public class AlephBotsTeleOp extends OpMode{
 
         //LIFT
         if (gamepad1.right_bumper) {
-            Lift.setPower(1.0);
+            Lift.setPower(1.0); //FULL POWER!!!!!
         } else if (gamepad1.left_bumper) {
-            Lift.setPower(-0.1);
+            Lift.setPower(-0.1); //TENTH OF THE POWER
         }
         else {
             Lift.setPower(0);
