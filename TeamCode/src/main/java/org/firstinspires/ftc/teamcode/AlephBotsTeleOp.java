@@ -36,12 +36,6 @@ public class AlephBotsTeleOp extends OpMode{
 
     @Override
     public void loop() {
-        //DRIVING
-        RF.setPower(gamepad1.right_stick_y);
-        LF.setPower(gamepad1.left_stick_y);
-        RB.setPower(gamepad1.right_stick_y);
-        LB.setPower(gamepad1.left_stick_y);
-
         //BUTTON PUSHER
         if (gamepad1.x && ButtonPresser.getPosition() < 1.0) {
             ButtonPresser.setPosition(ButtonPresser.getPosition() + 0.01);
@@ -59,20 +53,24 @@ public class AlephBotsTeleOp extends OpMode{
             Lift.setPower(0);
         }
 
-        //FLIP
+        //DRIVING and FLIP
         if (gamepad1.a) {
-            RF.setDirection(DcMotor.Direction.FORWARD);
-            RB.setDirection(DcMotor.Direction.FORWARD);
-            LF.setDirection(DcMotor.Direction.REVERSE);
-            LB.setDirection(DcMotor.Direction.REVERSE);
+            LB.setPower(gamepad1.right_stick_y);
+            RB.setPower(gamepad1.left_stick_y);
+            LF.setPower(gamepad1.right_stick_y);
+            RF.setPower(gamepad1.left_stick_y);
             backwards = true;
-        }
-        if (gamepad1.y) {
-            RF.setDirection(DcMotor.Direction.REVERSE);
-            RB.setDirection(DcMotor.Direction.REVERSE);
-            LF.setDirection(DcMotor.Direction.FORWARD);
-            LB.setDirection(DcMotor.Direction.FORWARD);
+        } else if (gamepad1.y) {
+            RF.setPower(gamepad1.right_stick_y);
+            LF.setPower(gamepad1.left_stick_y);
+            RB.setPower(gamepad1.right_stick_y);
+            LB.setPower(gamepad1.left_stick_y);
             backwards = false;
+        } else {
+            RF.setPower(gamepad1.right_stick_y);
+            LF.setPower(gamepad1.left_stick_y);
+            RB.setPower(gamepad1.right_stick_y);
+            LB.setPower(gamepad1.left_stick_y);
         }
 
 
