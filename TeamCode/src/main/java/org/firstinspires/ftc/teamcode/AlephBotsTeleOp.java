@@ -17,12 +17,14 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 //@Disabled //uncomment to disable, comment to enable
 public class AlephBotsTeleOp extends OpMode{
 
+    RobotDriving drive;
     DcMotor RF, LF, RB, LB, Lift;
     Servo ButtonPresser;
     Boolean backwards = false;
 
     @Override
     public void init() {
+        drive = new RobotDriving(hardwareMap.dcMotor.get("LF"), hardwareMap.dcMotor.get("LB"), hardwareMap.dcMotor.get("RF"), hardwareMap.dcMotor.get("RB"));
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
@@ -36,6 +38,9 @@ public class AlephBotsTeleOp extends OpMode{
 
     @Override
     public void loop() {
+        drive.tankDrive(gamepad1);
+        drive.changeDriveMode(gamepad1.left_stick_button, gamepad1.right_stick_button);
+
         //BUTTON PUSHER
         if (gamepad1.x && ButtonPresser.getPosition() < 1.0) {
             ButtonPresser.setPosition(ButtonPresser.getPosition() + 0.001);
@@ -54,7 +59,7 @@ public class AlephBotsTeleOp extends OpMode{
         }
 
         //DRIVING and FLIP
-        if (gamepad1.a) {
+        /*if (gamepad1.a) {
             LB.setPower(gamepad1.right_stick_y);
             RB.setPower(gamepad1.left_stick_y);
             LF.setPower(gamepad1.right_stick_y);
@@ -71,11 +76,11 @@ public class AlephBotsTeleOp extends OpMode{
             LF.setPower(gamepad1.left_stick_y);
             RB.setPower(gamepad1.right_stick_y);
             LB.setPower(gamepad1.left_stick_y);
-        }
+        }*/
 
 
         telemetry.addData("Aleph Bots Robot:", "Running!");
-        telemetry.addData("Driving backwards?", backwards);
+        telemetry.addData("Driving Mode:", drive.getDriveMode());
         telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
         telemetry.update();
     }
