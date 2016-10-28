@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by JacobDavoudgoleh on 11/11/15.
  */
-@TeleOp(name="Aleph Bots TeleOp", group="TeleOp")
 public class RobotDriving {
     private DcMotor leftDrive; //Defines the four motors
     private DcMotor leftDriveB;
