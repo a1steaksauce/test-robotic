@@ -15,6 +15,7 @@ public class RobotDriving {
     private DcMotor rightDrive;
     private DcMotor rightDriveB;
     private Boolean normalDrive = true;
+    private Boolean normalSpeed = true;
 
     public RobotDriving(DcMotor LF, DcMotor LB, DcMotor RF, DcMotor RB){
     //Creates what an instance of this class should look like
@@ -52,10 +53,14 @@ public class RobotDriving {
     }
     public void tankDrive(Gamepad gamepad){
         //Function that calls the other tankDrive with parameters of which gamepad to use
-        if(normalDrive) {
+        if(normalDrive && normalSpeed){
             tankDrive(gamepad.left_stick_y, gamepad.right_stick_y); //gets values from joysticks and sets the motors
-        } else {
-            tankDrive(-gamepad.right_stick_y, -gamepad.left_stick_y);
+        } else if(normalDrive && !normalSpeed){
+            tankDrive(0.5 * gamepad.right_stick_y,  0.5 * gamepad.left_stick_y);
+        } else if(!normalDrive && normalSpeed){
+            tankDrive(-gamepad.left_stick_y, -gamepad.right_stick_y);
+        } else{
+            tankDrive(0.5 * -gamepad.right_stick_y,  0.5 * -gamepad.left_stick_y);
         }
     }
     public void changeDriveMode(Boolean setNormalDriveTrue, Boolean setNormalDriveFalse){
@@ -65,11 +70,25 @@ public class RobotDriving {
             normalDrive = false;
         }
     }
+    public void changeDriveSpeed(Boolean fullSpeed, Boolean halfSpeed){
+        if(fullSpeed){
+            normalSpeed = true;
+        } else if (halfSpeed){
+            normalSpeed = false;
+        }
+    }
     public String getDriveMode(){
         if(normalDrive){
             return "Normal Drive";
         } else {
             return "Backwards Drive";
+        }
+    }
+    public String getDriveSpeed(){
+        if(normalSpeed) {
+            return "Full Speed";
+        } else {
+            return "Half Speed";
         }
     }
     public void setServoToggle(Servo servo, boolean firstButton, double firstValue, boolean secondButton, double secondValue){

@@ -41,6 +41,7 @@ public class AlephBotsTeleOp extends OpMode{
         //DRIVE and FLIP using RobotDriving.java Class
         drive.tankDrive(gamepad1);
         drive.changeDriveMode(gamepad1.left_stick_button, gamepad1.right_stick_button);
+        drive.changeDriveSpeed(gamepad1.dpad_up, gamepad1.dpad_down);
 
         //BUTTON PUSHER
         if (gamepad1.x && ButtonPresser.getPosition() < 1.0) {
@@ -62,6 +63,7 @@ public class AlephBotsTeleOp extends OpMode{
         //TELEMETRY
         telemetry.addData("Aleph Bots Robot:", "Running!");
         telemetry.addData("Driving Mode:", drive.getDriveMode());
+        telemetry.addData("Driving Speed:", drive.getDriveSpeed());
         telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
         telemetry.update();
     }
