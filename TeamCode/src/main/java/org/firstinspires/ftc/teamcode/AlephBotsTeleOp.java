@@ -16,14 +16,14 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 @TeleOp(name="Aleph Bots TeleOp", group="TeleOp")
 //@Disabled //uncomment to disable, comment to enable
 public class AlephBotsTeleOp extends OpMode{
-
+    //DECLARING MOTORS, SERVOS, and DRIVE
     RobotDriving drive;
     DcMotor RF, LF, RB, LB, Lift;
     Servo ButtonPresser;
-    Boolean backwards = false;
 
     @Override
     public void init() {
+        //INITIALIZING EVERYTHING
         drive = new RobotDriving(hardwareMap.dcMotor.get("LF"), hardwareMap.dcMotor.get("LB"), hardwareMap.dcMotor.get("RF"), hardwareMap.dcMotor.get("RB"));
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
         RF = hardwareMap.dcMotor.get("RF");
@@ -31,8 +31,8 @@ public class AlephBotsTeleOp extends OpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        RF.setDirection(DcMotor.Direction.REVERSE);
-        RB.setDirection(DcMotor.Direction.REVERSE);
+        //RF.setDirection(DcMotor.Direction.REVERSE);
+        //RB.setDirection(DcMotor.Direction.REVERSE);
         ButtonPresser.setPosition(0.4);
     }
 
