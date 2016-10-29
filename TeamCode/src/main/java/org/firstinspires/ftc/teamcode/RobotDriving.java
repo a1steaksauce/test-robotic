@@ -30,7 +30,6 @@ public class RobotDriving {
 
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDriveB.setDirection(DcMotor.Direction.REVERSE);
-
     }
     public void tankDrive(double leftPower, double rightPower){ //Function for driving with parameters leftDrive and RightDrive
         leftPower = Range.clip(leftPower, -1, 1); //Clip the values
@@ -46,10 +45,6 @@ public class RobotDriving {
         leftDriveB.setPower(leftPower);
         rightDrive.setPower(rightPower);
         rightDriveB.setPower(rightPower);
-
-
-
-
     }
     public void tankDrive(Gamepad gamepad){
         //Function that calls the other tankDrive with parameters of which gamepad to use
@@ -91,12 +86,12 @@ public class RobotDriving {
             return "Half Speed";
         }
     }
-    public void setServoToggle(Servo servo, boolean firstButton, double firstValue, boolean secondButton, double secondValue){
+    /*public void setServoToggle(Servo servo, boolean firstButton, double firstValue, boolean secondButton, double secondValue){
         if(firstButton){
             servo.setPosition(firstValue);
         } else if (secondButton){
             servo.setPosition(secondValue);
         }
-    }
+    }*/
 
 }
