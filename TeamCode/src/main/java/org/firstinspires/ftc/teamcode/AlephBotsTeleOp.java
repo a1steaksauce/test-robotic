@@ -38,7 +38,7 @@ public class AlephBotsTeleOp extends OpMode{
 
     @Override
     public void loop() {
-        //DRIVE and FLIP
+        //DRIVE and FLIP using RobotDriving.java Class
         drive.tankDrive(gamepad1);
         drive.changeDriveMode(gamepad1.left_stick_button, gamepad1.right_stick_button);
 
@@ -51,7 +51,7 @@ public class AlephBotsTeleOp extends OpMode{
 
         //LIFT
         if (gamepad1.right_bumper) {
-            Lift.setPower(0.5); //FULL POWER!!!!!
+            Lift.setPower(0.5); //HALF POWER
         } else if (gamepad1.left_bumper) {
             Lift.setPower(-0.1); //TENTH OF THE POWER
         }
