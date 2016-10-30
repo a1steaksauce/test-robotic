@@ -27,8 +27,8 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
     Servo buttonPush; //pushes buttons on beacon
     Servo angler;
     UltrasonicSensor us;
-    ColorSensor lineTracker; //pointed at floor
-    ColorSensor beaconDetector; //pointed at beacon
+    //ColorSensor lineTracker; //pointed at floor
+    //ColorSensor beaconDetector; //pointed at beacon
     @Override
     public void runOpMode(){
         topLeft = hardwareMap.dcMotor.get("topLeft");        //sets code motors to point to
@@ -92,7 +92,7 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
             }
 
             telemetry.addData("Angler value: ", angler.getPosition());
-            telemetry.addData("Ultrasonic value:", us.getUltrasonicLevel());
+            // telemetry.addData("Ultrasonic value:", us.getUltrasonicLevel());
             updateTelemetry(telemetry);
         }
     }

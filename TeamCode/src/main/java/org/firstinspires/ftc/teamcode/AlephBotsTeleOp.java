@@ -33,7 +33,7 @@ public class AlephBotsTeleOp extends OpMode{
         Lift = hardwareMap.dcMotor.get("Lift");
         //RF.setDirection(DcMotor.Direction.REVERSE);
         //RB.setDirection(DcMotor.Direction.REVERSE);
-        ButtonPresser.setPosition(0.1);
+        ButtonPresser.setPosition(0.3);
     }
 
     @Override
