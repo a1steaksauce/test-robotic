@@ -9,11 +9,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * Created by Ben on 9/18/16.
  */
-public class HutzAutonomousEchad extends LinearOpMode {
+public class HutzAutonomousBlueEchad extends LinearOpMode {
     DcMotor topRight, topLeft, bottomRight, bottomLeft;
     Servo buttonPush;
     ColorSensor beaconCheckRight, beaconCheckLeft;
-    String team = "red";
+    String team = "blue";
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -89,9 +89,9 @@ public class HutzAutonomousEchad extends LinearOpMode {
                 pushLeft();
             }
         } else if (colorLeft.equals(team)) {
-                pushLeft();
+            pushLeft();
         } else if (colorRight.equals(team)) {
-                pushRight();
+            pushRight();
         }
     }
 }
