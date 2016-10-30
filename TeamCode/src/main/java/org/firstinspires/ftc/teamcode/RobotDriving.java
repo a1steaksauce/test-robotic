@@ -51,9 +51,9 @@ public class RobotDriving {
         if(normalDrive && normalSpeed){
             tankDrive(gamepad.left_stick_y, gamepad.right_stick_y); //gets values from joysticks and sets the motors
         } else if(normalDrive && !normalSpeed){
-            tankDrive(0.5 * gamepad.right_stick_y,  0.5 * gamepad.left_stick_y);
+            tankDrive(0.5 * gamepad.left_stick_y,  0.5 * gamepad.right_stick_y);
         } else if(!normalDrive && normalSpeed){
-            tankDrive(-gamepad.left_stick_y, -gamepad.right_stick_y);
+            tankDrive(-gamepad.right_stick_y, -gamepad.left_stick_y);
         } else{
             tankDrive(0.5 * -gamepad.right_stick_y,  0.5 * -gamepad.left_stick_y);
         }
