@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 public class TeleopHutzNoSmLift extends LinearOpMode {
     final double DEAD_ZONE = 0.05; //TODO: CHANGE THIS THROUGH DEBUGGING
-    final double INCREMENT = 0.05;
+    final double INCREMENT = 0.05; //TODO: CHANGE THIS THROUGH DEBUGGING
     final int CPR = 1440; //Counts per revolution
     final int CPI = CPR / 4;
     DcMotor topLeft; //all motor names are given based on location from a top down
@@ -23,12 +23,11 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
     DcMotor botRight;
     DcMotor flywheel; //operates the gearbox
     DcMotor otherFly;
-    DcMotor lift;
     Servo buttonPush; //pushes buttons on beacon
     Servo angler;
     UltrasonicSensor us;
-    //ColorSensor lineTracker; //pointed at floor
-    //ColorSensor beaconDetector; //pointed at beacon
+    ColorSensor lineTracker; //pointed at floor
+    ColorSensor beaconDetector; //pointed at beacon
     @Override
     public void runOpMode(){
         topLeft = hardwareMap.dcMotor.get("topLeft");        //sets code motors to point to
@@ -37,14 +36,12 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
         botRight = hardwareMap.dcMotor.get("botRight");
         flywheel = hardwareMap.dcMotor.get("flywheel");
         otherFly = hardwareMap.dcMotor.get("otherFly");
-        lift = hardwareMap.dcMotor.get("lift");
         angler = hardwareMap.servo.get("angler");
         buttonPush = hardwareMap.servo.get("buttonPush");
 
         topLeft.setDirection(DcMotor.Direction.REVERSE);
         botLeft.setDirection(DcMotor.Direction.REVERSE);
-        //lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER); no encoder for now
-        angler.setPosition(0);
+
         while(true){
             if (Math.abs(gamepad1.left_stick_y) > DEAD_ZONE) {
                 topLeft.setPower(gamepad1.left_stick_y);
@@ -73,27 +70,12 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
                 angler.setPosition(angler.getPosition()-INCREMENT);
             }
             if (gamepad1.dpad_left) {
-                buttonPush.setPosition(0.125);
+                buttonPush.setPosition(0.3);
             } else if (gamepad1.dpad_right) {
-                buttonPush.setPosition(0.375);
+                buttonPush.setPosition(0.7);
             } else {
-                buttonPush.setPosition(0.25);
-            } //TODO: FIX VALUES but test current ones first
-            if (gamepad1.y) {
-                //lift.setTargetPosition(14*CPI);
-                //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lift.setPower(0.1);
-            } else if (gamepad1.a) {
-                //lift.setTargetPosition(-14*CPI);
-                //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                lift.setPower(-0.1);
-            } else {
-                lift.setPower(0);
+                buttonPush.setPosition(0.5);
             }
-
-            telemetry.addData("Angler value: ", angler.getPosition());
-            // telemetry.addData("Ultrasonic value:", us.getUltrasonicLevel());
-            updateTelemetry(telemetry);
         }
     }
 }
