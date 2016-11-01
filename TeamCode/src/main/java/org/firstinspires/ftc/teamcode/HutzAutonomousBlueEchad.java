@@ -46,6 +46,18 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
         bottomLeft.setPower(power);
     }
 
+    public void forward1() {
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topLeft.setTargetPosition(115);
+        bottomLeft.setTargetPosition(115);
+        topRight.setTargetPosition(115);
+        bottomRight.setTargetPosition(115);
+        forward(1);
+    }
+
     public void left(double speed) {
         topRight.setPower(0 - speed);
         bottomRight.setPower(0 - speed);
@@ -66,6 +78,18 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
         bottomRight.setPower(power);
         topLeft.setPower(power);
         bottomLeft.setPower(power);
+    }
+
+    public void backward1() {
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topLeft.setTargetPosition(115);
+        bottomLeft.setTargetPosition(115);
+        topRight.setTargetPosition(115);
+        bottomRight.setTargetPosition(115);
+        backward(1);
     }
 
     public boolean lineDetect() { //should have range, not definite equals
