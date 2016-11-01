@@ -4,15 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.En
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by Ben on 9/18/16.
  */
-public class HutzAutonomousBlueEchad extends LinearOpMode {
+public class HutzAutonomousRedEchad extends LinearOpMode {
     DcMotor topRight, topLeft, bottomRight, bottomLeft;
     Servo buttonPush;
-    ColorSensor beaconCheckRight, beaconCheckLeft;
+    ColorSensor beaconCheckRight, beaconCheckLeft, lineDetector;
     String team = "blue";
 
     @Override
@@ -23,9 +25,18 @@ public class HutzAutonomousBlueEchad extends LinearOpMode {
         bottomLeft = hardwareMap.dcMotor.get("bottomLeft");
         topRight.setDirection(DcMotor.Direction.REVERSE);
         bottomRight.setDirection(DcMotor.Direction.REVERSE);
+        topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         buttonPush = hardwareMap.servo.get("buttonPush");
         beaconCheckRight = hardwareMap.colorSensor.get("beaconCheckRight");
         beaconCheckLeft = hardwareMap.colorSensor.get("beaconCheckLeft");
+        lineDetector = hardwareMap.colorSensor.get("lineDetector");
     }
 
     public void forward(double power) {
@@ -57,12 +68,46 @@ public class HutzAutonomousBlueEchad extends LinearOpMode {
         bottomLeft.setPower(power);
     }
 
-    public void pushLeft() {
-        buttonPush.setPosition(0.7); //TODO: CHANGE THROUGH DEBUGGING
+    public boolean lineDetect() { //should have range, not definite equals
+        return lineDetector.argb() == 10000000; //TODO: CHANGE THROUGH DEBUGGING
     }
 
-    public void pushRight() {
-        buttonPush.setPosition(0.3); //TODO: CHANGE THROUGH DEBUGGING
+    public void pushLeft() { //TODO: CHANGE THROUGH DEBUGGING
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topLeft.setTargetPosition(180);
+        bottomLeft.setTargetPosition(180);
+        topLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bottomLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        topLeft.setPower(1);
+        bottomLeft.setPower(1);
+        topLeft.setTargetPosition(360);
+        bottomLeft.setTargetPosition(360);
+        topLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bottomLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        topLeft.setPower(-1);
+        bottomLeft.setPower(-1);
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void pushRight() { //TODO: CHANGE THROUGH DEBUGGING
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topRight.setTargetPosition(180);
+        bottomRight.setTargetPosition(180);
+        topRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bottomRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        topRight.setPower(1);
+        bottomRight.setPower(1);
+        topRight.setTargetPosition(360);
+        bottomRight.setTargetPosition(360);
+        topRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        bottomRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        topRight.setPower(-1);
+        bottomRight.setPower(-1);
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void pushButton() {

@@ -42,6 +42,8 @@ public class TeleopHutzNoSmLift extends LinearOpMode {
         topLeft.setDirection(DcMotor.Direction.REVERSE);
         botLeft.setDirection(DcMotor.Direction.REVERSE);
 
+        otherFly.setDirection(DcMotor.Direction.REVERSE);
+
         while(true){
             if (Math.abs(gamepad1.left_stick_y) > DEAD_ZONE) {
                 topLeft.setPower(gamepad1.left_stick_y);
