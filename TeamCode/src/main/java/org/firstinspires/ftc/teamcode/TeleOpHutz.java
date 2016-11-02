@@ -75,6 +75,8 @@ public class TeleOpHutz extends LinearOpMode {
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         botLeft.setDirection(DcMotor.Direction.REVERSE); //left motors are backward
 
+        otherFly.setDirection(DcMotor.Direction.REVERSE);
+
         reset();
 
         while (true) {
