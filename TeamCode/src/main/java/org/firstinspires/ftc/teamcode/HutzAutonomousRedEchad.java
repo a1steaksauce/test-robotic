@@ -50,10 +50,10 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
         bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        topLeft.setTargetPosition(115);
-        bottomLeft.setTargetPosition(115);
-        topRight.setTargetPosition(115);
-        bottomRight.setTargetPosition(115);
+        topLeft.setTargetPosition(1375);
+        bottomLeft.setTargetPosition(1375);
+        topRight.setTargetPosition(1375);
+        bottomRight.setTargetPosition(1375);
         forward(1);
     }
 
@@ -64,11 +64,35 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
         bottomLeft.setPower(speed);
     }
 
+    public void left90() { //TODO: CHANGE THROUGH DEBUGGING
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topLeft.setTargetPosition(1000);
+        bottomLeft.setTargetPosition(1000); //definitely wrong number
+        topRight.setTargetPosition(1000);
+        bottomRight.setTargetPosition(1000);
+        left(1);
+    }
+
     public void right(double speed) {
         topRight.setPower(speed);
         bottomRight.setPower(speed);
         topLeft.setPower(0 - speed);
         bottomLeft.setPower(0 - speed);
+    }
+
+    public void right90() { //TODO: CHANGE THROUGH DEBUGGING
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topLeft.setTargetPosition(1000);
+        bottomLeft.setTargetPosition(1000); //definitely wrong number
+        topRight.setTargetPosition(1000);
+        bottomRight.setTargetPosition(1000);
+        right(1);
     }
 
     public void backward(double power) {
@@ -84,10 +108,10 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
         bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        topLeft.setTargetPosition(115);
-        bottomLeft.setTargetPosition(115);
-        topRight.setTargetPosition(115);
-        bottomRight.setTargetPosition(115);
+        topLeft.setTargetPosition(1375);
+        bottomLeft.setTargetPosition(1375);
+        topRight.setTargetPosition(1375);
+        bottomRight.setTargetPosition(1375);
         backward(1);
     }
 
