@@ -24,7 +24,8 @@ public class AlephBotsTeleOp extends OpMode{
     @Override
     public void init() {
         //INITIALIZING EVERYTHING
-        drive = new RobotDriving(hardwareMap.dcMotor.get("LF"), hardwareMap.dcMotor.get("LB"), hardwareMap.dcMotor.get("RF"), hardwareMap.dcMotor.get("RB"));
+        drive = new RobotDriving(hardwareMap.dcMotor.get("LF"), hardwareMap.dcMotor.get("LB"),
+                                 hardwareMap.dcMotor.get("RF"), hardwareMap.dcMotor.get("RB"));
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
@@ -33,7 +34,7 @@ public class AlephBotsTeleOp extends OpMode{
         Lift = hardwareMap.dcMotor.get("Lift");
         //RF.setDirection(DcMotor.Direction.REVERSE);
         //RB.setDirection(DcMotor.Direction.REVERSE);
-        ButtonPresser.setPosition(0.1);
+        ButtonPresser.setPosition(0.3);
     }
 
     @Override
