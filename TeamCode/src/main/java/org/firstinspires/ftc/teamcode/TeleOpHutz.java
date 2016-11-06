@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 /**
  * Created by Eliezer Pearl on 9/9/2016.
  */
-@TeleOp(name="mainBot: Teleop Tank 2")
+@TeleOp(name="mainBot: Teleop Tank")
 //@Disabled //uncomment to disable, comment to enable
 public class TeleOpHutz extends LinearOpMode {
 

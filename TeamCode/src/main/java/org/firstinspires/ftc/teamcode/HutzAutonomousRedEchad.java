@@ -24,13 +24,13 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
         bottomLeft = hardwareMap.dcMotor.get("bottomLeft");
         topRight.setDirection(DcMotor.Direction.REVERSE);
         bottomRight.setDirection(DcMotor.Direction.REVERSE);
-        topRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        topRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bottomRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bottomRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         bottomRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        topLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        topLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bottomLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bottomLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         bottomLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         buttonPush = hardwareMap.servo.get("buttonPush");
         beaconCheckRight = hardwareMap.colorSensor.get("beaconCheckRight");
@@ -159,7 +159,7 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
 
     public void pushButton() {
         String valueRight = Integer.toString(beaconCheckRight.argb());
-        String colorRight;
+        String colorRight = "";
         if (valueRight != "") {
             if (Integer.valueOf(valueRight.substring(2, 4)) > Integer.valueOf(valueRight.substring(6, 8))) {
                 colorRight = "red";
@@ -168,7 +168,7 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
             }
         }
         String valueLeft = Integer.toString(beaconCheckLeft.argb());
-        String colorLeft;
+        String colorLeft = "";
         if (valueLeft != "") {
             if (Integer.valueOf(valueLeft.substring(2, 4)) > Integer.valueOf(valueLeft.substring(6, 8))) {
                 colorLeft = "red";
@@ -181,9 +181,9 @@ public class HutzAutonomousRedEchad extends LinearOpMode {
                 pushLeft();
             }
         } else if (colorLeft.equals(team)) {
-                pushLeft();
+            pushLeft();
         } else if (colorRight.equals(team)) {
-                pushRight();
+            pushRight();
         }
     }
 }
