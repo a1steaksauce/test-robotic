@@ -28,20 +28,26 @@ public class HutzAutoTest extends LinearOpMode {
     //BEGIN FUNCTIONS
 
     //input INCHES!!!
+    public void rest (long ms) {
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e){}
+    }
     public void forward (int dist, double pwr) {
         topLeft.setPower(pwr);
         topRight.setPower(pwr);
         botLeft.setPower(pwr);
         botRight.setPower(pwr);
-        topRight.setTargetPosition(inchInTicks * dist + tRTick);
-        topLeft.setTargetPosition(inchInTicks * dist + tLTick);
-        botLeft.setTargetPosition(inchInTicks * dist + bLTick);
-        botRight.setTargetPosition(inchInTicks * dist + bRTick);
+        topRight.setTargetPosition(inchInTicks * dist + 0 /*tRTick*/);
+        topLeft.setTargetPosition(inchInTicks * dist + 0/*tLTick*/);
+        botLeft.setTargetPosition(inchInTicks * dist + 0/*bLTick*/);
+        botRight.setTargetPosition(inchInTicks * dist + 0/*bRTick*/);
+        //Add a slowdown in future
         tLTick = topLeft.getCurrentPosition();
         tRTick = topRight.getCurrentPosition();
         bLTick = botLeft.getCurrentPosition();
         bRTick = botRight.getCurrentPosition();
-
+        rest(1000);
     }
     //input INCHES!!!
     public void backward (int dist, double pwr) {
@@ -51,14 +57,15 @@ public class HutzAutoTest extends LinearOpMode {
         topRight.setPower(pwr);
         botLeft.setPower(pwr);
         botRight.setPower(pwr);
-        topRight.setTargetPosition(inchInTicks * dist + tRTick);
-        topLeft.setTargetPosition(inchInTicks * dist + tLTick);
-        botLeft.setTargetPosition(inchInTicks * dist + bLTick);
-        botRight.setTargetPosition(inchInTicks * dist + bRTick);
+        topRight.setTargetPosition(inchInTicks * dist /*+ tRTick*/);
+        topLeft.setTargetPosition(inchInTicks * dist /*+ tLTick*/);
+        botLeft.setTargetPosition(inchInTicks * dist /*+ bLTick*/);
+        botRight.setTargetPosition(inchInTicks * dist /*+ bRTick*/);
         tLTick = topLeft.getCurrentPosition();
         tRTick = topRight.getCurrentPosition();
         bLTick = botLeft.getCurrentPosition();
         bRTick = botRight.getCurrentPosition();
+        rest(1000);
     }
 
     //Amount of ticks per degree turn
@@ -74,6 +81,7 @@ public class HutzAutoTest extends LinearOpMode {
         botLeft.setTargetPosition(angle * degreeInTicks);
         botRight.setTargetPosition(angle * degreeInTicks);
         topRight.setTargetPosition(angle * degreeInTicks);
+        rest(1000);
         //FIX
 
     }
@@ -87,6 +95,7 @@ public class HutzAutoTest extends LinearOpMode {
         botLeft.setTargetPosition(angle * degreeInTicks);
         botRight.setTargetPosition(angle * degreeInTicks);
         topRight.setTargetPosition(angle * degreeInTicks);
+        rest(1000);
         //FIX
     }
     @Override
@@ -100,19 +109,20 @@ public class HutzAutoTest extends LinearOpMode {
         topLeft.setDirection(DcMotor.Direction.REVERSE);
         botLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        tLTick = topLeft.getCurrentPosition();
-        tRTick = topRight.getCurrentPosition();
-        bLTick = botLeft.getCurrentPosition();
-        bRTick = botRight.getCurrentPosition();
+        //tLTick = topLeft.getCurrentPosition();
+        //tRTick = topRight.getCurrentPosition();
+        //bLTick = botLeft.getCurrentPosition();
+        //bRTick = botRight.getCurrentPosition();
         //ENCODER SETUP:
+        topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         topRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //topRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        botRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         botRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //botRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         topLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //topLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        botLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         botLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //botLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
 
         csR = hardwareMap.colorSensor.get("csR");
@@ -126,8 +136,8 @@ public class HutzAutoTest extends LinearOpMode {
         //START CODE
         //One square on filed = 23"
        //while (opModeIsActive()) {
-            forward(12, 0.5);
-            forward(12, 0.25);
+            forward(24, 0.75);
+
        //}
     }
 }
