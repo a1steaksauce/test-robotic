@@ -4,6 +4,7 @@ import android.widget.Button;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -20,7 +21,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
-    LightSensor GroundLightSensor =  null, BeaconLightSensor = null;
+    OpticalDistanceSensor TheGroundColorSensor =  null, BeaconLightSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -36,14 +37,14 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        GroundLightSensor = hardwareMap.lightSensor.get("LightSensor");
-        BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
+        TheGroundColorSensor = hardwareMap.opticalDistanceSensor.get("TheGroundColorSensor");
+        //BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
 
         ButtonPresser.setPosition(0.3);
-        GroundLightSensor.enableLed(true);
-        BeaconLightSensor.enableLed(true);
+        TheGroundColorSensor.enableLed(true);
+        //BeaconLightSensor.enableLed(true);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -52,7 +53,7 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         while (!isStarted()) {
 
             // Display the light level while we are waiting to start
-            telemetry.addData("Light Level:", GroundLightSensor.getLightDetected());
+            telemetry.addData("Light Level:", TheGroundColorSensor.getLightDetected());
             telemetry.update();
             idle();
         }
@@ -79,10 +80,10 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         driveStraight(FORWARD_SPEED);
 
         // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
+        while (opModeIsActive() && (TheGroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
-            telemetry.addData("Light Level:",  GroundLightSensor.getLightDetected());
+            telemetry.addData("Light Level:",  TheGroundColorSensor.getLightDetected());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
@@ -97,10 +98,10 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
             telemetry.update();
             idle();
         }
-        while (opModeIsActive() && (GroundLightSensor.getLightDetected() < WHITE_THRESHOLD)) {
+        while (opModeIsActive() && (TheGroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
-            telemetry.addData("Light Level:",  GroundLightSensor.getLightDetected());
+            telemetry.addData("Light Level:",  TheGroundColorSensor.getLightDetected());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
@@ -116,11 +117,11 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
             idle();
         }
         stopDrive();
-        if (BeaconLightSensor.getLightDetected() < 0.5) {
+        /*if (BeaconLightSensor.getLightDetected() < 0.5) {
             ButtonPresser.setPosition(0.0);
         } else {
             ButtonPresser.setPosition(0.92);
-        }
+        }*/
     }
     public void driveStraight(double power) {
         LF.setPower(power);
