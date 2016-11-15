@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by aaronkbutler on 10/21/16.
+ * Created by AARON BUTLER on 10/21/16.
  */
 
 @Autonomous(name="Aleph Bots Autonomous: Drive To Line Right", group="Autonomous")
