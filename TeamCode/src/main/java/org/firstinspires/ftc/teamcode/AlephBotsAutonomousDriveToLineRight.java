@@ -1,33 +1,28 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.widget.Button;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.LightSensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots Autonomous: Drive To Line", group="Autonomous")
-public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
+@Autonomous(name="Aleph Bots Autonomous: Drive To Line Right", group="Autonomous")
+public class AlephBotsAutonomousDriveToLineRight extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
-    OpticalDistanceSensor TheGroundColorSensor =  null, BeaconLightSensor = null;
+    OpticalDistanceSensor TheGroundColorSensor =  null;//, BeaconLightSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double     FORWARD_SPEED  = 0.6;
-    static final double     TURN_SPEED    = 0.5;
-    static final double     WHITE_THRESHOLD = 0.2;  // spans between 0.1 - 0.5 from dark to light
+    static final double     FORWARD2_SPEED = 0.1;
+    static final double     TURN_SPEED    = 0.3;
+    static final double     WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -109,9 +104,9 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         // Stop all motors
         stopDrive();
 
-        driveStraight(FORWARD_SPEED);
+        driveStraight(FORWARD2_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
             telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
             idle();
@@ -124,23 +119,23 @@ public class AlephBotsAutonomousDriveToLine extends LinearOpMode{
         }*/
     }
     public void driveStraight(double power) {
-        LF.setPower(power);
-        LB.setPower(power);
-        RF.setPower(power);
-        RB.setPower(power);
-    }
-    public void turnLeft(double power) {
         LF.setPower(-power);
         LB.setPower(-power);
-        RF.setPower(power);
-        RB.setPower(power);
+        RF.setPower(-power);
+        RB.setPower(-power);
     }
-
-    public void turnRight(double power) {
+    public void turnLeft(double power) {
         LF.setPower(power);
         LB.setPower(power);
         RF.setPower(-power);
         RB.setPower(-power);
+    }
+
+    public void turnRight(double power) {
+        LF.setPower(-power);
+        LB.setPower(-power);
+        RF.setPower(power);
+        RB.setPower(power);
     }
 
     public void stopDrive() {
