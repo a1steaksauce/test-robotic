@@ -17,7 +17,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
  */
 @Autonomous(name="Aleph Bots Autonomous: Drive Straight", group="Autonomous")
 public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
-    RobotDriving drive = null;
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
     //LightSensor GroundLightSensor = null, BeaconLightSensor = null;
@@ -28,16 +27,14 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
     static final double     TURN_SPEED    = 0.5;
 
     public void runOpMode() throws InterruptedException {
-        drive = new RobotDriving(hardwareMap.dcMotor.get("LF"), hardwareMap.dcMotor.get("LB"),
-                hardwareMap.dcMotor.get("RF"), hardwareMap.dcMotor.get("RB"));
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        //RF.setDirection(DcMotor.Direction.REVERSE);
-        //RB.setDirection(DcMotor.Direction.REVERSE);
+        RF.setDirection(DcMotor.Direction.REVERSE);
+        RB.setDirection(DcMotor.Direction.REVERSE);
         ButtonPresser.setPosition(0.3);
 
         //GroundLightSensor.enableLed(true);
@@ -67,23 +64,23 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
         idle();
     }
     public void driveStraight(double power) {
-        LF.setPower(power);
-        LB.setPower(power);
-        RF.setPower(power);
-        RB.setPower(power);
-    }
-    public void turnLeft(double power) {
         LF.setPower(-power);
         LB.setPower(-power);
-        RF.setPower(power);
-        RB.setPower(power);
+        RF.setPower(-power);
+        RB.setPower(-power);
     }
-
-    public void turnRight(double power) {
+    public void turnLeft(double power) {
         LF.setPower(power);
         LB.setPower(power);
         RF.setPower(-power);
         RB.setPower(-power);
+    }
+
+    public void turnRight(double power) {
+        LF.setPower(-power);
+        LB.setPower(-power);
+        RF.setPower(power);
+        RB.setPower(power);
     }
 
     public void stopDrive() {
