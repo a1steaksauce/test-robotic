@@ -51,11 +51,11 @@ public class RobotDriving {
         if(normalDrive && normalSpeed){
             tankDrive(gamepad.left_stick_y, gamepad.right_stick_y); //gets values from joysticks and sets the motors
         } else if(normalDrive && !normalSpeed){
-            tankDrive(0.1 * gamepad.left_stick_y,  0.1 * gamepad.right_stick_y);
+            tankDrive(0.25 * gamepad.left_stick_y,  0.25 * gamepad.right_stick_y);
         } else if(!normalDrive && normalSpeed){
             tankDrive(-gamepad.right_stick_y, -gamepad.left_stick_y);
         } else{
-            tankDrive(0.1 * -gamepad.right_stick_y,  0.1 * -gamepad.left_stick_y);
+            tankDrive(0.25 * -gamepad.right_stick_y,  0.25 * -gamepad.left_stick_y);
         }
     }
     public void changeDriveMode(Boolean setNormalDriveTrue, Boolean setNormalDriveFalse){
