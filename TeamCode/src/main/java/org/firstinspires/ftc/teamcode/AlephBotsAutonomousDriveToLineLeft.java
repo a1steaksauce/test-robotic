@@ -1,17 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.widget.Button;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.LightSensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by aaronkbutler on 10/21/16.
@@ -21,14 +17,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null;
-    OpticalDistanceSensor TheGroundColorSensor =  null;//, BeaconLightSensor = null;
+    OpticalDistanceSensor TheGroundColorSensor =  null;
+    ColorSensor BeaconColorSensor = null;
+    TouchSensor BeaconTouchSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
     static final double     FORWARD_SPEED  = 0.6;
-    static final double     FORWARD2_SPEED = 0.1;
+    static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.3;
     static final double     WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
+
+    String blueLevelS, redLevelS;
+    int blueLevelI, redLevelI;
 
     @Override
     public void runOpMode() throws InterruptedException{
@@ -39,13 +40,14 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
         TheGroundColorSensor = hardwareMap.opticalDistanceSensor.get("TheGroundColorSensor");
-        //BeaconLightSensor = hardwareMap.lightSensor.get("BeaconLightSensor");
+        BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
+        BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
 
-        ButtonPresser.setPosition(0.3);
+        ButtonPresser.setPosition(0.35);
         TheGroundColorSensor.enableLed(true);
-        //BeaconLightSensor.enableLed(true);
+        BeaconColorSensor.enableLed(true);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -55,6 +57,11 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
 
             // Display the light level while we are waiting to start
             telemetry.addData("Light Level:", TheGroundColorSensor.getLightDetected());
+            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            /*
+            First two are alpha values
+            3rd and 4th Red
+            */
             telemetry.update();
             idle();
         }
@@ -111,18 +118,63 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
         stopDrive();
 
         driveStraight(FORWARD2_SPEED);
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-            telemetry.addData("Path", "Leg 2: %2.5f S Elapsed", runtime.seconds());
+
+        while (opModeIsActive() && !BeaconTouchSensor.isPressed()) {
+            telemetry.addData("Pressed?",BeaconTouchSensor.isPressed());
             telemetry.update();
             idle();
         }
         stopDrive();
-        /*if (BeaconLightSensor.getLightDetected() < 0.5) {
-            ButtonPresser.setPosition(0.0);
+
+        driveStraight(-FORWARD2_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
+            telemetry.addData("Path", "Leg 3: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+            idle();
+        }
+        stopDrive();
+
+        turnLeft(TURN_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.1)) {
+            telemetry.addData("Path", "Leg 3: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+            idle();
+        }
+        stopDrive();
+
+        redLevelS = Integer.toString(BeaconColorSensor.argb());
+        redLevelS = redLevelS.substring(2,3);
+        redLevelI = Integer.valueOf(redLevelS);
+
+        blueLevelS = Integer.toString(BeaconColorSensor.argb());
+        blueLevelS = blueLevelS.substring(6,7);
+        blueLevelI = Integer.valueOf(blueLevelS);
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("Red Level:", redLevelI);
+            telemetry.addData("Blue Level:", blueLevelI);
+            telemetry.update();
+            idle();
+        }
+
+        driveStraight(-FORWARD2_SPEED);
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
+            telemetry.addData("Path", "Leg 5: %2.5f S Elapsed", runtime.seconds());
+            telemetry.update();
+            idle();
+        }
+        stopDrive();
+
+        if (blueLevelI < redLevelI) {
+            ButtonPresser.setPosition(0.68);
         } else {
-            ButtonPresser.setPosition(0.92);
-        }*/
+            ButtonPresser.setPosition(0.07);
+        }
     }
     public void driveStraight(double power) {
         LF.setPower(-power);
