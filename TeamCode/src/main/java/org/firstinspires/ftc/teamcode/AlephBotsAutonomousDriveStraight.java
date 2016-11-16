@@ -23,7 +23,7 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED  = -1.0;
+    static final double     FORWARD_SPEED  = 1.0;
     static final double     TURN_SPEED    = 0.5;
 
     public void runOpMode() throws InterruptedException {
@@ -35,7 +35,7 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
         Lift = hardwareMap.dcMotor.get("Lift");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
-        ButtonPresser.setPosition(0.3);
+        ButtonPresser.setPosition(0.35);
 
         //GroundLightSensor.enableLed(true);
         //BeaconLightSensor.enableLed(true);

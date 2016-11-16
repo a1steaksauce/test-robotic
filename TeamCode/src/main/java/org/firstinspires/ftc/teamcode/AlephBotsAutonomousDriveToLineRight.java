@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
- * Created by AARON BUTLER on 10/21/16.
+ * Created by aaronkbutler on 10/21/16.
  */
 
 @Autonomous(name="Aleph Bots Autonomous: Drive To Line Right", group="Autonomous")
@@ -145,11 +145,11 @@ public class AlephBotsAutonomousDriveToLineRight extends LinearOpMode{
         stopDrive();
 
         redLevelS = Integer.toString(BeaconColorSensor.argb());
-        redLevelS = redLevelS.substring(2,3);
+        redLevelS = redLevelS.substring(2,4);
         redLevelI = Integer.valueOf(redLevelS);
 
         blueLevelS = Integer.toString(BeaconColorSensor.argb());
-        blueLevelS = blueLevelS.substring(6,7);
+        blueLevelS = blueLevelS.substring(6);
         blueLevelI = Integer.valueOf(blueLevelS);
 
         runtime.reset();
@@ -170,7 +170,7 @@ public class AlephBotsAutonomousDriveToLineRight extends LinearOpMode{
         }
         stopDrive();
 
-        if (redLevelI < blueLevelI) {
+        if (blueLevelI < redLevelI) {
             ButtonPresser.setPosition(0.68);
         } else {
             ButtonPresser.setPosition(0.07);

@@ -145,11 +145,11 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
         stopDrive();
 
         redLevelS = Integer.toString(BeaconColorSensor.argb());
-        redLevelS = redLevelS.substring(2,3);
+        redLevelS = redLevelS.substring(2,4);
         redLevelI = Integer.valueOf(redLevelS);
 
         blueLevelS = Integer.toString(BeaconColorSensor.argb());
-        blueLevelS = blueLevelS.substring(6,7);
+        blueLevelS = blueLevelS.substring(6);
         blueLevelI = Integer.valueOf(blueLevelS);
 
         runtime.reset();
