@@ -83,6 +83,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("AlephBotsAutonomousDriveToLineLeft", AlephBotsAutonomousDriveToLineLeft.class);
         manager.register("AlephBotsAutonomousDriveToLineRight", AlephBotsAutonomousDriveToLineRight.class);
         manager.register("AlephBotsAutonomousDriveStraight", AlephBotsAutonomousDriveStraight.class);
+        manager.register("AlephBotsAutonomousLineFollowTest", AlephBotsAutonomousLineFollowTest.class);
 
         //HUTZBOTS CODE:
         manager.register("TeleopHutzNoSmLift", TeleopHutzNoSmLift.class);

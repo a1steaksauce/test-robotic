@@ -26,7 +26,7 @@ public class AlephBotsAutonomousDriveToLineRight extends LinearOpMode{
     static final double     FORWARD_SPEED  = 0.6;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.3;
-    static final double     WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
+    static final double     WHITE_THRESHOLD = 0.04;
 
     String blueLevelS, redLevelS;
     int blueLevelI, redLevelI;
