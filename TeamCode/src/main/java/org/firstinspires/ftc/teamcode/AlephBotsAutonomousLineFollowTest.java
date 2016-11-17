@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots Autonomous: Drive To Line Left", group="Autonomous")
+@Autonomous(name="Aleph Bots Autonomous: Line Follow Test", group="Autonomous")
 public class AlephBotsAutonomousLineFollowTest extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null;
     OpticalDistanceSensor TheGroundColorSensor =  null;

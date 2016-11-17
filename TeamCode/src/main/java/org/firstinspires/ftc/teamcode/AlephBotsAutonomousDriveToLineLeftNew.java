@@ -13,19 +13,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots Autonomous: Drive To Line Left", group="Autonomous")
-public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
+@Autonomous(name="Aleph Bots Autonomous: Drive To Line Left New", group="Autonomous")
+public class AlephBotsAutonomousDriveToLineLeftNew extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
-    Servo ButtonPresser = null;
-    OpticalDistanceSensor TheGroundColorSensor =  null;
+    Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
+    OpticalDistanceSensor GroundColorSensor =  null;
     ColorSensor BeaconColorSensor = null;
+    TouchSensor LTouchSensor = null;
+    TouchSensor RTouchSensor = null;
     TouchSensor BeaconTouchSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED  = 0.6;
+    static final double     FORWARD_SPEED  = 0.5;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.3;
+    static final double     END_TURN_SPEED    = 0.1;
     static final double     WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
 
     String blueLevelS, redLevelS;
@@ -34,19 +37,26 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException{
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
+        LTouchServo = hardwareMap.servo.get("LTouchServo");
+        RTouchServo = hardwareMap.servo.get("RTouchServo");
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        TheGroundColorSensor = hardwareMap.opticalDistanceSensor.get("TheGroundColorSensor");
+        GroundColorSensor = hardwareMap.opticalDistanceSensor.get("GroundColorSensor");
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
+        LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
+        RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
         BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
 
         ButtonPresser.setPosition(0.35);
-        TheGroundColorSensor.enableLed(true);
+        LTouchServo.setPosition(1.0);
+        RTouchServo.setPosition(0.0);
+
+        GroundColorSensor.enableLed(true);
         BeaconColorSensor.enableLed(true);
 
         // Send telemetry message to signify robot waiting;
@@ -54,10 +64,19 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
         telemetry.update();
 
         while (!isStarted()) {
+            redLevelS = Integer.toString(BeaconColorSensor.argb());
+            redLevelS = redLevelS.substring(2,4);
+            redLevelI = Integer.valueOf(redLevelS);
 
-            // Display the light level while we are waiting to start
-            telemetry.addData("Light Level:", TheGroundColorSensor.getLightDetected());
+            blueLevelS = Integer.toString(BeaconColorSensor.argb());
+            blueLevelS = blueLevelS.substring(6,8);
+            blueLevelI = Integer.valueOf(blueLevelS);
+
+            // Display the light levels while we are waiting to start
+            telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
             telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            telemetry.addData("Red Level:", redLevelI);
+            telemetry.addData("Blue Level:", blueLevelI);
             /*
             First two are alpha values
             3rd and 4th Red
@@ -88,10 +107,10 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
         driveStraight(FORWARD_SPEED);
 
         // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive() && (TheGroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
+        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
-            telemetry.addData("Light Level:",  TheGroundColorSensor.getLightDetected());
+            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
@@ -101,15 +120,15 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
 
         turnLeft(TURN_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.2)) {
             telemetry.addData("Path", "Spin: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
             idle();
         }
-        while (opModeIsActive() && (TheGroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
+        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
             // Display the light level while we are looking for the line
-            telemetry.addData("Light Level:",  TheGroundColorSensor.getLightDetected());
+            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
@@ -128,7 +147,7 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
 
         driveStraight(-FORWARD2_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
+        while (opModeIsActive() && (runtime.seconds() < 0.3)) {
             telemetry.addData("Path", "Leg 3: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
             idle();
@@ -145,9 +164,8 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
         blueLevelI = Integer.valueOf(blueLevelS);
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 10.0)) {
+        while (opModeIsActive() && (runtime.seconds() < 3.0)) {
             telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
             telemetry.addData("Red Level:", redLevelI);
             telemetry.addData("Blue Level:", blueLevelI);
             telemetry.update();
@@ -156,24 +174,75 @@ public class AlephBotsAutonomousDriveToLineLeft extends LinearOpMode{
 
         driveStraight(-FORWARD2_SPEED);
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.4)) {
+        while (opModeIsActive() && (runtime.seconds() < 2.0)) {
             telemetry.addData("Path", "Leg 5: %2.5f S Elapsed", runtime.seconds());
             telemetry.update();
             idle();
         }
         stopDrive();
 
+        LTouchServo.setPosition(0.16);
+        RTouchServo.setPosition(0.72);
+
+        driveStraight(FORWARD2_SPEED);
+        while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed()) {
+            telemetry.addData("L Pressed?",LTouchSensor.isPressed());
+            telemetry.addData("R Pressed?",RTouchSensor.isPressed());
+            telemetry.update();
+            idle();
+        }
+        stopDrive();
+
+        if (LTouchSensor.isPressed()) {
+            driveStraightLeft(END_TURN_SPEED);
+            while (opModeIsActive() && !RTouchSensor.isPressed()) {
+                telemetry.addData("Turning Left?", "Yes");
+                telemetry.addData("L Pressed?",LTouchSensor.isPressed());
+                telemetry.addData("R Pressed?",RTouchSensor.isPressed());
+                telemetry.update();
+                idle();
+            }
+            stopDrive();
+        } else if (RTouchSensor.isPressed()) {
+            driveStraightRight(END_TURN_SPEED);
+            while (opModeIsActive() && !LTouchSensor.isPressed()) {
+                telemetry.addData("Turning Right?", "Yes");
+                telemetry.addData("L Pressed?",LTouchSensor.isPressed());
+                telemetry.addData("R Pressed?",RTouchSensor.isPressed());
+                telemetry.update();
+                idle();
+            }
+            stopDrive();
+        }
+
         if (blueLevelI < redLevelI) {
             ButtonPresser.setPosition(0.68);
         } else {
             ButtonPresser.setPosition(0.07);
         }
+
+        //LTouchServo.setPosition(1.0);
+        //RTouchServo.setPosition(0.0);
+        sleep(1000);
+        idle();
     }
     public void driveStraight(double power) {
         LF.setPower(-power);
         LB.setPower(-power);
         RF.setPower(-power);
         RB.setPower(-power);
+    }
+    public void driveStraightLeft(double power) {
+        LF.setPower(-(power/2.0));
+        LB.setPower(-(power/2.0));
+        RF.setPower(-power);
+        RB.setPower(-power);
+    }
+    public void driveStraightRight(double power) {
+        LF.setPower(-power);
+        LB.setPower(-power);
+        RF.setPower(-(power/2.0));
+        RB.setPower(-(power/2.0));
     }
     public void turnLeft(double power) {
         LF.setPower(power);

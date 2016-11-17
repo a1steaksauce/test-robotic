@@ -19,7 +19,7 @@ public class AlephBotsTeleOp extends OpMode{
     //DECLARING MOTORS, SERVOS, and DRIVE
     RobotDriving drive;
     DcMotor RF, LF, RB, LB, Lift;
-    Servo ButtonPresser;
+    Servo ButtonPresser, LTouchServo, RTouchServo;
 
     @Override
     public void init() {
@@ -27,6 +27,10 @@ public class AlephBotsTeleOp extends OpMode{
         drive = new RobotDriving(hardwareMap.dcMotor.get("LF"), hardwareMap.dcMotor.get("LB"),
                                  hardwareMap.dcMotor.get("RF"), hardwareMap.dcMotor.get("RB"));
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
+
+        LTouchServo = hardwareMap.servo.get("LTouchServo");
+        RTouchServo = hardwareMap.servo.get("RTouchServo");
+
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
@@ -34,7 +38,10 @@ public class AlephBotsTeleOp extends OpMode{
         Lift = hardwareMap.dcMotor.get("Lift");
         //RF.setDirection(DcMotor.Direction.REVERSE);
         //RB.setDirection(DcMotor.Direction.REVERSE);
-        ButtonPresser.setPosition(0.3);
+        ButtonPresser.setPosition(0.35);
+
+        LTouchServo.setPosition(1.0);
+        RTouchServo.setPosition(0.0);
     }
 
     @Override
@@ -51,9 +58,21 @@ public class AlephBotsTeleOp extends OpMode{
             ButtonPresser.setPosition(ButtonPresser.getPosition() - 0.01);
         }
 
+        if (gamepad1.dpad_left && LTouchServo.getPosition() < 1.0) {
+            LTouchServo.setPosition(LTouchServo.getPosition() + 0.01);
+        } else if (gamepad1.dpad_right && LTouchServo.getPosition() > 0.0) {
+            LTouchServo.setPosition(LTouchServo.getPosition() - 0.01);
+        }
+
+        if (gamepad1.a && RTouchServo.getPosition() < 1.0) {
+            RTouchServo.setPosition(RTouchServo.getPosition() + 0.01);
+        } else if (gamepad1.y && RTouchServo.getPosition() > 0.0) {
+            RTouchServo.setPosition(RTouchServo.getPosition() - 0.01);
+        }
+
         //LIFT
         if (gamepad1.right_bumper) {
-            Lift.setPower(0.5); //HALF POWER
+            Lift.setPower(0.7); //SEVEN TENTHS OF THE POWER
         } else if (gamepad1.left_bumper) {
             Lift.setPower(-0.1); //TENTH OF THE POWER
         }
@@ -66,6 +85,8 @@ public class AlephBotsTeleOp extends OpMode{
         telemetry.addData("Driving Mode:", drive.getDriveMode());
         telemetry.addData("Driving Speed:", drive.getDriveSpeed());
         telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
+        telemetry.addData("LTouchServo position:", LTouchServo.getPosition());
+        telemetry.addData("RTouchServo position:", RTouchServo.getPosition());
         telemetry.update();
     }
 }
