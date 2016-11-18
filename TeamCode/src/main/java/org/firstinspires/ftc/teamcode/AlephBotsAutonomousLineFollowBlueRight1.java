@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.widget.Button;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -15,8 +13,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots Autonomous: Drive To Line Follow", group="Autonomous")
-public class AutonomousLineFollow extends LinearOpMode{
+@Autonomous(name="Aleph Bots Autonomous: Blue Right 1", group="Autonomous")
+public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
     OpticalDistanceSensor GroundColorSensor =  null;
@@ -115,17 +113,17 @@ public class AutonomousLineFollow extends LinearOpMode{
         stopDrive();
         sleep(150);
         while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD){
-            turnLeft(TURN_SPEED);
+            turnRight(TURN_SPEED);
             telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
             telemetry.update();
         }
         while (opModeIsActive() && !BeaconTouchSensor.isPressed()) {
             if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
-                driveStraightLeft(FORWARD_SPEED/2);
+                driveStraightRight(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
                 telemetry.update();
             } else {
-                driveStraightRight(FORWARD_SPEED/2);
+                driveStraightLeft(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
                 telemetry.update();
             }
