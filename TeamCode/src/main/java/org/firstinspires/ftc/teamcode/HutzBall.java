@@ -14,9 +14,9 @@ import static java.lang.StrictMath.signum;
 /**
  * Created by poop on 11/13/2016.
  */
-@Autonomous(name="Hutzbots Autonomous: Eliezer Auto", group="HutzAuto")
-public class HutzForwardsNoEncoderEl extends LinearOpMode {
-    final int TURN = 10
+@Autonomous(name="Hutzbots Autonomous: BALL ONLY", group="HutzAuto")
+public class HutzBall extends LinearOpMode {
+    final int TURN = 9
             ;
     DcMotor topLeft, topRight, botLeft, botRight;
     ColorSensor csL, csR;
@@ -49,6 +49,8 @@ public class HutzForwardsNoEncoderEl extends LinearOpMode {
         telemetry.addData("Line: ", lineDetector.getLightDetected());
         telemetry.addData("csL: argb ", csL.argb());
         telemetry.addData("csR: argb ", csR.argb());
+
+        updateTelemetry(telemetry);
     }
     public void runOpMode() throws InterruptedException{
 
@@ -64,14 +66,21 @@ public class HutzForwardsNoEncoderEl extends LinearOpMode {
         csL = hardwareMap.colorSensor.get("csL");
         lineDetector = hardwareMap.lightSensor.get("lineDetector");
         ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
-
+        while (!isStarted()){
+            logToTelemetry();
+        }
         while (opModeIsActive()){
             waitForStart();
             logToTelemetry();
-            drive(0.5, 2000);
+            while (ultrason.getUltrasonicLevel() != 0 && ultrason.getUltrasonicLevel() > 40) {
+                drive(0.5, 250);
+            }
+            drive(1, 400);
             logToTelemetry();
-            turn(90);
+            sleep(500);
+            turn(-60);
             logToTelemetry();
+            idle();
         }
     }
 }
