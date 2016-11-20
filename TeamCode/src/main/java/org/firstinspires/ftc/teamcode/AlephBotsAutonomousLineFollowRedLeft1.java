@@ -184,7 +184,7 @@ public class AlephBotsAutonomousLineFollowRedLeft1 extends LinearOpMode{
         }
         stopDrive();
         runtime.reset();
-        if(runtime.seconds() < 2.0) {
+        while(runtime.seconds() < 2.0) {
             if (LTouchSensor.isPressed()) {
                 driveStraightLeft(END_TURN_SPEED);
                 while (opModeIsActive() && !RTouchSensor.isPressed()) {

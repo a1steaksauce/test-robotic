@@ -119,11 +119,11 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         }
         while (opModeIsActive() && !BeaconTouchSensor.isPressed()) {
             if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
-                driveStraightRight(FORWARD_SPEED/2);
+                driveStraightLeft(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
                 telemetry.update();
             } else {
-                driveStraightLeft(FORWARD_SPEED/2);
+                driveStraightRight(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
                 telemetry.update();
             }
@@ -182,7 +182,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         }
         stopDrive();
         runtime.reset();
-        if(runtime.seconds() < 2.0) {
+        while(runtime.seconds() < 2.0) {
             if (LTouchSensor.isPressed()) {
                 driveStraightLeft(END_TURN_SPEED);
                 while (opModeIsActive() && !RTouchSensor.isPressed()) {
@@ -205,7 +205,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
                 stopDrive();
             }
         }
-        if (blueLevelI < redLevelI) {
+        if (blueLevelI > redLevelI) {
             ButtonPresser.setPosition(0.68);
         } else {
             ButtonPresser.setPosition(0.00);
