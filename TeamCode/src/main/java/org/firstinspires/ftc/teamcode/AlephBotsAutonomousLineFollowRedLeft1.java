@@ -70,6 +70,20 @@ public class AlephBotsAutonomousLineFollowRedLeft1 extends LinearOpMode{
             // Display the light levels while we are waiting to start
             telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
             telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+
+            if(BeaconColorSensor.argb() != 0) {
+
+                redLevelS = Integer.toString(BeaconColorSensor.argb());
+                redLevelS = redLevelS.substring(2, 4);
+                redLevelI = Integer.valueOf(redLevelS);
+
+                blueLevelS = Integer.toString(BeaconColorSensor.argb());
+                blueLevelS = blueLevelS.substring(6, 8);
+                blueLevelI = Integer.valueOf(blueLevelS);
+                telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
+                telemetry.addData("Red Level:", redLevelI);
+                telemetry.addData("Blue Level:", blueLevelI);
+            }
             /*
             First two are alpha values
             3rd and 4th Red
@@ -135,7 +149,7 @@ public class AlephBotsAutonomousLineFollowRedLeft1 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.55);
+        ButtonPresser.setPosition(0.5);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {

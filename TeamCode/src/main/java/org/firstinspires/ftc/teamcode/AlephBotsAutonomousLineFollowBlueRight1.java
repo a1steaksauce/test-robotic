@@ -25,7 +25,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED  = 0.5;
+    static final double     FORWARD_SPEED  = 0.75;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.2;
     static final double     END_TURN_SPEED    = 0.3;
@@ -133,7 +133,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.55);
+        ButtonPresser.setPosition(0.5);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {

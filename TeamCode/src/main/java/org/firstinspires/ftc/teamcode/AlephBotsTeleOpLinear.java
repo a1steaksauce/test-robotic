@@ -96,6 +96,11 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             } else if (gamepad2.dpad_right){
                 lineUp(true);
             }
+            //LIFT TOUCH SENSOR SERVOS
+            if (gamepad1.y){
+                RTouchServo.setPosition(0.0);
+                LTouchServo.setPosition(1.0);
+            }
             //TELEMETRY
             telemetry.addData("Aleph Bots Robot:", "Running!");
             telemetry.addData("Driving Mode:", drive.getDriveMode());
@@ -150,46 +155,78 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
         RB.setPower(0);
     }
     public void lineUp(Boolean right) throws InterruptedException {
-        driveStraight(FORWARD_SPEED);
+        runningAutonomous = true;
+        int step = 0;
+        while (runningAutonomous == true) {
+            if(step == 0) {
+                driveStraight(FORWARD_SPEED);
 
-        // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
+                // run until the white line is seen OR the driver presses STOP;
+                while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
 
-            // Display the light level while we are looking for the line
-            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-            telemetry.update();
-            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-        }
+                    // Display the light level while we are looking for the line
+                    telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
+                    telemetry.update();
 
-        // Stop all motors
-        stopDrive();
-        driveStraight(FORWARD_SPEED/2);
-        LTouchServo.setPosition(0.16);
-        RTouchServo.setPosition(0.72);
-        sleep(150);
-        stopDrive();
-        sleep(150);
-        while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD){
-            if(!right) {
-                turnLeft(TURN_SPEED);
-            } else {
-                turnRight(TURN_SPEED);
+                    if(gamepad2.a){
+                        runningAutonomous = false;
+                        break;
+                    }
+                    idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+
+                }
+
+            // Stop all motors
+                stopDrive();
             }
-            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-            telemetry.update();
-        }
+            if (step == 1) {
+                LTouchServo.setPosition(0.16);
+                RTouchServo.setPosition(0.72);
+                driveStraight(FORWARD_SPEED / 2);
 
-        runtime.reset();
-        while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed() && runtime.seconds() < 2.0) {
-            if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
-                driveStraightLeft(FORWARD_SPEED/2);
-                telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-                telemetry.update();
-            } else {
-                driveStraightRight(FORWARD_SPEED/2);
-                telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-                telemetry.update();
+                sleep(150);
+                stopDrive();
+                sleep(150);
             }
+            if(step == 2) {
+                while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) {
+                    if (!right) {
+                        turnLeft(TURN_SPEED);
+                    } else {
+                        turnRight(TURN_SPEED);
+                    }
+                    telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
+                    telemetry.update();
+
+                    if(gamepad2.a){
+                        runningAutonomous = false;
+                        break;
+                    }
+                }
+            }
+            if (step == 3) {
+                runtime.reset();
+                while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed() && runtime.seconds() < 2.0) {
+                    if (GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD) {
+                        driveStraightLeft(FORWARD_SPEED / 2);
+                        telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
+                        telemetry.update();
+                    } else {
+                        driveStraightRight(FORWARD_SPEED / 2);
+                        telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
+                        telemetry.update();
+                    }
+
+                    if(gamepad2.a){
+                        runningAutonomous = false;
+                        break;
+                    }
+
+                }
+                runningAutonomous = false;
+            }
+            step++;
         }
+        runningAutonomous = false;
     }
 }

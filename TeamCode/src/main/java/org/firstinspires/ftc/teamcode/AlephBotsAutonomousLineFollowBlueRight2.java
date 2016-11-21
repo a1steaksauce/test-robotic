@@ -25,7 +25,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED  = 0.5;
+    static final double     FORWARD_SPEED  = 0.75;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.2;
     static final double     END_TURN_SPEED    = 0.3;
@@ -95,7 +95,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         waitForStart();
         idle();
         */
-        driveStraight(FORWARD_SPEED);
+        driveStraight(1);
 
         // run until the white line is seen OR the driver presses STOP;
         while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
@@ -133,7 +133,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.55);
+        ButtonPresser.setPosition(0.5);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {
@@ -221,10 +221,10 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         RTouchServo.setPosition(0.0);
 
         turnLeft(TURN_SPEED);
-        sleep(1800); //Try to turn 90 degrees to the right
+        sleep(1600); //Try to turn 90 degrees to the right
         stopDrive();
 
-        driveStraight(FORWARD_SPEED); //Go until 2nd white line
+        driveStraight(1); //Go until 2nd white line
 
         // run until the white line is seen OR the driver presses STOP;
         while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
@@ -262,7 +262,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.55); //Adjust the servo to line the color sensor up with the beacon
+        ButtonPresser.setPosition(0.5); //Adjust the servo to line the color sensor up with the beacon
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {
