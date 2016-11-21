@@ -31,6 +31,14 @@ public class TeleOpHutz extends LinearOpMode {
         botLeft.setPower(0);
         botRight.setPower(0);
     }
+    public void logToTelemetry() throws InterruptedException{
+        telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
+        telemetry.addData("Line: ", lineDetector.getLightDetected());
+        telemetry.addData("csL: argb ", csL.argb());
+        telemetry.addData("csR: argb ", csR.argb());
+
+        updateTelemetry(telemetry);
+    }
     /////////////////////////////////////////
 
     /////////////////////////////////////////
@@ -62,6 +70,7 @@ public class TeleOpHutz extends LinearOpMode {
 
         reset();
         while (!isStarted()) {
+            logToTelemetry();
         }
         while (opModeIsActive()) {
             /*
@@ -89,14 +98,7 @@ public class TeleOpHutz extends LinearOpMode {
                 topLeft.setPower(0);
                 botLeft.setPower(0);
             }
-
-            /*Telemetry is basically System.out.println() for
-            robots. For example, telemetry.addData("Text", "*** Robot Data***");
-            will display "Text: *** Robot Data***" on the
-            driver's station.
-            */
-            telemetry.addData("Left joystick Y value:", gamepad1.left_stick_y);
-            telemetry.addData("Right joystick Y value:", gamepad1.right_stick_y);
+            logToTelemetry();
         }
     }
 }
