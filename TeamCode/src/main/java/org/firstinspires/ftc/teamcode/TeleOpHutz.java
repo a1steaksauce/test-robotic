@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
@@ -16,41 +17,36 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 //@Disabled //uncomment to disable, comment to enable
 public class TeleOpHutz extends LinearOpMode {
 
-    final double DEAD_ZONE = 0.08; //TODO: CHANGE THIS THROUGH DEBUGGING
+    final double DEAD_ZONE = 0.05; //TODO: CHANGE THIS THROUGH DEBUGGING
 
     DcMotor topLeft; //all motor names are given based on location from a top down
     DcMotor topRight; //view of the robot
     DcMotor botLeft;
     DcMotor botRight;
-    DcMotor flywheel; //operates the gearbox
-    DcMotor otherFly;
+    DcMotor intake;
 //    DcMotor steve; //for raising the balls to the gearbox. Name was provided by Elan Ganz
     public void reset(){
-        flywheel.setPower(0);
-        //steve.setPower(0);
-        otherFly.setPower(0);
         topLeft.setPower(0);
         topRight.setPower(0);
         botLeft.setPower(0);
         botRight.setPower(0);
-        buttonPush.setPosition(0.5);
-   //     handL.setPosition(0.5);
-    //    handR.setPosition(0.5);
-        //handUp.setPosition(1);
+    }
+    public void logToTelemetry() throws InterruptedException{
+        telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
+        telemetry.addData("Line: ", lineDetector.getLightDetected());
+        telemetry.addData("csL: argb ", csL.argb());
+        telemetry.addData("csR: argb ", csR.argb());
+
+        updateTelemetry(telemetry);
     }
     /////////////////////////////////////////
-    Servo buttonPush;//pushes buttons on beacon
-    Servo angler;
-   // Servo handL;
- //   Servo handR;
-    //Servo handUp;
+
     /////////////////////////////////////////
     UltrasonicSensor us;
-    ColorSensor lineTracker; //pointed at floor
-    ColorSensor beaconDetector; //pointed at beacon
+    LightSensor lineTracker; //pointed at floor
+    ColorSensor csL; //pointed at beacon
+    ColorSensor csR;
 
-    boolean bumperRunning = false;
-    boolean up = false;
 
     public TeleOpHutz() {  //just here, don't touch
 
@@ -63,23 +59,20 @@ public class TeleOpHutz extends LinearOpMode {
         topRight = hardwareMap.dcMotor.get("topRight");       //actual ones. use the names
         botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
         botRight = hardwareMap.dcMotor.get("botRight");
-        flywheel = hardwareMap.dcMotor.get("flywheel");
-        //steve = hardwareMap.dcMotor.get("steve");
-        otherFly = hardwareMap.dcMotor.get("otherFly");
-        buttonPush = hardwareMap.servo.get("buttonPush");
-        angler = hardwareMap.servo.get("angler");
         us = hardwareMap.ultrasonicSensor.get("us");
-        lineTracker = hardwareMap.colorSensor.get("lineTracker");
-        beaconDetector = hardwareMap.colorSensor.get("beaconDetector");
+        lineTracker = hardwareMap.lightSensor.get("lineTracker");
+        csL = hardwareMap.colorSensor.get("csL");
+        csR = hardwareMap.colorSensor.get("csR");
+        intake = hardwareMap.dcMotor.get("intake");
 
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         botLeft.setDirection(DcMotor.Direction.REVERSE); //left motors are backward
 
-        otherFly.setDirection(DcMotor.Direction.REVERSE);
-
         reset();
-
-        while (true) {
+        while (!isStarted()) {
+            logToTelemetry();
+        }
+        while (opModeIsActive()) {
             /*
                 Essentially, the following code makes sure that
                 a joystick is being moved for real (hence
@@ -105,71 +98,7 @@ public class TeleOpHutz extends LinearOpMode {
                 topLeft.setPower(0);
                 botLeft.setPower(0);
             }
-     //       if (gamepad1.dpad_up) {
-   //             if (gamepad1.left_trigger != 1) {
-     //               steve.setPower(0.5);
-       //         } else {
-         //           steve.setPower(0.9);
-         //       }
-       //     } else if (gamepad1.dpad_down) {
-            //
-            //         if (gamepad1.left_trigger != 1) {
-            //        steve.setPower(-0.5);
-            //    } else {
-             //       steve.setPower(-0.9);
-             //   }
-           // }
-            if (gamepad1.dpad_left) {
-                otherFly.setPower(1);
-                flywheel.setPower(1); //note that this is max power; also TODO: MIGHT NEED TO REVERSE MOTOR IF SPINS INWARDS
-            } else {
-                otherFly.setPower(0);
-                flywheel.setPower(0);
-            }
-            if (gamepad1.left_bumper) {
-                buttonPush.setPosition(0.75); //TODO: THIS IS PROBABLY TOO MUCH; SUBJECT TO CHANGE
-                bumperRunning = true;
-            }
-            if (gamepad1.right_bumper) {
-                buttonPush.setPosition(0.25); //TODO: THIS IS PROBABLY TOO MUCH; SUBJECT TO CHANGE
-                bumperRunning = true;
-            }
-            if (gamepad1.y) {
-                if (angler.getPosition() - 0.05 <= 1.0)
-                    angler.setPosition(angler.getPosition() + 0.05); //TODO: MIGHT BE TOO FAST/SLOW; SUBJECT TO CHANGE
-            }
-            if (gamepad1.a) {
-                if (angler.getPosition() - 0.05 >= 0.0)
-                    angler.setPosition(angler.getPosition() - 0.05); //TODO: MIGHT BE TOO FAST/SLOW; SUBJECT TO CHANGE
-            }
-            if (gamepad1.dpad_right) {
-                if(up){
-       //             handUp.setPosition(1);
-                    up = true;
-                }
-                else{
-       //             handUp.setPosition(0.2);
-                    up = false;
-                }
-            }
-            if (gamepad1.left_stick_button) {
-        //        handL.setPosition(1);
-      //          handR.setPosition(1);
-            }
-            if (gamepad1.right_stick_button){
-        //        handL.setPosition(0);
-          //      handR.setPosition(0);
-            }
-            if (!bumperRunning)
-                buttonPush.setPosition(0.5);
-
-            /*Telemetry is basically System.out.println() for
-            robots. For example, telemetry.addData("Text", "*** Robot Data***");
-            will display "Text: *** Robot Data***" on the
-            driver's station.
-            */
-            telemetry.addData("Left joystick Y value:", gamepad1.left_stick_y);
-            telemetry.addData("Right joystick Y value:", gamepad1.right_stick_y);
+            logToTelemetry();
         }
     }
 }

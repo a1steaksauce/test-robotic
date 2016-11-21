@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 /**
  * Created by JacobDavoudgoleh on 11/11/15.
  */
-public class RobotDriving {
+public class AlephBotsRobotDriving {
     private DcMotor leftDrive; //Defines the four motors
     private DcMotor leftDriveB;
     private DcMotor rightDrive;
@@ -17,10 +17,10 @@ public class RobotDriving {
     private Boolean normalDrive = true;
     private Boolean normalSpeed = true;
 
-    public RobotDriving(DcMotor LF, DcMotor LB, DcMotor RF, DcMotor RB){
+    public AlephBotsRobotDriving(DcMotor LF, DcMotor LB, DcMotor RF, DcMotor RB){
     //Creates what an instance of this class should look like
 
-        leftDrive = LF; //Sets the four motors to the parameters. When an instance of RobotDriving is created,
+        leftDrive = LF; //Sets the four motors to the parameters. When an instance of AlephBotsRobotDriving is created,
         leftDriveB = LB;  //the parameters are the hardware mappings for the four motors
         rightDrive = RF;
         rightDriveB = RB;

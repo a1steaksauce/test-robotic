@@ -18,12 +18,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 @Autonomous(name="Aleph Bots Autonomous: Drive Straight", group="Autonomous")
 public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
-    Servo ButtonPresser = null;
+    Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
     //LightSensor GroundLightSensor = null, BeaconLightSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED  = -1.0;
+    static final double     FORWARD_SPEED  = 1.0;
     static final double     TURN_SPEED    = 0.5;
 
     public void runOpMode() throws InterruptedException {
@@ -33,12 +33,13 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
+        LTouchServo = hardwareMap.servo.get("LTouchServo");
+        RTouchServo = hardwareMap.servo.get("RTouchServo");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
-        ButtonPresser.setPosition(0.3);
-
-        //GroundLightSensor.enableLed(true);
-        //BeaconLightSensor.enableLed(true);
+        ButtonPresser.setPosition(0.35);
+        LTouchServo.setPosition(1.0);
+        RTouchServo.setPosition(0.0);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
