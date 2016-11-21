@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+//import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * Created by poop on 11/13/2016.

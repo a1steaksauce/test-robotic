@@ -85,7 +85,7 @@ public class HutzBallBeacon extends LinearOpMode {
             waitForStart();
             logToTelemetry();
             double initFloorVal = lineDetector.getLightDetected();
-            while (ultrason.getUltrasonicLevel() == 0 || ultrason.getUltrasonicLevel() > 30)) {
+            while (!(ultrason.getUltrasonicLevel() < 30 || ultrason.getUltrasonicLevel() < 30) ){
                 driveNS(0.1);
             }
             logToTelemetry();
@@ -98,19 +98,19 @@ public class HutzBallBeacon extends LinearOpMode {
             turn(-60);
             logToTelemetry();
             sleep(500);
-            while (ultrason.getUltrasonicLevel() == 0 || ultrason.getUltrasonicLevel() > 20){
+            while (ultrason.getUltrasonicLevel() <5 || ultrason.getUltrasonicLevel() > 20){
                 driveNS(0.1);
                 logToTelemetry();
             }
             reset();
             turn(60);
             sleep(500);
-            while (ultrason.getUltrasonicLevel() == 0 || ultrason.getUltrasonicLevel() > 40){
+            while (ultrason.getUltrasonicLevel() <5 || ultrason.getUltrasonicLevel() > 40){
                 driveNS(0.3);
             }
             reset();
             sleep(500);
-            while (lineDetector.getLightDetected() < ((3*initFloorVal)/2)) {
+            while (lineDetector.getLightDetected() <  (initFloorVal*1.5)) {
                 driveNS(0.3);
             }
             reset();
