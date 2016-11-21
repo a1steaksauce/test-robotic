@@ -68,9 +68,27 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
             // Display the light levels while we are waiting to start
             telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
             telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            telemetry.addData("Red Value:", BeaconColorSensor.red());
+            telemetry.addData("Green Value:", BeaconColorSensor.green());
+            telemetry.addData("Blue Value:", BeaconColorSensor.blue());
             /*
             First two are alpha values
             3rd and 4th Red
+            */
+            /*
+            if(BeaconColorSensor.argb() != 0) {
+
+                redLevelS = Integer.toString(BeaconColorSensor.argb());
+                redLevelS = redLevelS.substring(2, 4);
+                redLevelI = Integer.valueOf(redLevelS);
+
+                blueLevelS = Integer.toString(BeaconColorSensor.argb());
+                blueLevelS = blueLevelS.substring(6, 8);
+                blueLevelI = Integer.valueOf(blueLevelS);
+                telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
+                telemetry.addData("Red Level:", redLevelI);
+                telemetry.addData("Blue Level:", blueLevelI);
+            }
             */
             telemetry.update();
             idle();
@@ -142,7 +160,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
             telemetry.update();
             idle();
         }
-
+        /*
         redLevelS = Integer.toString(BeaconColorSensor.argb());
         redLevelS = redLevelS.substring(2,4);
         redLevelI = Integer.valueOf(redLevelS);
@@ -150,12 +168,27 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         blueLevelS = Integer.toString(BeaconColorSensor.argb());
         blueLevelS = blueLevelS.substring(6,8);
         blueLevelI = Integer.valueOf(blueLevelS);
+        */
+
+        redLevelI = BeaconColorSensor.red();
+        blueLevelI = BeaconColorSensor.blue();
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.5)) {
             telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Red Level:", redLevelI);
-            telemetry.addData("Blue Level:", blueLevelI);
+            telemetry.addData("Red Level Calc:", redLevelI);
+            telemetry.addData("Blue Level Calc:", blueLevelI);
+            if(redLevelI > blueLevelI) {
+                telemetry.addData("Color found:", "Red");
+            } else if(blueLevelI > redLevelI) {
+                telemetry.addData("Color found:", "Blue");
+            } else {
+                telemetry.addData("Color found", "Undecided (Equal values)");
+            }
+            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            telemetry.addData("Red Value:", BeaconColorSensor.red());
+            telemetry.addData("Green Value:", BeaconColorSensor.green());
+            telemetry.addData("Blue Value:", BeaconColorSensor.blue());
             telemetry.update();
             idle();
         }
@@ -271,7 +304,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
             telemetry.update();
             idle();
         }
-
+        /*
         redLevelS = Integer.toString(BeaconColorSensor.argb()); //Get color values
         redLevelS = redLevelS.substring(2,4);
         redLevelI = Integer.valueOf(redLevelS);
@@ -279,12 +312,27 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         blueLevelS = Integer.toString(BeaconColorSensor.argb());
         blueLevelS = blueLevelS.substring(6,8);
         blueLevelI = Integer.valueOf(blueLevelS);
+        */
+
+        redLevelI = BeaconColorSensor.red();
+        blueLevelI = BeaconColorSensor.blue();
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.5)) { //Wait some time to get accurate color values
             telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Red Level:", redLevelI);
-            telemetry.addData("Blue Level:", blueLevelI);
+            telemetry.addData("Red Level Calc:", redLevelI);
+            telemetry.addData("Blue Level Calc:", blueLevelI);
+            if(redLevelI > blueLevelI) {
+                telemetry.addData("Color found:", "Red");
+            } else if(blueLevelI > redLevelI) {
+                telemetry.addData("Color found:", "Blue");
+            } else {
+                telemetry.addData("Color found", "Undecided (Equal values)");
+            }
+            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            telemetry.addData("Red Value:", BeaconColorSensor.red());
+            telemetry.addData("Green Value:", BeaconColorSensor.green());
+            telemetry.addData("Blue Value:", BeaconColorSensor.blue());
             telemetry.update();
             idle();
         }
