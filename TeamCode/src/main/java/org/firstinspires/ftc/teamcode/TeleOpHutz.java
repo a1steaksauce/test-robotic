@@ -61,7 +61,8 @@ public class TeleOpHutz extends LinearOpMode {
         botLeft.setDirection(DcMotor.Direction.REVERSE); //left motors are backward
 
         reset();
-
+        while (!isStarted()) {
+        }
         while (opModeIsActive()) {
             /*
                 Essentially, the following code makes sure that
