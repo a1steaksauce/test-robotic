@@ -100,6 +100,7 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             if (gamepad1.y){
                 RTouchServo.setPosition(0.0);
                 LTouchServo.setPosition(1.0);
+                ButtonPresser.setPosition(0.35);
             }
             //TELEMETRY
             telemetry.addData("Aleph Bots Robot:", "Running!");
