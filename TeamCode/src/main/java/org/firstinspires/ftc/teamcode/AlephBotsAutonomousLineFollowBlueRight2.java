@@ -151,7 +151,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.5);
+        ButtonPresser.setPosition(0.4);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {
@@ -295,7 +295,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.5); //Adjust the servo to line the color sensor up with the beacon
+        ButtonPresser.setPosition(0.4); //Adjust the servo to line the color sensor up with the beacon
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {

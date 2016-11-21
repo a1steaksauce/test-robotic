@@ -151,7 +151,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.5);
+        ButtonPresser.setPosition(0.4);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {
