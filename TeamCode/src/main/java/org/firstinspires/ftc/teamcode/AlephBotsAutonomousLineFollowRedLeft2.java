@@ -57,7 +57,7 @@ public class AlephBotsAutonomousLineFollowRedLeft2 extends LinearOpMode{
         RTouchServo.setPosition(0.0);
 
         GroundColorSensor.enableLed(true);
-        BeaconColorSensor.enableLed(true);
+        BeaconColorSensor.enableLed(false);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
