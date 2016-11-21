@@ -255,7 +255,7 @@ public class AlephBotsAutonomousLineFollowRedLeft2 extends LinearOpMode{
         RTouchServo.setPosition(0.0);
 
         turnRight(TURN_SPEED);
-        sleep(1600); //Try to turn 90 degrees to the right
+        sleep(AlephBotsAutonomousLineFollowBlueRight2.NEXT_BEACON_TURN_TIME); //Try to turn 90 degrees to the right
         stopDrive();
 
         driveStraight(1); //Go until 2nd white line

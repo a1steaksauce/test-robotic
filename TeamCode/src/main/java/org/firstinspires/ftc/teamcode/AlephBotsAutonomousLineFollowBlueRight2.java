@@ -24,7 +24,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
     TouchSensor BeaconTouchSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
-
+    static final long     NEXT_BEACON_TURN_TIME = 1600;
     static final double     FORWARD_SPEED  = 0.75;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.2;
@@ -254,7 +254,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         RTouchServo.setPosition(0.0);
 
         turnLeft(TURN_SPEED);
-        sleep(1600); //Try to turn 90 degrees to the right
+        sleep(NEXT_BEACON_TURN_TIME); //Try to turn 90 degrees to the right
         stopDrive();
 
         driveStraight(1); //Go until 2nd white line
