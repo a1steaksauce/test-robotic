@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots Autonomous: Blue Right 1", group="Autonomous")
+@Autonomous(name="Aleph Bots: Blue Right 1", group="Autonomous")
 public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
@@ -151,7 +151,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.4);
+        ButtonPresser.setPosition(0.45);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {

@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots Autonomous: Blue Right 2", group="Autonomous")
+@Autonomous(name="Aleph Bots: Blue Right 2", group="Autonomous")
 public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
@@ -22,9 +22,10 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
     TouchSensor LTouchSensor = null;
     TouchSensor RTouchSensor = null;
     TouchSensor BeaconTouchSensor = null;
+    //UltrasonicSensor UltraSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
-    static final long     NEXT_BEACON_TURN_TIME = 1600;
+    static final long     NEXT_BEACON_TURN_TIME = 1800;
     static final double     FORWARD_SPEED  = 0.75;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.2;
@@ -49,6 +50,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
         RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
         BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
+        //UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
 
@@ -71,6 +73,8 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
             telemetry.addData("Red Value:", BeaconColorSensor.red());
             telemetry.addData("Green Value:", BeaconColorSensor.green());
             telemetry.addData("Blue Value:", BeaconColorSensor.blue());
+            //telemetry.addData("Distance:", UltraSensor.getUltrasonicLevel());
+            telemetry.addData("Battery Level:", hardwareMap.voltageSensor.get("Lift Controller").getVoltage());
             /*
             First two are alpha values
             3rd and 4th Red
@@ -151,7 +155,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.4);
+        ButtonPresser.setPosition(0.45);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {
@@ -174,7 +178,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         blueLevelI = BeaconColorSensor.blue();
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.5)) {
+        while (opModeIsActive() && (runtime.seconds() < 1.5)) {
             telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("Red Level Calc:", redLevelI);
             telemetry.addData("Blue Level Calc:", blueLevelI);
@@ -254,7 +258,11 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         RTouchServo.setPosition(0.0);
 
         turnLeft(TURN_SPEED);
-        sleep(NEXT_BEACON_TURN_TIME); //Try to turn 90 degrees to the right
+        if(hardwareMap.voltageSensor.get("Lift Controller").getVoltage() <= 12.8) {
+            sleep(NEXT_BEACON_TURN_TIME + 200); //Try to turn 90 degrees to the right
+        } else {
+            sleep(NEXT_BEACON_TURN_TIME);
+        }
         stopDrive();
 
         driveStraight(1); //Go until 2nd white line
@@ -295,7 +303,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.4); //Adjust the servo to line the color sensor up with the beacon
+        ButtonPresser.setPosition(0.45); //Adjust the servo to line the color sensor up with the beacon
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {
@@ -318,7 +326,7 @@ public class AlephBotsAutonomousLineFollowBlueRight2 extends LinearOpMode{
         blueLevelI = BeaconColorSensor.blue();
 
         runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 2.5)) { //Wait some time to get accurate color values
+        while (opModeIsActive() && (runtime.seconds() < 1.5)) { //Wait some time to get accurate color values
             telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("Red Level Calc:", redLevelI);
             telemetry.addData("Blue Level Calc:", blueLevelI);
