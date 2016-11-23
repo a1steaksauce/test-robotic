@@ -32,8 +32,8 @@ public class TeleOpHutz extends LinearOpMode {
         botRight.setPower(0);
     }
     public void logToTelemetry() throws InterruptedException{
-        telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
-        telemetry.addData("Line: ", lineDetector.getLightDetected());
+        //telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
+        //telemetry.addData("Line: ", lineDetector.getLightDetected());
         telemetry.addData("csL: argb ", csL.argb());
         telemetry.addData("csR: argb ", csR.argb());
 
@@ -70,7 +70,7 @@ public class TeleOpHutz extends LinearOpMode {
 
         reset();
         while (!isStarted()) {
-            logToTelemetry();
+            //logToTelemetry();
         }
         while (opModeIsActive()) {
             /*
@@ -98,7 +98,7 @@ public class TeleOpHutz extends LinearOpMode {
                 topLeft.setPower(0);
                 botLeft.setPower(0);
             }
-            logToTelemetry();
+            //logToTelemetry();
         }
     }
 }

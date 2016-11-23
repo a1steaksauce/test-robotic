@@ -26,7 +26,7 @@ public class AlephBotsAutonomousLineFollowRedLeft2 extends LinearOpMode{
     //UltrasonicSensor UltraSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
-    static final long     NEXT_BEACON_TURN_TIME = 1800;
+    static final long     NEXT_BEACON_TURN_TIME = 2000;
     static final double     FORWARD_SPEED  = 0.75;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.2;
