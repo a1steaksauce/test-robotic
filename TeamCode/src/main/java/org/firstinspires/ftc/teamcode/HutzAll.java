@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 
 public class HutzAll extends LinearOpMode{
-    DcMotor
     public void runOpMode(){
 
     }
