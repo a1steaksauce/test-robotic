@@ -12,7 +12,7 @@ import static java.lang.StrictMath.signum;
 //import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
- * Created by poop on 11/13/2016.
+ * Created by Eliezer on 11/13/2016.
  */
 @Autonomous(name="Hutzbots Autonomous: BALL AND BEACON", group="HutzAuto")
 public class HutzBallBeacon extends LinearOpMode {
