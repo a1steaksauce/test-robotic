@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 /**
  * Created by aaronkbutler on 3/10/16.
  */
-@TeleOp(name="Aleph Bots TeleOp", group="TeleOp")
+@TeleOp(name="Aleph Bots: TeleOp", group="TeleOp")
 //@Disabled //uncomment to disable, comment to enable
 public class AlephBotsTeleOp extends OpMode{
     //DECLARING MOTORS, SERVOS, and DRIVE

@@ -16,8 +16,7 @@ import static java.lang.StrictMath.signum;
  */
 @Autonomous(name="Hutzbots Autonomous: BALL AND BEACON", group="HutzAuto")
 public class HutzBallBeacon extends LinearOpMode {
-    final int TURN = 9
-            ;
+    final int TURN = 9;
     DcMotor topLeft, topRight, botLeft, botRight;
     ColorSensor csL, csR;
     UltrasonicSensor ultrason;
@@ -46,7 +45,7 @@ public class HutzBallBeacon extends LinearOpMode {
         botRight.setPower(power);
     }
     public void turn(int deg) throws InterruptedException{
-        topLeft.setPower(signum(deg)*0.5);
+        topLeft.setPower(signum(deg)*0.5);       //signum gets the sign (positive or negative) of the number
         topRight.setPower(-signum(deg)*0.5);
         botLeft.setPower(signum(deg)*0.5);
         botRight.setPower(-signum(deg)*0.5);
@@ -85,7 +84,7 @@ public class HutzBallBeacon extends LinearOpMode {
             waitForStart();
             logToTelemetry();
             double initFloorVal = lineDetector.getLightDetected();
-            while (!(ultrason.getUltrasonicLevel() < 30 || ultrason.getUltrasonicLevel() < 30) ){
+            while (ultrason.getUltrasonicLevel() == 0 || ultrason.getUltrasonicLevel() > 30) {
                 driveNS(0.1);
             }
             logToTelemetry();
@@ -98,19 +97,19 @@ public class HutzBallBeacon extends LinearOpMode {
             turn(-60);
             logToTelemetry();
             sleep(500);
-            while (ultrason.getUltrasonicLevel() <5 || ultrason.getUltrasonicLevel() > 20){
+            while (ultrason.getUltrasonicLevel() == 0 || ultrason.getUltrasonicLevel() > 20){
                 driveNS(0.1);
                 logToTelemetry();
             }
             reset();
             turn(60);
             sleep(500);
-            while (ultrason.getUltrasonicLevel() <5 || ultrason.getUltrasonicLevel() > 40){
+            while (ultrason.getUltrasonicLevel() == 0 || ultrason.getUltrasonicLevel() > 40){
                 driveNS(0.3);
             }
             reset();
             sleep(500);
-            while (lineDetector.getLightDetected() <  (initFloorVal*1.5)) {
+            while (lineDetector.getLightDetected() < ((3*initFloorVal)/2)) {
                 driveNS(0.3);
             }
             reset();

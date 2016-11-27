@@ -72,13 +72,13 @@ public class HutzBall extends LinearOpMode {
         while (opModeIsActive()){
             waitForStart();
             logToTelemetry();
-            while (ultrason.getUltrasonicLevel() != 30) {
+            while (ultrason.getUltrasonicLevel() != 0 && ultrason.getUltrasonicLevel() > 40) {
                 drive(0.5, 250);
             }
             drive(1, 400);
             logToTelemetry();
             sleep(500);
-            //turn(-60);
+            turn(-60);
             logToTelemetry();
             idle();
         }

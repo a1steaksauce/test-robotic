@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots Autonomous: Blue Right 1", group="Autonomous")
+@Autonomous(name="Aleph Bots: Blue Right 1", group="Autonomous")
 public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
@@ -25,7 +25,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     FORWARD_SPEED  = 0.5;
+    static final double     FORWARD_SPEED  = 0.75;
     static final double     FORWARD2_SPEED = 0.06;
     static final double     TURN_SPEED    = 0.2;
     static final double     END_TURN_SPEED    = 0.3;
@@ -57,7 +57,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         RTouchServo.setPosition(0.0);
 
         GroundColorSensor.enableLed(true);
-        BeaconColorSensor.enableLed(true);
+        BeaconColorSensor.enableLed(false);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -68,9 +68,27 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
             // Display the light levels while we are waiting to start
             telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
             telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            telemetry.addData("Red Value:", BeaconColorSensor.red());
+            telemetry.addData("Green Value:", BeaconColorSensor.green());
+            telemetry.addData("Blue Value:", BeaconColorSensor.blue());
             /*
             First two are alpha values
             3rd and 4th Red
+            */
+            /*
+            if(BeaconColorSensor.argb() != 0) {
+
+                redLevelS = Integer.toString(BeaconColorSensor.argb());
+                redLevelS = redLevelS.substring(2, 4);
+                redLevelI = Integer.valueOf(redLevelS);
+
+                blueLevelS = Integer.toString(BeaconColorSensor.argb());
+                blueLevelS = blueLevelS.substring(6, 8);
+                blueLevelI = Integer.valueOf(blueLevelS);
+                telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
+                telemetry.addData("Red Level:", redLevelI);
+                telemetry.addData("Blue Level:", blueLevelI);
+            }
             */
             telemetry.update();
             idle();
@@ -119,11 +137,11 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         }
         while (opModeIsActive() && !BeaconTouchSensor.isPressed()) {
             if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
-                driveStraightRight(FORWARD_SPEED/2);
+                driveStraightLeft(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
                 telemetry.update();
             } else {
-                driveStraightLeft(FORWARD_SPEED/2);
+                driveStraightRight(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
                 telemetry.update();
             }
@@ -133,7 +151,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         sleep(400);
         stopDrive();
 
-        ButtonPresser.setPosition(0.55);
+        ButtonPresser.setPosition(0.45);
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 2.0)) {
@@ -142,7 +160,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
             telemetry.update();
             idle();
         }
-
+        /*
         redLevelS = Integer.toString(BeaconColorSensor.argb());
         redLevelS = redLevelS.substring(2,4);
         redLevelI = Integer.valueOf(redLevelS);
@@ -150,12 +168,27 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         blueLevelS = Integer.toString(BeaconColorSensor.argb());
         blueLevelS = blueLevelS.substring(6,8);
         blueLevelI = Integer.valueOf(blueLevelS);
+        */
+
+        redLevelI = BeaconColorSensor.red();
+        blueLevelI = BeaconColorSensor.blue();
 
         runtime.reset();
         while (opModeIsActive() && (runtime.seconds() < 3.0)) {
             telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Red Level:", redLevelI);
-            telemetry.addData("Blue Level:", blueLevelI);
+            telemetry.addData("Red Level Calc:", redLevelI);
+            telemetry.addData("Blue Level Calc:", blueLevelI);
+            if(redLevelI > blueLevelI) {
+                telemetry.addData("Color found:", "Red");
+            } else if(blueLevelI > redLevelI) {
+                telemetry.addData("Color found:", "Blue");
+            } else {
+                telemetry.addData("Color found", "Undecided (Equal values)");
+            }
+            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            telemetry.addData("Red Value:", BeaconColorSensor.red());
+            telemetry.addData("Green Value:", BeaconColorSensor.green());
+            telemetry.addData("Blue Value:", BeaconColorSensor.blue());
             telemetry.update();
             idle();
         }
@@ -182,7 +215,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
         }
         stopDrive();
         runtime.reset();
-        if(runtime.seconds() < 2.0) {
+        while(runtime.seconds() < 2.0) {
             if (LTouchSensor.isPressed()) {
                 driveStraightLeft(END_TURN_SPEED);
                 while (opModeIsActive() && !RTouchSensor.isPressed()) {
@@ -205,7 +238,7 @@ public class AlephBotsAutonomousLineFollowBlueRight1 extends LinearOpMode{
                 stopDrive();
             }
         }
-        if (blueLevelI < redLevelI) {
+        if (blueLevelI > redLevelI) {
             ButtonPresser.setPosition(0.68);
         } else {
             ButtonPresser.setPosition(0.00);
