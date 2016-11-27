@@ -16,8 +16,7 @@ import static java.lang.StrictMath.signum;
  */
 @Autonomous(name="Hutzbots Autonomous: BALL AND BEACON", group="HutzAuto")
 public class HutzBallBeacon extends LinearOpMode {
-    final int TURN = 9
-            ;
+    final int TURN = 9;
     DcMotor topLeft, topRight, botLeft, botRight;
     ColorSensor csL, csR;
     UltrasonicSensor ultrason;
@@ -46,7 +45,7 @@ public class HutzBallBeacon extends LinearOpMode {
         botRight.setPower(power);
     }
     public void turn(int deg) throws InterruptedException{
-        topLeft.setPower(signum(deg)*0.5);
+        topLeft.setPower(signum(deg)*0.5);       //signum gets the sign (positive or negative) of the number
         topRight.setPower(-signum(deg)*0.5);
         botLeft.setPower(signum(deg)*0.5);
         botRight.setPower(-signum(deg)*0.5);
