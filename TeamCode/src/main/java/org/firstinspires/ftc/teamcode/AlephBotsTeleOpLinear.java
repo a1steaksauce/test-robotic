@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * Created by aaronkbutler on 3/10/16.
  */
-@TeleOp(name="Aleph Bots TeleOp Linear", group="TeleOp")
+@TeleOp(name="Aleph Bots: TeleOp Linear", group="TeleOp")
 //@Disabled //uncomment to disable, comment to enable
 public class AlephBotsTeleOpLinear extends LinearOpMode{
     //DECLARING MOTORS, SERVOS, and DRIVE
