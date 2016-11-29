@@ -80,12 +80,13 @@ public class FtcOpModeRegister implements OpModeRegister {
          */
         //ALEPH BOTS CODE:
         manager.register("AlephBotsTeleOp", AlephBotsTeleOp.class);
+        manager.register("AlephBotsTeleOpLinear", AlephBotsTeleOpLinear.class);
 
         manager.register("AlephBotsAutonomousLineFollowRedLeftShort", AlephBotsAutonomousLineFollowRedLeftShort.class);
         manager.register("AlephBotsAutonomousLineFollowRedLeftLong", AlephBotsAutonomousLineFollowRedLeftLong.class);
 
-        manager.register("AlephBotsAutonomousLineFollowRedRight1", AlephBotsAutonomousLineFollowBlueRightShort.class);
-        manager.register("AlephBotsAutonomousLineFollowRedRight2", AlephBotsAutonomousLineFollowBlueRightLong.class);
+        manager.register("AlephBotsAutonomousLineFollowBlueRightShort", AlephBotsAutonomousLineFollowBlueRightShort.class);
+        manager.register("AlephBotsAutonomousLineFollowBlueRightLong", AlephBotsAutonomousLineFollowBlueRightLong.class);
 
         manager.register("AlephBotsAutonomousDriveStraight", AlephBotsAutonomousDriveStraight.class);
 
