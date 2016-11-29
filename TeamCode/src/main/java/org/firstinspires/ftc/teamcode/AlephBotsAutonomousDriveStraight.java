@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 /**
  * Created by aaronkbutler on 10/25/16.
  */
-@Autonomous(name="Aleph Bots Autonomous: Drive Straight", group="Autonomous")
+@Autonomous(name="Aleph Bots: Drive Straight", group="Autonomous")
 public class AlephBotsAutonomousDriveStraight extends LinearOpMode {
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
