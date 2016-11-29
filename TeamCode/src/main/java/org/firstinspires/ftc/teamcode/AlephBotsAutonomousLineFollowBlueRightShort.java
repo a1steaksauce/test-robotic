@@ -229,7 +229,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
         ButtonPresser.setPosition(0.35);
 
         driveStraight(-FORWARD2_SPEED);
-        sleep(1500);
+        sleep(2500);
         stopDrive();
 
         LTouchServo.setPosition(1.0);
