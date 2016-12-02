@@ -96,7 +96,7 @@ public class HutzBeacon extends LinearOpMode {
                 bill2 = lineDetector.getLightDetected();
                 turn(-1);
             } while (bill2 < 0.11);
-            lineFollow(e); //TODO: implement
+            //lineFollow(e); //TODO: implement
             if(csL.red() > csR.red()){
                 topLeft.setPower(0.5);
                 botLeft.setPower(0.5);
