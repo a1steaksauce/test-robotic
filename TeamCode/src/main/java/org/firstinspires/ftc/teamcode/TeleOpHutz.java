@@ -43,7 +43,7 @@ public class TeleOpHutz extends LinearOpMode {
 
     /////////////////////////////////////////
     UltrasonicSensor us;
-    LightSensor lineTracker; //pointed at floor
+    LightSensor lineDetector; //pointed at floor
     ColorSensor csL; //pointed at beacon
     ColorSensor csR;
 
@@ -59,14 +59,14 @@ public class TeleOpHutz extends LinearOpMode {
         topRight = hardwareMap.dcMotor.get("topRight");       //actual ones. use the names
         botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
         botRight = hardwareMap.dcMotor.get("botRight");
-        us = hardwareMap.ultrasonicSensor.get("us");
-        lineTracker = hardwareMap.lightSensor.get("lineTracker");
+        //us = hardwareMap.ultrasonicSensor.get("us");
+        lineDetector = hardwareMap.lightSensor.get("lineDetector");
         csL = hardwareMap.colorSensor.get("csL");
         csR = hardwareMap.colorSensor.get("csR");
-        intake = hardwareMap.dcMotor.get("intake");
+        //intake = hardwareMap.dcMotor.get("intake");
 
-        topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
-        botLeft.setDirection(DcMotor.Direction.REVERSE); //left motors are backward
+        topRight.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
+        botRight.setDirection(DcMotor.Direction.REVERSE); //left motors are backward
 
         reset();
         while (!isStarted()) {

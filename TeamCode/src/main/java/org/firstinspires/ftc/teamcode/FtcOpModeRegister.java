@@ -96,6 +96,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         //OTHER:
         manager.register("AutonomousTestBench", AutonomousTestBench.class);
         manager.register("TestBenchDrive", TestBenchDrive.class);
+        manager.register("Autonbeacononly", HutzBeacon.class);
 
     }
 }
