@@ -17,13 +17,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AlephBotsTeleOpLinear extends LinearOpMode{
     //DECLARING MOTORS, SERVOS, and DRIVE
     AlephBotsRobotDriving drive;
-    DcMotor RF, LF, RB, LB, Lift;
+    DcMotor RF, LF, RB, LB, Lift, Shooter;
     Servo ButtonPresser, LTouchServo, RTouchServo;
     OpticalDistanceSensor GroundColorSensor;
     ColorSensor BeaconColorSensor;
     TouchSensor LTouchSensor;
     TouchSensor RTouchSensor;
-    TouchSensor BeaconTouchSensor;
+    //TouchSensor BeaconTouchSensor;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -50,13 +50,14 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
         LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
         RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
-        BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
+        //BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
 
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
+        Shooter = hardwareMap.dcMotor.get("Shooter");
         //RF.setDirection(DcMotor.Direction.REVERSE);
         //RB.setDirection(DcMotor.Direction.REVERSE);
         ButtonPresser.setPosition(0.35);
@@ -89,6 +90,15 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             }
             else {
                 Lift.setPower(0);
+            }
+            //SHOOTER
+            if (gamepad1.dpad_right) {
+                Shooter.setPower(-1); //SEVEN TENTHS OF THE POWER
+            } else if (gamepad1.dpad_left) {
+                Shooter.setPower(1); //TENTH OF THE POWER
+            }
+            else {
+                Shooter.setPower(0);
             }
             //LINE FOLLOW
             if (gamepad2.dpad_left){
