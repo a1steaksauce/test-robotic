@@ -55,6 +55,7 @@ public class HutzBallBeacon extends LinearOpMode {
         botLeft.setPower(0);
         botRight.setPower(0);
     }
+
     public void logToTelemetry() throws InterruptedException{
         telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
         telemetry.addData("Line: ", lineDetector.getLightDetected());

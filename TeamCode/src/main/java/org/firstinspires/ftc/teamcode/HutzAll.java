@@ -8,12 +8,12 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
 /**
- * Created by poop on 11/27/2016.
+ * Created by Eliezer on 11/27/2016.
  */
 @Autonomous(name="hutzpls", group="hutzAuto")
 public class HutzAll extends LinearOpMode{
     DcMotor topLeft, topRight, botLeft, botRight; //mecanum wheels
-   // DcMotor ballIntake, cannon; //Other cool motors
+    DcMotor ballIntake, cannon; //Other cool motors
     LightSensor line; //follows line
     UltrasonicSensor ultrason;
     //ColorSensor csL, csR;
@@ -26,8 +26,8 @@ public class HutzAll extends LinearOpMode{
         topLeft.setDirection(DcMotor.Direction.REVERSE);
         botLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        //ballIntake = hardwareMap.dcMotor.get("ballIntake");
-        //cannon = hardwareMap.dcMotor.get("cannon");
+        ballIntake = hardwareMap.dcMotor.get("ballIntake");
+        cannon = hardwareMap.dcMotor.get("cannon");
 
         line = hardwareMap.lightSensor.get("line");
         ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
@@ -68,7 +68,7 @@ public class HutzAll extends LinearOpMode{
         do {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
-        } while(lightStore > 0.12); //drives until white line
+        } while (lightStore > 0.12); //drives until white line
     }
     public void doTilDistance(double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;

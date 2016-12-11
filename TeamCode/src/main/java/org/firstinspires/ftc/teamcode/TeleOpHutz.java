@@ -68,8 +68,8 @@ public class TeleOpHutz extends LinearOpMode {
         //csR = hardwareMap.colorSensor.get("csR");
         //intake = hardwareMap.dcMotor.get("intake");
 
-        topRight.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
-        botRight.setDirection(DcMotor.Direction.REVERSE); //left motors are backward
+        topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
+        botLeft.setDirection(DcMotor.Direction.REVERSE);  //left motors are backward
 
         reset();
         while (!isStarted()) {
@@ -109,7 +109,7 @@ public class TeleOpHutz extends LinearOpMode {
                 topLeft.setPower(-gamepad1.right_stick_x);
                 botRight.setPower(gamepad1.right_stick_x);
                 botLeft.setPower(-gamepad1.right_stick_x);
-            } else if (gamepad1.left_stick_x != 0) {
+            } else if (Math.abs(gamepad1.left_stick_x) > DEAD_ZONE) {
                 arctanYX = Math.atan(gamepad1.left_stick_y / gamepad1.left_stick_x);
                 RFLBPower = Math.sin(arctanYX + Math.PI / 4);
                 RBLFPower = Math.sin(arctanYX - Math.PI / 4);
@@ -128,7 +128,7 @@ public class TeleOpHutz extends LinearOpMode {
             else if(gamepad1.x){
                 intake.setPower(-1);
             }
-            else{
+            else {
                 intake.setPower(0);
             }
         }
