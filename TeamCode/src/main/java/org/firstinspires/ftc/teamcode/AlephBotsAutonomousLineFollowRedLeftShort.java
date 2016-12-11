@@ -15,13 +15,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Aleph Bots: Red Left Short", group="Autonomous")
 public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
-    DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
+    DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null, Shooter = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
     OpticalDistanceSensor GroundColorSensor =  null;
     ColorSensor BeaconColorSensor = null;
     TouchSensor LTouchSensor = null;
     TouchSensor RTouchSensor = null;
-    TouchSensor BeaconTouchSensor = null;
+    //TouchSensor BeaconTouchSensor = null;
     //UltrasonicSensor UltraSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -45,11 +45,12 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
+        Shooter = hardwareMap.dcMotor.get("Shooter");
         GroundColorSensor = hardwareMap.opticalDistanceSensor.get("GroundColorSensor");
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
         LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
         RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
-        BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
+        //BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
         //UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
@@ -227,6 +228,10 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         }
         sleep(1000);
         ButtonPresser.setPosition(0.35);
+
+        Shooter.setPower(-1);
+        sleep(5000);
+        Shooter.setPower(0);
 
         driveStraight(-FORWARD2_SPEED);
         sleep(2500);
