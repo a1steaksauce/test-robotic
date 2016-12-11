@@ -24,6 +24,9 @@ public class TeleOpHutz extends LinearOpMode {
     DcMotor botLeft;
     DcMotor botRight;
     DcMotor intake;
+    Double RFLBPower = 0.0;
+    Double RBLFPower = 0.0;
+    Double arctanYX = 0.0;
 //    DcMotor steve; //for raising the balls to the gearbox. Name was provided by Elan Ganz
     public void reset(){
         topLeft.setPower(0);
@@ -34,18 +37,18 @@ public class TeleOpHutz extends LinearOpMode {
     public void logToTelemetry() throws InterruptedException{
         //telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
         //telemetry.addData("Line: ", lineDetector.getLightDetected());
-        telemetry.addData("csL: argb ", csL.argb());
-        telemetry.addData("csR: argb ", csR.argb());
+        //telemetry.addData("csL: argb ", csL.argb());
+        //telemetry.addData("csR: argb ", csR.argb());
 
-        updateTelemetry(telemetry);
+        //updateTelemetry(telemetry);
     }
     /////////////////////////////////////////
 
     /////////////////////////////////////////
-    UltrasonicSensor us;
-    LightSensor lineDetector; //pointed at floor
-    ColorSensor csL; //pointed at beacon
-    ColorSensor csR;
+    //UltrasonicSensor us;
+    //LightSensor lineDetector; //pointed at floor
+    //ColorSensor csL; //pointed at beacon
+    //ColorSensor csR;
 
 
     public TeleOpHutz() {  //just here, don't touch
@@ -60,9 +63,9 @@ public class TeleOpHutz extends LinearOpMode {
         botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
         botRight = hardwareMap.dcMotor.get("botRight");
         //us = hardwareMap.ultrasonicSensor.get("us");
-        lineDetector = hardwareMap.lightSensor.get("lineDetector");
-        csL = hardwareMap.colorSensor.get("csL");
-        csR = hardwareMap.colorSensor.get("csR");
+        //lineDetector = hardwareMap.lightSensor.get("lineDetector");
+        //csL = hardwareMap.colorSensor.get("csL");
+        //csR = hardwareMap.colorSensor.get("csR");
         //intake = hardwareMap.dcMotor.get("intake");
 
         topRight.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
@@ -82,6 +85,7 @@ public class TeleOpHutz extends LinearOpMode {
                 power. So left joystick moves left motors,
                 right joystick moves right motors.
             */
+            /*
             if (Math.abs(gamepad1.left_stick_y) > DEAD_ZONE) {
                 topLeft.setPower(gamepad1.left_stick_y);
                 botLeft.setPower(gamepad1.left_stick_y);
@@ -99,6 +103,34 @@ public class TeleOpHutz extends LinearOpMode {
                 botLeft.setPower(0);
             }
             //logToTelemetry();
+            */
+            if(Math.abs(gamepad1.right_stick_x) > DEAD_ZONE){
+                topRight.setPower(gamepad1.right_stick_x);
+                topLeft.setPower(-gamepad1.right_stick_x);
+                botRight.setPower(gamepad1.right_stick_x);
+                botLeft.setPower(-gamepad1.right_stick_x);
+            } else if (gamepad1.left_stick_x != 0) {
+                arctanYX = Math.atan(gamepad1.left_stick_y / gamepad1.left_stick_x);
+                RFLBPower = Math.sin(arctanYX + Math.PI / 4);
+                RBLFPower = Math.sin(arctanYX - Math.PI / 4);
+                if (gamepad1.left_stick_x < 0) {
+                    RFLBPower = -RFLBPower;
+                    RBLFPower = -RBLFPower;
+                }
+                topRight.setPower(RFLBPower);
+                botLeft.setPower(RFLBPower);
+                botRight.setPower(RBLFPower);
+                topLeft.setPower(RBLFPower);
+            }
+            if (gamepad1.a){
+                intake.setPower(1);
+            }
+            else if(gamepad1.x){
+                intake.setPower(-1);
+            }
+            else{
+                intake.setPower(0);
+            }
         }
     }
 }

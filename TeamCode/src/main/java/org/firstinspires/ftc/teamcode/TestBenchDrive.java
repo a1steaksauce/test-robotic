@@ -29,35 +29,28 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 @TeleOp(name="TestBenchDrive", group="TeleOp")
 public class TestBenchDrive extends OpMode {
 
-    DcMotor left;
-    DcMotor right;
+    DcMotor mtr;
+    Servo srv;
 
 
     @Override
     public void init () {
-        left = hardwareMap.dcMotor.get("left");
-        right = hardwareMap.dcMotor.get("right");
-
-        right.setDirection(DcMotor.Direction.REVERSE);
+        mtr = hardwareMap.dcMotor.get("mtr");
+        srv = hardwareMap.servo.get("srv");
     }
 
     @Override
     public void loop() {
 
-        float xValue = gamepad1.left_stick_x;
-        float yValue = -gamepad1.right_stick_y;
+        float value = gamepad1.left_stick_y;
 
-        float leftPower = yValue + xValue;
-        float rightPower = yValue - xValue;
 
-        leftPower = Range.clip(leftPower, -1, 1);
-        rightPower = Range.clip(rightPower, -1, 1);
+        float power = Range.clip(value, -1, 1);
 
        // float leftY = -gamepad1.left_stick_y;
        // float rightY = gamepad1.right_stick_y;
 
-        left.setPower(leftPower);
-        right.setPower(rightPower);
+        mtr.setPower(value);
 
     }
 
