@@ -43,6 +43,8 @@ public class HutzAutoOmni extends LinearOpMode {
         csL = hardwareMap.colorSensor.get("csL");
         csR = hardwareMap.colorSensor.get("csR");
 
+        reset();
+        beacon.setPosition(0.5);
         //TODO: WRITE CODE HERE!!!!!!!!
     }
     public void reset() {

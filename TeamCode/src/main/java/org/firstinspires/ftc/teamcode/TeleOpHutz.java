@@ -24,6 +24,7 @@ public class TeleOpHutz extends LinearOpMode {
     DcMotor botLeft;
     DcMotor botRight;
     DcMotor intake;
+    Servo beacon;
     Double RFLBPower = 0.0;
     Double RBLFPower = 0.0;
     Double arctanYX = 0.0;
@@ -66,7 +67,8 @@ public class TeleOpHutz extends LinearOpMode {
         //lineDetector = hardwareMap.lightSensor.get("lineDetector");
         //csL = hardwareMap.colorSensor.get("csL");
         //csR = hardwareMap.colorSensor.get("csR");
-         intake = hardwareMap.dcMotor.get("intake");
+        intake = hardwareMap.dcMotor.get("intake");
+        beacon = hardwareMap.servo.get("beacon");
 
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         botLeft.setDirection(DcMotor.Direction.REVERSE);  //left motors are backward
@@ -123,16 +125,32 @@ public class TeleOpHutz extends LinearOpMode {
                 topLeft.setPower(RBLFPower);
             }
 
-
+            if (gamepad1.x) {
+                if (beacon.getPosition() > 0.6) {
+                    beacon.setPosition(0.5);
+                } else {
+                    beacon.setPosition(1); //TODO: FIND CORRECT VALUE
+                }
+            } else if (gamepad1.b) {
+                if (beacon.getPosition() < 0.4) {
+                    beacon.setPosition(0.5);
+                } else {
+                    beacon.setPosition(0); //TODO: FIND CORRECT VALUE
+                }
+            }
 
             if (gamepad1.a){
                 intake.setPower(1);
             }
-            else if(gamepad1.x){
+            else if(gamepad1.y){
                 intake.setPower(-1);
             }
             else {
                 intake.setPower(0);
+            }
+
+            if (gamepad1.right_trigger > 0.3) {
+                //TODO: WRITE SHOOTING CODE
             }
         }
     }
