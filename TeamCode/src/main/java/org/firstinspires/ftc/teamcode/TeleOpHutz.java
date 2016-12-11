@@ -66,7 +66,7 @@ public class TeleOpHutz extends LinearOpMode {
         //lineDetector = hardwareMap.lightSensor.get("lineDetector");
         //csL = hardwareMap.colorSensor.get("csL");
         //csR = hardwareMap.colorSensor.get("csR");
-        //intake = hardwareMap.dcMotor.get("intake");
+         intake = hardwareMap.dcMotor.get("intake");
 
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         botLeft.setDirection(DcMotor.Direction.REVERSE);  //left motors are backward
@@ -122,6 +122,9 @@ public class TeleOpHutz extends LinearOpMode {
                 botRight.setPower(RBLFPower);
                 topLeft.setPower(RBLFPower);
             }
+
+
+
             if (gamepad1.a){
                 intake.setPower(1);
             }

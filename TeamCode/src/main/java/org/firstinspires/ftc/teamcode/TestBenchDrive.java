@@ -28,30 +28,43 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
  */
 @TeleOp(name="TestBenchDrive", group="TeleOp")
 public class TestBenchDrive extends OpMode {
+    final float DEAD_ZONE = 0.05f;
 
     DcMotor mtr;
     Servo srv;
-
+    OpticalDistanceSensor ods;
+    TouchSensor touch;
 
     @Override
     public void init () {
         mtr = hardwareMap.dcMotor.get("mtr");
         srv = hardwareMap.servo.get("srv");
+        ods = hardwareMap.opticalDistanceSensor.get("ods");
+        touch = hardwareMap.touchSensor.get("touch");
     }
 
     @Override
     public void loop() {
 
         float value = gamepad1.left_stick_y;
-
-
         float power = Range.clip(value, -1, 1);
 
-       // float leftY = -gamepad1.left_stick_y;
-       // float rightY = gamepad1.right_stick_y;
+        if(value > DEAD_ZONE) {
+            mtr.setPower(power);
+        } else {
+            mtr.setPower(0);
+        }
 
-        mtr.setPower(value);
+        if(gamepad1.y) {
+            srv.setPosition(1);
+        } else if(gamepad1.a) {
+            srv.setPosition(-1);
+        }
 
+        telemetry.addData("ODS light returned: ", ods.getLightDetected());
+        telemetry.addData("Touch on? ", touch.isPressed());
+
+        updateTelemetry(telemetry);
     }
 
 }
