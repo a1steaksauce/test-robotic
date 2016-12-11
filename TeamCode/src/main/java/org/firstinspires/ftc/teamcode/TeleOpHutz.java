@@ -123,6 +123,11 @@ public class TeleOpHutz extends LinearOpMode {
                 botLeft.setPower(RFLBPower);
                 botRight.setPower(RBLFPower);
                 topLeft.setPower(RBLFPower);
+            } else {
+                topRight.setPower(0);
+                topLeft.setPower(0);
+                botRight.setPower(0);
+                botLeft.setPower(0);
             }
 
             if (gamepad1.x) {

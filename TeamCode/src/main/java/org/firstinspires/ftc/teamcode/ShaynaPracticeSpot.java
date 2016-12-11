@@ -17,6 +17,3 @@ public class ShaynaPracticeSpot {
     }
 }
 
-public class CoolBeans {
-        public boolean equals(int x, int y) { if (x != y) {return true;} else {return false;} }
-}
