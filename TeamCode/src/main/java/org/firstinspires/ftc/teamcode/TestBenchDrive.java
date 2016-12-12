@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+        import com.qualcomm.hardware.adafruit.BNO055IMU;
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
         import com.qualcomm.robotcore.hardware.DcMotor;
@@ -34,13 +35,14 @@ public class TestBenchDrive extends OpMode {
     Servo srv;
     OpticalDistanceSensor ods;
     TouchSensor touch;
-
+    CompassSensor comp;
     @Override
     public void init () {
         mtr = hardwareMap.dcMotor.get("mtr");
         srv = hardwareMap.servo.get("srv");
         ods = hardwareMap.opticalDistanceSensor.get("ods");
         touch = hardwareMap.touchSensor.get("touch");
+        comp = hardwareMap.compassSensor.get("comp");
     }
 
     @Override
@@ -63,6 +65,7 @@ public class TestBenchDrive extends OpMode {
 
         telemetry.addData("ODS light returned: ", ods.getLightDetected());
         telemetry.addData("Touch on? ", touch.isPressed());
+        telemetry.addData("Compass direction: ", comp.getDirection());
 
         updateTelemetry(telemetry);
     }
