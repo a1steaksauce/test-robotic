@@ -21,7 +21,7 @@ public class HutzAutoOmni extends LinearOpMode {
     DcMotor intake, cannon;
     UltrasonicSensor ultrason;  //WRITE FOR THIS
     Servo beacon;
-    ColorSensor csR, csL;
+    ColorSensor cs;
     LightSensor line;           //WRITE FOR THIS
     public void runOpMode() throws InterruptedException {
         topLeft = hardwareMap.dcMotor.get("topLeft");
@@ -40,12 +40,22 @@ public class HutzAutoOmni extends LinearOpMode {
 
         beacon = hardwareMap.servo.get("beacon");
 
-        csL = hardwareMap.colorSensor.get("csL");
-        csR = hardwareMap.colorSensor.get("csR");
+        cs = hardwareMap.colorSensor.get("cs");
 
         reset();
         beacon.setPosition(0.5);
-        //TODO: WRITE CODE HERE!!!!!!!!
+
+        while(!isStarted()) {
+            telemetry.addData("line: ", line.getLightDetected());
+            telemetry.addData("ultrason: ", ultrason.getUltrasonicLevel());
+            telemetry.addData("cs: ", cs.argb());
+
+            updateTelemetry(telemetry);
+        }
+        while(opModeIsActive()){
+            //todo: write code here
+            idle();
+        }
     }
     public void reset() {
         topLeft.setPower(0);
@@ -120,7 +130,7 @@ public class HutzAutoOmni extends LinearOpMode {
         beacon.setPosition(0.5);
     }
     public void pushButton() {
-        String valueRight = Integer.toString(csR.argb());
+        String valueRight = Integer.toString(cs.argb());
         String colorRight = "";
         if (valueRight != "") {
             if (Integer.valueOf(valueRight.substring(2, 4)) > Integer.valueOf(valueRight.substring(6, 8))) {
@@ -129,23 +139,12 @@ public class HutzAutoOmni extends LinearOpMode {
                 colorRight = "blue";
             }
         }
-        String valueLeft = Integer.toString(csL.argb());
-        String colorLeft = "";
-        if (valueLeft != "") {
-            if (Integer.valueOf(valueLeft.substring(2, 4)) > Integer.valueOf(valueLeft.substring(6, 8))) {
-                colorLeft = "red";
-            } else {
-                colorLeft = "blue";
-            }
-        }
-        if (colorLeft == colorRight) {
-            if (colorLeft != team) {
-                pushLeft();
-            }
-        } else if (colorLeft.equals(team)) {
-            pushLeft();
-        } else if (colorRight.equals(team)) {
+
+
+        if (colorRight.equals(team)) {
             pushRight();
+        } else {
+            pushLeft();
         }
     }
     public void shoot () {

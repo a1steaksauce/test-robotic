@@ -24,7 +24,13 @@ public class TeleOpHutz extends LinearOpMode {
     DcMotor botLeft;
     DcMotor botRight;
     DcMotor intake;
+    DcMotor drawback;
     Servo beacon;
+
+    ColorSensor cs;
+    UltrasonicSensor ultrason;
+    LightSensor lineDetector;
+
     Double RFLBPower = 0.0;
     Double RBLFPower = 0.0;
     Double arctanYX = 0.0;
@@ -36,9 +42,9 @@ public class TeleOpHutz extends LinearOpMode {
         botRight.setPower(0);
     }
     public void logToTelemetry() throws InterruptedException{
-        //telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
-        //telemetry.addData("Line: ", lineDetector.getLightDetected());
-        //telemetry.addData("csL: argb ", csL.argb());
+        telemetry.addData("Ultr: ", ultrason.getUltrasonicLevel());
+        telemetry.addData("Line: ", lineDetector.getLightDetected());
+        telemetry.addData("cs: argb ", cs.argb());
         //telemetry.addData("csR: argb ", csR.argb());
 
         //updateTelemetry(telemetry);
@@ -58,24 +64,26 @@ public class TeleOpHutz extends LinearOpMode {
 
 
     @Override
-    public void runOpMode() {  //Executed in a linear format
+    public void runOpMode() throws InterruptedException{  //Executed in a linear format
         topLeft = hardwareMap.dcMotor.get("topLeft");        //sets code motors to point to
         topRight = hardwareMap.dcMotor.get("topRight");       //actual ones. use the names
         botLeft = hardwareMap.dcMotor.get("botLeft");        //in config as the string vals
         botRight = hardwareMap.dcMotor.get("botRight");
-        //us = hardwareMap.ultrasonicSensor.get("us");
-        //lineDetector = hardwareMap.lightSensor.get("lineDetector");
-        //csL = hardwareMap.colorSensor.get("csL");
+        ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
+        lineDetector = hardwareMap.lightSensor.get("lineDetector");
+        cs = hardwareMap.colorSensor.get("cs");
         //csR = hardwareMap.colorSensor.get("csR");
         intake = hardwareMap.dcMotor.get("intake");
         beacon = hardwareMap.servo.get("beacon");
+        drawback = hardwareMap.dcMotor.get("drawback");
+
 
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         botLeft.setDirection(DcMotor.Direction.REVERSE);  //left motors are backward
 
         reset();
         while (!isStarted()) {
-            //logToTelemetry();
+            logToTelemetry();
         }
         while (opModeIsActive()) {
             /*
@@ -153,9 +161,15 @@ public class TeleOpHutz extends LinearOpMode {
             else {
                 intake.setPower(0);
             }
-
-            if (gamepad1.right_trigger > 0.3) {
-                //TODO: WRITE SHOOTING CODE
+            if (gamepad1.right_trigger > 0.1) {
+                drawback.setPower(0.2);
+            }
+            else if (gamepad1.left_trigger > 0.1) { //debugging only
+                drawback.setPower(-0.2);
+            }
+            else {
+                //todo: operate servo
+                drawback.setPower(0);
             }
         }
     }
