@@ -115,19 +115,19 @@ public class TeleOpHutz extends LinearOpMode {
             //logToTelemetry();
             */
             if(Math.abs(gamepad1.right_stick_x) > DEAD_ZONE){
-                topRight.setPower(gamepad1.right_stick_x);
-                topLeft.setPower(-gamepad1.right_stick_x);
-                botRight.setPower(gamepad1.right_stick_x);
-                botLeft.setPower(-gamepad1.right_stick_x);
-            } else if (Math.abs(gamepad1.left_stick_x) > DEAD_ZONE) {
-                arctanYX = Math.atan(gamepad1.left_stick_y / gamepad1.left_stick_x);
-                RFLBPower = Math.sin(arctanYX + Math.PI / 4);
-                RBLFPower = Math.sin(arctanYX - Math.PI / 4);
-                if (gamepad1.left_stick_x < 0) {
-                    RFLBPower = -RFLBPower;
-                    RBLFPower = -RBLFPower;
-                }
-                topRight.setPower(RFLBPower);
+                    topRight.setPower(gamepad1.right_stick_x);
+                    topLeft.setPower(-gamepad1.right_stick_x);
+                    botRight.setPower(gamepad1.right_stick_x);
+                    botLeft.setPower(-gamepad1.right_stick_x);
+                } else if (Math.abs(gamepad1.left_stick_x) > DEAD_ZONE) {
+                    arctanYX = Math.atan(gamepad1.left_stick_y / gamepad1.left_stick_x);
+                    RFLBPower = Math.sin(arctanYX + Math.PI / 4);
+                    RBLFPower = Math.sin(arctanYX - Math.PI / 4);
+                    if (gamepad1.left_stick_x < 0) {
+                        RFLBPower = -RFLBPower;
+                        RBLFPower = -RBLFPower;
+                    }
+                    topRight.setPower(RFLBPower);
                 botLeft.setPower(RFLBPower);
                 botRight.setPower(RBLFPower);
                 topLeft.setPower(RBLFPower);
