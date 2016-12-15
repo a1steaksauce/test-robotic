@@ -54,6 +54,39 @@ public class HutzAutoOmni extends LinearOpMode {
         }
         while(opModeIsActive()){
             //todo: write code here
+            //shoot ball
+            intake.setPower(1);
+            Thread.sleep(1200);
+            intake.setPower(0);
+            //shoot again
+            strafeRight45(1);
+            doTilDistance(8);
+            reset();
+            for (int i = 0; i < 2; i++) {
+                Thread.sleep(500);
+                driveStraight(0.5);
+                doTilLine();
+                reset();
+                Thread.sleep(500);
+                pushButton();
+            }
+            strafeRight45(-0.75);
+            doTilPlatform(15);
+            reset();
+            if (botOrNot()) {
+                strafeRight45(-1);
+                Thread.sleep(400);
+                reset();
+            } else {
+                strafeLeft45(-0.5);
+                Thread.sleep(600);
+                reset();
+                driveStraight(-0.3);
+                Thread.sleep(200);
+                strafeLeft45(-0.5);
+                Thread.sleep(600);
+                reset();
+            }
             idle();
         }
     }
@@ -62,6 +95,29 @@ public class HutzAutoOmni extends LinearOpMode {
         topRight.setPower(0);
         botLeft.setPower(0);
         botRight.setPower(0);
+    }
+    public void doTilLine() throws InterruptedException{ //waits until white line
+        double lightStore;
+        do {
+            Thread.sleep(50);
+            lightStore = line.getLightDetected();
+        } while (lightStore > 0.12); //drives until white line
+    }
+    public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
+        double ultrasonStore;
+        do {
+            Thread.sleep(50);
+            ultrasonStore = ultrason.getUltrasonicLevel();
+        } while (ultrasonStore > distance && ultrasonStore != 0);
+    }
+    public void doTilPlatform (double distance) throws InterruptedException{ //waits until robot is on platform
+        double lightStore;
+        double ultrasonStore;
+        do {
+            Thread.sleep(50);
+            lightStore = line.getLightDetected();
+            ultrasonStore = ultrason.getUltrasonicLevel();
+        } while (lightStore > 0.25 || (ultrasonStore > distance && ultrasonStore != 0)); //TODO: TEST!
     }
     public void strafe180 (double power) {
         topLeft.setPower(power);
@@ -139,12 +195,33 @@ public class HutzAutoOmni extends LinearOpMode {
                 colorRight = "blue";
             }
         }
-
-
         if (colorRight.equals(team)) {
             pushRight();
         } else {
             pushLeft();
+        }
+    }
+    public boolean botOrNot () throws InterruptedException { //returns true if not robot
+        strafeRight45(-0.4);
+        doTilDistance(8);
+        reset();
+        int red = Integer.valueOf(Integer.toString(cs.argb()).substring(2,4));
+        int blue = Integer.valueOf(Integer.toString(cs.argb()).substring(6,8));
+        int colorVal = red - blue;
+        String color = "";
+        if (Math.abs(colorVal) > 30) {
+            if (colorVal < 0) {
+                color = "blue";
+            } else {
+                color = "red";
+            }
+            if (color.equals(team)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
     public void shoot () {
