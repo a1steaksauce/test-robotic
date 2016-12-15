@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.*;
 
 /**
  * Created by poop on 12/14/2016.
  */
-
+@TeleOp(name="teleop", group="fweGNDGFREffbgfrfwe")
 public class rabbiTeleop extends LinearOpMode {
     DcMotor topLeft, topRight, botLeft, botRight, capBall;
     Servo bl, br;
