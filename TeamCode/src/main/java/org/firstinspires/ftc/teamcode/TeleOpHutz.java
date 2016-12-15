@@ -24,7 +24,8 @@ public class TeleOpHutz extends LinearOpMode {
     DcMotor botLeft;
     DcMotor botRight;
     DcMotor intake;
-    DcMotor drawback;
+    DcMotor drawback; //todo: rotate like twice
+    DcMotor release; //todo: pull back a bit, 1/4 turn
     Servo beacon;
 
     ColorSensor cs;
@@ -76,11 +77,11 @@ public class TeleOpHutz extends LinearOpMode {
         intake = hardwareMap.dcMotor.get("intake");
         beacon = hardwareMap.servo.get("beacon");
         drawback = hardwareMap.dcMotor.get("drawback");
-
-
+        release = hardwareMap.dcMotor.get("release");
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         botLeft.setDirection(DcMotor.Direction.REVERSE);  //left motors are backward
-
+        drawback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         reset();
         while (!isStarted()) {
             logToTelemetry();
@@ -161,15 +162,22 @@ public class TeleOpHutz extends LinearOpMode {
             else {
                 intake.setPower(0);
             }
+            boolean pulledBack = false;
             if (gamepad1.right_trigger > 0.1) {
-                drawback.setPower(0.2);
+                drawback.setTargetPosition(560/*2 rotation */);
+                drawback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                pulledBack = true;
             }
-            else if (gamepad1.left_trigger > 0.1) { //debugging only
-                drawback.setPower(-0.2);
-            }
-            else {
+            else if (gamepad1.right_trigger < 0.1 && pulledBack){
                 //todo: operate servo
-                drawback.setPower(0);
+                release.setTargetPosition(360/*1/4 rotation*/);
+                release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                sleep(2000);
+                release.setTargetPosition(-360/*-1/4 rotation*/);
+                release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+                pulledBack = false;
             }
         }
     }
