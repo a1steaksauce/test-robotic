@@ -17,8 +17,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class AlephBotsTeleOpLinear extends LinearOpMode{
     //DECLARING MOTORS, SERVOS, and DRIVE
     AlephBotsRobotDriving drive;
-    DcMotor RF, LF, RB, LB, Lift, Shooter;
-    Servo ButtonPresser, LTouchServo, RTouchServo;
+    DcMotor RF, LF, RB, LB, Lift;
+    Servo ButtonPresser, LTouchServo, RTouchServo, LHolderServo, RHolderServo;
     OpticalDistanceSensor GroundColorSensor;
     ColorSensor BeaconColorSensor;
     TouchSensor LTouchSensor;
@@ -46,6 +46,8 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
 
         LTouchServo = hardwareMap.servo.get("LTouchServo");
         RTouchServo = hardwareMap.servo.get("RTouchServo");
+        LHolderServo = hardwareMap.servo.get("LHolderServo");
+        RHolderServo = hardwareMap.servo.get("RHolderServo");
         GroundColorSensor = hardwareMap.opticalDistanceSensor.get("GroundColorSensor");
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
         LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
@@ -57,13 +59,15 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        Shooter = hardwareMap.dcMotor.get("Shooter");
         //RF.setDirection(DcMotor.Direction.REVERSE);
         //RB.setDirection(DcMotor.Direction.REVERSE);
         ButtonPresser.setPosition(0.35);
 
         LTouchServo.setPosition(1.0);
         RTouchServo.setPosition(0.0);
+
+        LHolderServo.setPosition(0.65);
+        RHolderServo.setPosition(0.3);
 
         GroundColorSensor.enableLed(true);
         BeaconColorSensor.enableLed(true);
@@ -82,6 +86,7 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             } else if (gamepad1.b && ButtonPresser.getPosition() > 0.0) {
                 ButtonPresser.setPosition(ButtonPresser.getPosition() - 0.01);
             }
+
             //LIFT
             if (gamepad1.right_bumper) {
                 Lift.setPower(0.7); //SEVEN TENTHS OF THE POWER
@@ -90,15 +95,6 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             }
             else {
                 Lift.setPower(0);
-            }
-            //SHOOTER
-            if (gamepad1.dpad_right) {
-                Shooter.setPower(-1); //SEVEN TENTHS OF THE POWER
-            } else if (gamepad1.dpad_left) {
-                Shooter.setPower(1); //TENTH OF THE POWER
-            }
-            else {
-                Shooter.setPower(0);
             }
             //LINE FOLLOW
             if (gamepad2.dpad_left){
@@ -109,8 +105,12 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             //LIFT TOUCH SENSOR SERVOS
             if (gamepad1.y){
                 ButtonPresser.setPosition(0.35);
+
                 RTouchServo.setPosition(0.0);
                 LTouchServo.setPosition(1.0);
+
+                LHolderServo.setPosition(0.65);
+                RHolderServo.setPosition(0.3);
             }
             //TELEMETRY
             telemetry.addData("Aleph Bots Robot:", "Running!");

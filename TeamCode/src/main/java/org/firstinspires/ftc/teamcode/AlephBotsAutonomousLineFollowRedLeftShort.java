@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -15,12 +16,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Aleph Bots: Red Left Short", group="Autonomous")
 public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
-    DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null, Shooter = null;
-    Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null;
+    DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
+    Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null, LHolderServo = null, RHolderServo = null;
     OpticalDistanceSensor GroundColorSensor =  null;
     ColorSensor BeaconColorSensor = null;
     TouchSensor LTouchSensor = null;
     TouchSensor RTouchSensor = null;
+    GyroSensor Gyro = null;
     //TouchSensor BeaconTouchSensor = null;
     //UltrasonicSensor UltraSensor = null;
 
@@ -32,6 +34,12 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
     static final double     END_TURN_SPEED    = 0.3;
     static final double     WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
 
+    int xVal, yVal, zVal = 0;     // Gyro rate Values
+    int heading = 0;              // Gyro integrated heading
+    int angleZ = 0;
+    boolean lastResetState = false;
+    boolean curResetState  = false;
+
     String blueLevelS, redLevelS;
     int blueLevelI, redLevelI;
 
@@ -40,16 +48,18 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         ButtonPresser = hardwareMap.servo.get("ButtonPresser");
         LTouchServo = hardwareMap.servo.get("LTouchServo");
         RTouchServo = hardwareMap.servo.get("RTouchServo");
+        LHolderServo = hardwareMap.servo.get("LHolderServo");
+        RHolderServo = hardwareMap.servo.get("RHolderServo");
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
-        Shooter = hardwareMap.dcMotor.get("Shooter");
         GroundColorSensor = hardwareMap.opticalDistanceSensor.get("GroundColorSensor");
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
         LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
         RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
+        Gyro = hardwareMap.gyroSensor.get("Gyro");
         //BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
         //UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
@@ -58,6 +68,9 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         ButtonPresser.setPosition(0.35);
         LTouchServo.setPosition(1.0);
         RTouchServo.setPosition(0.0);
+
+        LHolderServo.setPosition(1.0);
+        RHolderServo.setPosition(0.0);
 
         GroundColorSensor.enableLed(true);
         BeaconColorSensor.enableLed(false);
@@ -118,6 +131,9 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         waitForStart();
         idle();
         */
+        LHolderServo.setPosition(0.65);
+        RHolderServo.setPosition(0.3);
+
         driveStraight(1);
 
         // run until the white line is seen OR the driver presses STOP;
@@ -229,10 +245,6 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         sleep(1000);
         ButtonPresser.setPosition(0.35);
 
-        Shooter.setPower(-1);
-        sleep(5000);
-        Shooter.setPower(0);
-
         driveStraight(-FORWARD2_SPEED);
         sleep(2500);
         stopDrive();
@@ -240,11 +252,24 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         LTouchServo.setPosition(1.0);
         RTouchServo.setPosition(0.0);
 
+        telemetry.addData(">", "Gyro Calibrating. Do Not move!");
+        telemetry.update();
+        Gyro.calibrate();
+
+        // make sure the gyro is calibrated.
+        while (Gyro.isCalibrating())  {
+            Thread.sleep(50);
+            idle();
+        }
+        heading = Gyro.getHeading();
         turnRight(TURN_SPEED);
-        if(hardwareMap.voltageSensor.get("Lift Controller").getVoltage() <= 12.8) {
-            sleep(NEXT_BEACON_TURN_TIME + 200); //Try to turn 90 degrees to the right
-        } else {
-            sleep(NEXT_BEACON_TURN_TIME);
+        while (opModeIsActive() && (heading <= 95)) {
+
+            // Display the light level while we are looking for the line
+            heading = Gyro.getHeading();
+            telemetry.addData("Heading:",  heading);
+            telemetry.update();
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
         stopDrive();
 
