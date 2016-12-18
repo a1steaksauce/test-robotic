@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 /**
  * hi iit is Eliezer in 12
  */
-@Autonomous(name="hutz blue button only", group="hutzAuto")
+@Autonomous(name="hutz blue button only no shoot", group="hutzAuto")
 
 public class HutzOnlyButtonBlueNS extends HutzFunc {
     @Override
