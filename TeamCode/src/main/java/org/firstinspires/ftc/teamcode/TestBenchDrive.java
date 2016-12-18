@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+        import com.qualcomm.hardware.adafruit.BNO055IMU;
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
         import com.qualcomm.robotcore.eventloop.opmode.OpMode;
         import com.qualcomm.robotcore.hardware.DcMotor;
@@ -28,37 +29,45 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
  */
 @TeleOp(name="TestBenchDrive", group="TeleOp")
 public class TestBenchDrive extends OpMode {
+    final float DEAD_ZONE = 0.05f;
 
-    DcMotor left;
-    DcMotor right;
-
-
+    DcMotor mtr;
+    Servo srv;
+    OpticalDistanceSensor ods;
+    TouchSensor touch;
+    CompassSensor comp;
     @Override
     public void init () {
-        left = hardwareMap.dcMotor.get("left");
-        right = hardwareMap.dcMotor.get("right");
-
-        right.setDirection(DcMotor.Direction.REVERSE);
+        mtr = hardwareMap.dcMotor.get("mtr");
+        srv = hardwareMap.servo.get("srv");
+        ods = hardwareMap.opticalDistanceSensor.get("ods");
+        touch = hardwareMap.touchSensor.get("touch");
+        comp = hardwareMap.compassSensor.get("comp");
     }
 
     @Override
     public void loop() {
 
-        float xValue = gamepad1.left_stick_x;
-        float yValue = -gamepad1.right_stick_y;
+        float value = gamepad1.left_stick_y;
+        float power = Range.clip(value, -1, 1);
 
-        float leftPower = yValue + xValue;
-        float rightPower = yValue - xValue;
+        if(value > DEAD_ZONE) {
+            mtr.setPower(power);
+        } else {
+            mtr.setPower(0);
+        }
 
-        leftPower = Range.clip(leftPower, -1, 1);
-        rightPower = Range.clip(rightPower, -1, 1);
+        if(gamepad1.y) {
+            srv.setPosition(1);
+        } else if(gamepad1.a) {
+            srv.setPosition(-1);
+        }
 
-       // float leftY = -gamepad1.left_stick_y;
-       // float rightY = gamepad1.right_stick_y;
+        telemetry.addData("ODS light returned: ", ods.getLightDetected());
+        telemetry.addData("Touch on? ", touch.isPressed());
+        telemetry.addData("Compass direction: ", comp.getDirection());
 
-        left.setPower(leftPower);
-        right.setPower(rightPower);
-
+        updateTelemetry(telemetry);
     }
 
 }
