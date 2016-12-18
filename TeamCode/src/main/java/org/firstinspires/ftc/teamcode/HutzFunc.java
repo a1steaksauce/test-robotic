@@ -39,8 +39,8 @@ public abstract class HutzFunc extends LinearOpMode {
         drawback = hardwareMap.dcMotor.get("drawback");
         release = hardwareMap.dcMotor.get("release");
 
-      //  drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-      //  release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         line = hardwareMap.lightSensor.get("lineDetector");
         ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
