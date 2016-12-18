@@ -39,8 +39,8 @@ public abstract class HutzFunc extends LinearOpMode {
         drawback = hardwareMap.dcMotor.get("drawback");
         release = hardwareMap.dcMotor.get("release");
 
-        //drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         line = hardwareMap.lightSensor.get("lineDetector");
         ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
@@ -56,7 +56,6 @@ public abstract class HutzFunc extends LinearOpMode {
         try {Thread.sleep(15);} catch (InterruptedException e) {}
         floorVal3 = line.getLightDetected();
         finalFloorVal = (floorVal1 + floorVal2 + floorVal3) / 3;
-
     } //ready to test
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
@@ -213,32 +212,39 @@ public abstract class HutzFunc extends LinearOpMode {
         shootOnce();
         //eyy. now lets do it again
         intake.setPower(1);
-        sleep(500);
+        sleep(700);
         intake.setPower(0);
         //second ball in.
         shootOnce();
         //ez
     } //test me for fucks sake
     public void shootOnce () throws InterruptedException {
-        //drawback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        drawback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        drawback.setTargetPosition(2 * andymark_tick); //debug. may need to multiply by 60 to account for gearbox
+        drawback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         drawback.setPower(0.3); //slow for now.
-        //drawback.setTargetPosition(2 * andymark_tick); //debug. may need to multiply by 60 to account for gearbox
-        //drawback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //while (drawback.isBusy()) {
+        while (drawback.isBusy()) {
             //wait til motor drawn back
-        //}
-        Thread.sleep(1000);
+        }
         drawback.setPower(0);
         //we are now pulled back, hopefully!
         //now to release.
-        //release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        release.setTargetPosition(tetrix_tick/4); //should work, debug tho
+        release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         release.setPower(0.3);
-        //release.setTargetPosition(tetrix_tick / 4); //should work, debug tho
-        //release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        //while (drawback.isBusy()) {
+        while (release.isBusy()) {
             //other motor is releasing!
-        //}
-        Thread.sleep(500);
+        }
+        release.setPower(0);
+        Thread.sleep(100);
+        release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        release.setTargetPosition(-tetrix_tick/4);
+        release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        release.setPower(-0.3);
+        while (release.isBusy()) {
+            //so this doesn't immediately turn off
+        }
         release.setPower(0);
     }
 }

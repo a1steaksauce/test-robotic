@@ -17,32 +17,46 @@ public class TeleOpHutzNew extends HutzFunc {
             logToTelemetry();
         }
         while (opModeIsActive()) {
+            if (gamepad1.right_bumper) {
+                telemetry.addData("into right",0);
+                beacon.setPosition(0);
+                Thread.sleep(1000);
+                beacon.setPosition(0.5);
+                telemetry.addData("outta right",0);
+                //semicolon
+            }
+            if (gamepad1.left_bumper) {
+                telemetry.addData("into left", 0);
+                beacon.setPosition(1);
+                Thread.sleep(1000);
+                beacon.setPosition(0.5);
+                telemetry.addData("outta left", 0);
+                //semicolon
+            }
             if (Math.abs(gamepad1.left_stick_y) > DEAD_ZONE) {
                 botRight.setPower(gamepad1.left_stick_y);
                 topRight.setPower(gamepad1.left_stick_y);
                 topLeft.setPower(gamepad1.left_stick_y);
                 botLeft.setPower(gamepad1.left_stick_y);
-            } else {
-                reset();
+                //semicolon
             }
             if (Math.abs(gamepad1.right_stick_x) > DEAD_ZONE) {
                 botRight.setPower(0 - gamepad1.right_stick_x);
                 topRight.setPower(0 - gamepad1.right_stick_x);
                 topLeft.setPower(gamepad1.right_stick_x);
                 botLeft.setPower(gamepad1.right_stick_x);
-            } else {
+                //semicolon
+            }
+            if(Math.abs(gamepad1.right_stick_x) < DEAD_ZONE && Math.abs(gamepad1.left_stick_y) < DEAD_ZONE){
                 reset();
+                //semicolon
             }
-            if (gamepad1.right_bumper) {
-                beacon.setPosition(0);
-                Thread.sleep(1000);
-                beacon.setPosition(0.5);
+            if (gamepad1.right_trigger > 0.5) {
+                shootOnce();
+                //semicolon
             }
-            if (gamepad1.left_bumper) {
-                beacon.setPosition(1);
-                Thread.sleep(1000);
-                beacon.setPosition(0.5);
-            }
+            updateTelemetry(telemetry);
+            //semicolon
         }
     }
 }
