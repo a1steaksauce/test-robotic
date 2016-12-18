@@ -24,6 +24,7 @@ public abstract class HutzFunc extends LinearOpMode {
     Servo beacon;
     ColorSensor cs;
     LightSensor line;
+    double finalFloorVal;
 
     public void initializeHardware() {
         topLeft = hardwareMap.dcMotor.get("topLeft");
@@ -47,6 +48,15 @@ public abstract class HutzFunc extends LinearOpMode {
         beacon = hardwareMap.servo.get("beacon");
 
         cs = hardwareMap.colorSensor.get("cs");
+
+        double floorVal1, floorVal2, floorVal3;
+        floorVal1 = line.getLightDetected();
+        try {Thread.sleep(15);} catch (InterruptedException e) {}
+        floorVal2 = line.getLightDetected();
+        try {Thread.sleep(15);} catch (InterruptedException e) {}
+        floorVal3 = line.getLightDetected();
+        finalFloorVal = (floorVal1 + floorVal2 + floorVal3) / 3;
+
     } //ready to test
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
@@ -69,7 +79,7 @@ public abstract class HutzFunc extends LinearOpMode {
         do {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
-        } while (lightStore > 0.12); //drives until white line
+        } while (lightStore < finalFloorVal+0.051); //drives until white line
     } //ready to test
     public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;
@@ -85,14 +95,14 @@ public abstract class HutzFunc extends LinearOpMode {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
             ultrasonStore = ultrason.getUltrasonicLevel();
-        } while (lightStore > 0.09 || (ultrasonStore > distance && ultrasonStore != 0)); //TODO: TEST!
+        } while (lightStore > finalFloorVal-0.021 || (ultrasonStore > distance && ultrasonStore != 0)); //TODO: TEST!
     } //ready to test
     public void doTilPlatform () throws InterruptedException{
         double lightStore;
         do {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
-        } while (lightStore > 0.09);
+        } while (lightStore > finalFloorVal-0.021);
     }
     public void strafe180 (double power) {
         topLeft.setPower(power);
