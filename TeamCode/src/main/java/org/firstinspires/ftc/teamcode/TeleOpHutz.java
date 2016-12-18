@@ -66,19 +66,20 @@ public class TeleOpHutz extends LinearOpMode {
         release = hardwareMap.dcMotor.get("release");
         topLeft.setDirection(DcMotor.Direction.REVERSE);  //just for ease of programming since
         botLeft.setDirection(DcMotor.Direction.REVERSE);  //left motors are backward
-        drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         reset();
         while (!isStarted()) {
             logToTelemetry();
         }
         while (opModeIsActive()) {
-            if(Math.abs(gamepad1.right_stick_x) > DEAD_ZONE){
-                    topRight.setPower(gamepad1.right_stick_x);
-                    topLeft.setPower(-gamepad1.right_stick_x);
-                    botRight.setPower(gamepad1.right_stick_x);
-                    botLeft.setPower(-gamepad1.right_stick_x);
-                } else if (Math.abs(gamepad1.left_stick_x) > DEAD_ZONE) {
+            if(Math.abs(gamepad1.right_stick_y) > DEAD_ZONE){
+                    topRight.setPower(gamepad1.right_stick_y);
+                    topLeft.setPower(-gamepad1.right_stick_y);
+                    botRight.setPower(gamepad1.right_stick_y);
+                    botLeft.setPower(-gamepad1.right_stick_y);
+            }
+            if (Math.abs(gamepad1.left_stick_y) > DEAD_ZONE) {
                     arctanYX = Math.atan(gamepad1.left_stick_y / gamepad1.left_stick_x);
                     RFLBPower = Math.sin(arctanYX + Math.PI / 4);
                     RBLFPower = Math.sin(arctanYX - Math.PI / 4);
@@ -96,6 +97,8 @@ public class TeleOpHutz extends LinearOpMode {
                 botRight.setPower(0);
                 botLeft.setPower(0);
             }
+
+
 
             if (gamepad1.x) {
                 if (beacon.getPosition() > 0.6) {
@@ -121,23 +124,25 @@ public class TeleOpHutz extends LinearOpMode {
                 intake.setPower(0);
             }
             if(gamepad1.dpad_right) {
-                drawback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                //drawback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 drawback.setPower(0.1); //slow for now.
-                drawback.setTargetPosition(andymark_tick/4); //debug. may need to multiply by 60 to account for gearbox
-                drawback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while (drawback.isBusy()) {
+                //drawback.setTargetPosition(andymark_tick/4); //debug. may need to multiply by 60 to account for gearbox
+                //drawback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //while (drawback.isBusy()) {
                     //wait til motor drawn back
-                }
+                //}
+                Thread.sleep(1000);
                 drawback.setPower(0);
                 //we are now pulled back, hopefully!
                 //now to release.
-                release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                //release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 release.setPower(0.5);
-                release.setTargetPosition(tetrix_tick / 4); //should work, debug tho
-                release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                while (drawback.isBusy()) {
+                //release.setTargetPosition(tetrix_tick / 4); //should work, debug tho
+                //release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                //while (drawback.isBusy()) {
                     //other motor is releasing!
-                }
+                //}
+                Thread.sleep(500);
                 release.setPower(0);
             }
         }
