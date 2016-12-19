@@ -87,6 +87,15 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
             idle();
         }*/
 
+        Gyro.calibrate();
+
+        // make sure the gyro is calibrated.
+        while (Gyro.isCalibrating())  {
+            Thread.sleep(50);
+            idle();
+        }
+        heading = Gyro.getHeading();
+
         while (!isStarted()) {
 
 
@@ -162,10 +171,12 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
         driveStraight(1);
 
         // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
+        runtime.reset();
+        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) && runtime.seconds() < 3.0) {
 
             // Display the light level while we are looking for the line
             telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
+            telemetry.addData("Runtime:", runtime.seconds());
             telemetry.update();
             idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
@@ -185,7 +196,9 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
             telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
             telemetry.update();
         }
-        while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed()) {
+        runtime.reset();
+        while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed() && runtime.seconds() < 3.0) {
+            telemetry.addData("Runtime:", runtime.seconds());
             if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
                 driveStraightLeft(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
@@ -201,7 +214,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
         while(runtime.seconds() < 1.0) {
             if (LTouchSensor.isPressed()) {
                 driveStraightLeft(END_TURN_SPEED);
-                while (opModeIsActive() && !RTouchSensor.isPressed()) {
+                if (opModeIsActive() && !RTouchSensor.isPressed()) {
                     telemetry.addData("Turning Left?", "Yes");
                     telemetry.addData("L Pressed?", LTouchSensor.isPressed());
                     telemetry.addData("R Pressed?", RTouchSensor.isPressed());
@@ -211,7 +224,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
                 stopDrive();
             } else if (RTouchSensor.isPressed()) {
                 driveStraightRight(END_TURN_SPEED);
-                while (opModeIsActive() && !LTouchSensor.isPressed()) {
+                if (opModeIsActive() && !LTouchSensor.isPressed()) {
                     telemetry.addData("Turning Right?", "Yes");
                     telemetry.addData("L Pressed?", LTouchSensor.isPressed());
                     telemetry.addData("R Pressed?", RTouchSensor.isPressed());
@@ -220,6 +233,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
                 }
                 stopDrive();
             }
+            telemetry.addData("Runtime:", runtime.seconds());
         }
         stopDrive();
 
@@ -227,6 +241,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
         while (opModeIsActive() && (runtime.seconds() < 0.5)) {
             telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
             telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+
             telemetry.update();
             idle();
         }
@@ -262,6 +277,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
             telemetry.update();
             idle();
         }
+        stopDrive();
         if (blueLevelI > redLevelI) {
             ButtonPresser.setPosition(0.68);
         } else {
@@ -271,7 +287,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
         ButtonPresser.setPosition(0.35);
 
         driveStraight(-FORWARD2_SPEED);
-        sleep(2500);
+        sleep(2350);
         stopDrive();
 
         LTouchServo.setPosition(1.0);
@@ -288,7 +304,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
         }
         heading = Gyro.getHeading();
         turnLeft(TURN_SPEED);
-        while (opModeIsActive() && ((heading <= 5) || (heading >= 270))) {
+        while (opModeIsActive() && ((heading <= 5) || (heading >= 285))) {
 
             // Display the light level while we are looking for the line
             heading = Gyro.getHeading();
@@ -340,7 +356,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
         while(runtime.seconds() < 1.0) {
             if (LTouchSensor.isPressed()) {
                 driveStraightLeft(END_TURN_SPEED);
-                while (opModeIsActive() && !RTouchSensor.isPressed()) {
+                if (opModeIsActive() && !RTouchSensor.isPressed()) {
                     telemetry.addData("Turning Left?", "Yes");
                     telemetry.addData("L Pressed?", LTouchSensor.isPressed());
                     telemetry.addData("R Pressed?", RTouchSensor.isPressed());
@@ -350,7 +366,7 @@ public class AlephBotsAutonomousLineFollowBlueRightShort extends LinearOpMode{
                 stopDrive();
             } else if (RTouchSensor.isPressed()) {
                 driveStraightRight(END_TURN_SPEED);
-                while (opModeIsActive() && !LTouchSensor.isPressed()) {
+                if (opModeIsActive() && !LTouchSensor.isPressed()) {
                     telemetry.addData("Turning Right?", "Yes");
                     telemetry.addData("L Pressed?", LTouchSensor.isPressed());
                     telemetry.addData("R Pressed?", RTouchSensor.isPressed());
