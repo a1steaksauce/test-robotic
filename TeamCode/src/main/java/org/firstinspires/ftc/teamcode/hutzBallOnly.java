@@ -17,7 +17,7 @@ public class hutzBallOnly extends HutzFunc {
             logToTelemetry();
         }
         while(opModeIsActive()){
-            driveStraight(1);
+            driveStraight(0.75);
             doTilPlatform();
             reset();
             idle();

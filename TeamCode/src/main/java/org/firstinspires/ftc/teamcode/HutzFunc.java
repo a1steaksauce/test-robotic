@@ -24,6 +24,7 @@ public abstract class HutzFunc extends LinearOpMode {
     Servo beacon;
     ColorSensor cs;
     LightSensor line;
+    double finalFloorVal;
 
     public void initializeHardware() {
         topLeft = hardwareMap.dcMotor.get("topLeft");
@@ -38,8 +39,8 @@ public abstract class HutzFunc extends LinearOpMode {
         drawback = hardwareMap.dcMotor.get("drawback");
         release = hardwareMap.dcMotor.get("release");
 
-      //  drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-      //  release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        drawback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        release.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         line = hardwareMap.lightSensor.get("lineDetector");
         ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
@@ -47,6 +48,14 @@ public abstract class HutzFunc extends LinearOpMode {
         beacon = hardwareMap.servo.get("beacon");
 
         cs = hardwareMap.colorSensor.get("cs");
+
+        double floorVal1, floorVal2, floorVal3;
+        floorVal1 = line.getLightDetected();
+        try {Thread.sleep(15);} catch (InterruptedException e) {}
+        floorVal2 = line.getLightDetected();
+        try {Thread.sleep(15);} catch (InterruptedException e) {}
+        floorVal3 = line.getLightDetected();
+        finalFloorVal = (floorVal1 + floorVal2 + floorVal3) / 3;
     } //ready to test
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
@@ -69,7 +78,7 @@ public abstract class HutzFunc extends LinearOpMode {
         do {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
-        } while (lightStore > 0.12); //drives until white line
+        } while (lightStore < finalFloorVal+0.051); //drives until white line
     } //ready to test
     public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;
@@ -85,14 +94,14 @@ public abstract class HutzFunc extends LinearOpMode {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
             ultrasonStore = ultrason.getUltrasonicLevel();
-        } while (lightStore > 0.09 || (ultrasonStore > distance && ultrasonStore != 0)); //TODO: TEST!
+        } while (lightStore > finalFloorVal-0.021 || (ultrasonStore > distance && ultrasonStore != 0)); //TODO: TEST!
     } //ready to test
     public void doTilPlatform () throws InterruptedException{
         double lightStore;
         do {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
-        } while (lightStore > 0.09);
+        } while (lightStore > finalFloorVal-0.021);
     }
     public void strafe180 (double power) {
         topLeft.setPower(power);
@@ -203,7 +212,7 @@ public abstract class HutzFunc extends LinearOpMode {
         shootOnce();
         //eyy. now lets do it again
         intake.setPower(1);
-        sleep(500);
+        sleep(700);
         intake.setPower(0);
         //second ball in.
         shootOnce();
@@ -211,9 +220,9 @@ public abstract class HutzFunc extends LinearOpMode {
     } //test me for fucks sake
     public void shootOnce () throws InterruptedException {
         drawback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        drawback.setPower(0.3); //slow for now.
         drawback.setTargetPosition(2 * andymark_tick); //debug. may need to multiply by 60 to account for gearbox
         drawback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        drawback.setPower(0.3); //slow for now.
         while (drawback.isBusy()) {
             //wait til motor drawn back
         }
@@ -221,11 +230,20 @@ public abstract class HutzFunc extends LinearOpMode {
         //we are now pulled back, hopefully!
         //now to release.
         release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        release.setPower(0.3);
-        release.setTargetPosition(tetrix_tick / 4); //should work, debug tho
+        release.setTargetPosition(tetrix_tick/4); //should work, debug tho
         release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while (drawback.isBusy()) {
+        release.setPower(0.3);
+        while (release.isBusy()) {
             //other motor is releasing!
+        }
+        release.setPower(0);
+        Thread.sleep(100);
+        release.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        release.setTargetPosition(-tetrix_tick/4);
+        release.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        release.setPower(-0.3);
+        while (release.isBusy()) {
+            //so this doesn't immediately turn off
         }
         release.setPower(0);
     }

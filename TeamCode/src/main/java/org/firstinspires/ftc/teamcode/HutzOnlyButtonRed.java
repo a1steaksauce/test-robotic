@@ -19,7 +19,7 @@ public class HutzOnlyButtonRed extends HutzFunc {
 
         while(opModeIsActive()) {
             //todo: write code here
-            shoot();
+            shootOnce();
             strafeLeft45(0.75);
             doTilDistance(8); //cm
             reset();
