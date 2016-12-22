@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
+import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -24,6 +25,7 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
     TouchSensor LTouchSensor;
     TouchSensor RTouchSensor;
     //TouchSensor BeaconTouchSensor;
+    UltrasonicSensor UltraSensor;
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -52,6 +54,7 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
         LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
         RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
+        UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
         //BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
 
         RF = hardwareMap.dcMotor.get("RF");
@@ -191,8 +194,8 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
                 stopDrive();
             }
             if (step == 1) {
-                LTouchServo.setPosition(0.16);
-                RTouchServo.setPosition(0.72);
+                //LTouchServo.setPosition(0.16);
+                //RTouchServo.setPosition(0.72);
                 driveStraight(FORWARD_SPEED / 2);
 
                 sleep(150);
@@ -216,15 +219,31 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
                 }
             }
             if (step == 3) {
+                int hitAmount = 0;
                 runtime.reset();
-                while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed() && runtime.seconds() < 2.0) {
+                while (opModeIsActive() && hitAmount < 10 /*&& runtime.seconds() < 2.0*/) {
                     if (GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD) {
-                        driveStraightLeft(FORWARD_SPEED / 2);
+                        driveStraightLeft(0.2);
+                        if(UltraSensor.getUltrasonicLevel() <= 9.0){
+                            hitAmount++;
+                        } else {
+                            hitAmount = 0;
+                        }
                         telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
+                        telemetry.addData("Distance", UltraSensor.getUltrasonicLevel());
+                        telemetry.addData("Turning", "Left");
                         telemetry.update();
                     } else {
-                        driveStraightRight(FORWARD_SPEED / 2);
+                        driveStraightRight(0.2);
+                        if(UltraSensor.getUltrasonicLevel() <= 9.0){
+                            hitAmount++;
+                        } else {
+                            hitAmount = 0;
+                        }
                         telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
+                        telemetry.addData("Distance", UltraSensor.getUltrasonicLevel());
+                        //telemetry.addData("Distances Combined:", num);
+                        telemetry.addData("Turning", "Right");
                         telemetry.update();
                     }
 

@@ -8,15 +8,14 @@ import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots: Red Left Short", group="Autonomous")
-public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
+@Autonomous(name="Aleph Bots: Blue Right Short", group="Autonomous")
+public class AlephBotsAutonomousBlue extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null, LHolderServo = null, RHolderServo = null;
     OpticalDistanceSensor GroundColorSensor =  null;
@@ -25,7 +24,7 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
     TouchSensor RTouchSensor = null;
     GyroSensor Gyro = null;
     //TouchSensor BeaconTouchSensor = null;
-    UltrasonicSensor UltraSensor = null;
+    //UltrasonicSensor UltraSensor = null;
 
     private ElapsedTime runtime = new ElapsedTime();
     static final long     NEXT_BEACON_TURN_TIME = 2000;
@@ -62,7 +61,7 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
         Gyro = hardwareMap.gyroSensor.get("Gyro");
         //BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
-        UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
+        //UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
         RF.setDirection(DcMotor.Direction.REVERSE);
         RB.setDirection(DcMotor.Direction.REVERSE);
 
@@ -78,7 +77,15 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
+        //telemetry.addData(">", "Gyro Calibrating. Do Not move!");
         telemetry.update();
+        /*Gyro.calibrate();
+
+        // make sure the gyro is calibrated.
+        while (Gyro.isCalibrating())  {
+            Thread.sleep(50);
+            idle();
+        }*/
 
         Gyro.calibrate();
 
@@ -91,7 +98,24 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
 
         while (!isStarted()) {
 
-            // Display the light levels while we are waiting to start
+
+            /*telemetry.addData(">", "Gyro Calibrated.  Press Start.");
+            xVal = Gyro.rawX();
+            yVal = Gyro.rawY();
+            zVal = Gyro.rawZ();
+
+            // get the heading info.
+            // the Modern Robotics' gyro sensor keeps
+            // track of the current heading for the Z axis only.
+            heading = Gyro.getHeading();
+            //angleZ  = Gyro.getIntegratedZValue();
+
+            telemetry.addData("0", "Heading %03d", heading);
+            //telemetry.addData("1", "Int. Ang. %03d", angleZ);
+            telemetry.addData("2", "X av. %03d", xVal);
+            telemetry.addData("3", "Y av. %03d", yVal);
+            telemetry.addData("4", "Z av. %03d", zVal);
+            */
             telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
             telemetry.addData("RGB Level:", BeaconColorSensor.argb());
             telemetry.addData("Red Value:", BeaconColorSensor.red());
@@ -99,7 +123,6 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
             telemetry.addData("Blue Value:", BeaconColorSensor.blue());
             //telemetry.addData("Distance:", UltraSensor.getUltrasonicLevel());
             telemetry.addData("Battery Level:", hardwareMap.voltageSensor.get("Lift Controller").getVoltage());
-            telemetry.addData("Distance:",UltraSensor.getUltrasonicLevel());
             /*
             First two are alpha values
             3rd and 4th Red
@@ -149,7 +172,7 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
 
         // run until the white line is seen OR the driver presses STOP;
         runtime.reset();
-        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) && (runtime.seconds() < 3.0)) {
+        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) && runtime.seconds() < 3.0) {
 
             // Display the light level while we are looking for the line
             telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
@@ -169,14 +192,13 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
         stopDrive();
         sleep(150);
         while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD){
-            turnLeft(TURN_SPEED);
+            turnRight(TURN_SPEED);
             telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
             telemetry.update();
         }
         runtime.reset();
         while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed() && runtime.seconds() < 3.0) {
             telemetry.addData("Runtime:", runtime.seconds());
-
             if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
                 driveStraightLeft(FORWARD_SPEED/2);
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
@@ -186,12 +208,152 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
                 telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
                 telemetry.update();
             }
-
         }
         stopDrive();
         runtime.reset();
         while(runtime.seconds() < 1.0) {
+            if (LTouchSensor.isPressed()) {
+                driveStraightLeft(END_TURN_SPEED);
+                if (opModeIsActive() && !RTouchSensor.isPressed()) {
+                    telemetry.addData("Turning Left?", "Yes");
+                    telemetry.addData("L Pressed?", LTouchSensor.isPressed());
+                    telemetry.addData("R Pressed?", RTouchSensor.isPressed());
+                    telemetry.update();
+                    idle();
+                }
+                stopDrive();
+            } else if (RTouchSensor.isPressed()) {
+                driveStraightRight(END_TURN_SPEED);
+                if (opModeIsActive() && !LTouchSensor.isPressed()) {
+                    telemetry.addData("Turning Right?", "Yes");
+                    telemetry.addData("L Pressed?", LTouchSensor.isPressed());
+                    telemetry.addData("R Pressed?", RTouchSensor.isPressed());
+                    telemetry.update();
+                    idle();
+                }
+                stopDrive();
+            }
             telemetry.addData("Runtime:", runtime.seconds());
+        }
+        stopDrive();
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
+            telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+
+            telemetry.update();
+            idle();
+        }
+        /*
+        redLevelS = Integer.toString(BeaconColorSensor.argb());
+        redLevelS = redLevelS.substring(2,4);
+        redLevelI = Integer.valueOf(redLevelS);
+
+        blueLevelS = Integer.toString(BeaconColorSensor.argb());
+        blueLevelS = blueLevelS.substring(6,8);
+        blueLevelI = Integer.valueOf(blueLevelS);
+        */
+
+        redLevelI = BeaconColorSensor.red();
+        blueLevelI = BeaconColorSensor.blue();
+
+        runtime.reset();
+        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
+            telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
+            telemetry.addData("Red Level Calc:", redLevelI);
+            telemetry.addData("Blue Level Calc:", blueLevelI);
+            if(redLevelI > blueLevelI) {
+                telemetry.addData("Color found:", "Red");
+            } else if(blueLevelI > redLevelI) {
+                telemetry.addData("Color found:", "Blue");
+            } else {
+                telemetry.addData("Color found", "Undecided (Equal values)");
+            }
+            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
+            telemetry.addData("Red Value:", BeaconColorSensor.red());
+            telemetry.addData("Green Value:", BeaconColorSensor.green());
+            telemetry.addData("Blue Value:", BeaconColorSensor.blue());
+            telemetry.update();
+            idle();
+        }
+        stopDrive();
+        if (blueLevelI > redLevelI) {
+            ButtonPresser.setPosition(0.68);
+        } else {
+            ButtonPresser.setPosition(0.00);
+        }
+        sleep(1000);
+        ButtonPresser.setPosition(0.35);
+
+        driveStraight(-FORWARD2_SPEED);
+        sleep(2350);
+        stopDrive();
+
+        LTouchServo.setPosition(1.0);
+        RTouchServo.setPosition(0.0);
+
+        telemetry.addData(">", "Gyro Calibrating. Do Not move!");
+        telemetry.update();
+        Gyro.calibrate();
+
+        // make sure the gyro is calibrated.
+        while (Gyro.isCalibrating())  {
+            Thread.sleep(50);
+            idle();
+        }
+        heading = Gyro.getHeading();
+        turnLeft(TURN_SPEED);
+        while (opModeIsActive() && ((heading <= 5) || (heading >= 285))) {
+
+            // Display the light level while we are looking for the line
+            heading = Gyro.getHeading();
+            telemetry.addData("Heading:",  heading);
+            telemetry.update();
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        }
+        stopDrive();
+
+        driveStraight(1);
+
+        // run until the white line is seen OR the driver presses STOP;
+        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
+
+            // Display the light level while we are looking for the line
+            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
+            telemetry.update();
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+        }
+
+        // Stop all motors
+        stopDrive();
+
+        LTouchServo.setPosition(0.16); //Prepare the touch servos for the touch sensors
+        RTouchServo.setPosition(0.72);
+
+        driveStraight(FORWARD_SPEED/2);
+        sleep(150);
+        stopDrive();
+        sleep(150);
+        while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD){
+            turnRight(TURN_SPEED);
+            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
+            telemetry.update();
+        }
+        while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed()) {
+            if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
+                driveStraightLeft(FORWARD_SPEED/2);
+                telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
+                telemetry.update();
+            } else {
+                driveStraightRight(FORWARD_SPEED/2);
+                telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
+                telemetry.update();
+            }
+        }
+        stopDrive();
+        runtime.reset();
+        while(runtime.seconds() < 1.0) {
             if (LTouchSensor.isPressed()) {
                 driveStraightLeft(END_TURN_SPEED);
                 if (opModeIsActive() && !RTouchSensor.isPressed()) {
@@ -255,146 +417,7 @@ public class AlephBotsAutonomousLineFollowRedLeftShort extends LinearOpMode{
             telemetry.update();
             idle();
         }
-        if (blueLevelI < redLevelI) {
-            ButtonPresser.setPosition(0.68);
-        } else {
-            ButtonPresser.setPosition(0.00);
-        }
-        sleep(1000);
-        ButtonPresser.setPosition(0.35);
-
-        driveStraight(-FORWARD2_SPEED);
-        sleep(2400);
-        stopDrive();
-
-        LTouchServo.setPosition(1.0);
-        RTouchServo.setPosition(0.0);
-
-        telemetry.addData(">", "Gyro Calibrating. Do Not move!");
-        telemetry.update();
-        Gyro.calibrate();
-
-        // make sure the gyro is calibrated.
-        while (Gyro.isCalibrating())  {
-            Thread.sleep(50);
-            idle();
-        }
-        heading = Gyro.getHeading();
-        turnRight(TURN_SPEED);
-        while (opModeIsActive() && (heading <= 80)) {
-
-            // Display the light level while we are looking for the line
-            heading = Gyro.getHeading();
-            telemetry.addData("Heading:",  heading);
-            telemetry.update();
-            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-        }
-        stopDrive();
-
-        driveStraight(1);
-
-        // run until the white line is seen OR the driver presses STOP;
-        while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
-
-            // Display the light level while we are looking for the line
-            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-            telemetry.update();
-            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
-        }
-
-        // Stop all motors
-        stopDrive();
-
-        LTouchServo.setPosition(0.16); //Prepare the touch servos for the touch sensors
-        RTouchServo.setPosition(0.72);
-
-        driveStraight(FORWARD_SPEED/2);
-        sleep(150);
-        stopDrive();
-        sleep(150);
-        while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD){
-            turnLeft(TURN_SPEED);
-            telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-            telemetry.update();
-        }
-        while (opModeIsActive() && !LTouchSensor.isPressed() && !RTouchSensor.isPressed()) {
-            if(GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD){
-                driveStraightLeft(FORWARD_SPEED/2);
-                telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-                telemetry.update();
-            } else {
-                driveStraightRight(FORWARD_SPEED/2);
-                telemetry.addData("Light Level:",  GroundColorSensor.getLightDetected());
-                telemetry.update();
-            }
-        }
-        stopDrive();
-        runtime.reset();
-        while(runtime.seconds() < 1.0) {
-            if (LTouchSensor.isPressed()) {
-                driveStraightLeft(END_TURN_SPEED);
-                if(opModeIsActive() && !RTouchSensor.isPressed()) {
-                    telemetry.addData("Turning Left?", "Yes");
-                    telemetry.addData("L Pressed?", LTouchSensor.isPressed());
-                    telemetry.addData("R Pressed?", RTouchSensor.isPressed());
-                    telemetry.update();
-                    idle();
-                }
-                stopDrive();
-            } else if (RTouchSensor.isPressed()) {
-                driveStraightRight(END_TURN_SPEED);
-                if (opModeIsActive() && !LTouchSensor.isPressed()) {
-                    telemetry.addData("Turning Right?", "Yes");
-                    telemetry.addData("L Pressed?", LTouchSensor.isPressed());
-                    telemetry.addData("R Pressed?", RTouchSensor.isPressed());
-                    telemetry.update();
-                    idle();
-                }
-                stopDrive();
-            }
-        }
-        stopDrive();
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 0.5)) {
-            telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
-            telemetry.update();
-            idle();
-        }
-        /*
-        redLevelS = Integer.toString(BeaconColorSensor.argb());
-        redLevelS = redLevelS.substring(2,4);
-        redLevelI = Integer.valueOf(redLevelS);
-
-        blueLevelS = Integer.toString(BeaconColorSensor.argb());
-        blueLevelS = blueLevelS.substring(6,8);
-        blueLevelI = Integer.valueOf(blueLevelS);
-        */
-
-        redLevelI = BeaconColorSensor.red();
-        blueLevelI = BeaconColorSensor.blue();
-
-        runtime.reset();
-        while (opModeIsActive() && (runtime.seconds() < 1.0)) {
-            telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
-            telemetry.addData("Red Level Calc:", redLevelI);
-            telemetry.addData("Blue Level Calc:", blueLevelI);
-            if(redLevelI > blueLevelI) {
-                telemetry.addData("Color found:", "Red");
-            } else if(blueLevelI > redLevelI) {
-                telemetry.addData("Color found:", "Blue");
-            } else {
-                telemetry.addData("Color found", "Undecided (Equal values)");
-            }
-            telemetry.addData("RGB Level:", BeaconColorSensor.argb());
-            telemetry.addData("Red Value:", BeaconColorSensor.red());
-            telemetry.addData("Green Value:", BeaconColorSensor.green());
-            telemetry.addData("Blue Value:", BeaconColorSensor.blue());
-            telemetry.update();
-            idle();
-        }
-        if (blueLevelI < redLevelI) {
+        if (blueLevelI > redLevelI) {
             ButtonPresser.setPosition(0.68);
         } else {
             ButtonPresser.setPosition(0.00);
