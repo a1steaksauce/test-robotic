@@ -35,7 +35,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
     static final double     WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
 
     int xVal, yVal, zVal = 0;     // Gyro rate Values
-    int heading = 0;              // Gyro integrated heading
+    int heading = 0;              // The Gyro integrated heading
     int angleZ = 0;
     boolean lastResetState = false;
     boolean curResetState  = false;
