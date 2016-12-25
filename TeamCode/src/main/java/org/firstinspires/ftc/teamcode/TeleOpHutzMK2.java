@@ -24,6 +24,26 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
         }
         while(opModeIsActive()){
             //TODO: add crab drive code
+            //left stick drives, right stick turns. add compass or gyro!!!!! for turning
+
+            if(gamepad1.y){
+                runIntake(true);
+            } else if(gamepad1.x){
+                runIntake(false);
+            } else {
+                stopIntake();
+            } //run intake
+
+            if(gamepad1.left_bumper){
+                setServo(true, 0.5);
+            } else if(gamepad1.right_bumper){   //could make em independent but no need
+                setServo(false, 0.5);
+            } else {
+                resetServos();
+            } //run pushers
+
+            //TODO: add ball launching code
+
         }
     }
 }

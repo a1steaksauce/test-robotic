@@ -167,5 +167,21 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         Thread.sleep(time);
         resetWheels();
     } //test
-
+    public void runIntake(boolean forwards){
+        if(forwards) {
+            intake.setPower(1);
+        }else{
+            intake.setPower(-1);
+        }
+    }
+    public void stopIntake(){
+        intake.setPower(0);
+    }
+    public void setServo(boolean left, double location){
+        if(left){
+            beaconLeft.setPosition(location);
+        } else {
+            beaconRight.setPosition(location);
+        }
+    }
 }
