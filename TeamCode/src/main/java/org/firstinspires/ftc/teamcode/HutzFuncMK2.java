@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
@@ -15,20 +16,20 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 public abstract class HutzFuncMK2 extends LinearOpMode {
     abstract public void runOpMode() throws InterruptedException;
 
-    private String team;
-    private final int BALL_INTAKE = 0;
-    private final int BLANK = 1;
-    private final int BALL_LAUNCH = 2;
-    private final int BUTTON_PUSH = 3;
-    private int side = BLANK;
-    private DcMotor topLeft, topRight, botLeft, botRight;
-    private DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
+    String team;
+    final int BALL_INTAKE = 0;
+    final int BLANK = 1;
+    final int BALL_LAUNCH = 2;
+    final int BUTTON_PUSH = 3;
+    int side = BLANK;
+    DcMotor topLeft, topRight, botLeft, botRight;
+    DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
 
    // private DcMotor intake, release;
-    private UltrasonicSensor ultrason;
-    private Servo beaconLeft, beaconRight;
-    private ColorSensor cs;
-    private LightSensor line;
+    UltrasonicSensor ultrason;
+    Servo beaconLeft, beaconRight;
+    ColorSensor cs;
+    LightSensor line;
 
     public void initializeHardware(String teamName) {
         team = teamName;
@@ -50,6 +51,8 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         cs = hardwareMap.colorSensor.get("cs");
         line = hardwareMap.lightSensor.get("line");
 
+        currTopLeft.setDirection(DcMotor.Direction.REVERSE);
+        currTopRight.setDirection(DcMotor.Direction.REVERSE);
         beaconLeft.setPosition(1);
         beaconRight.setPosition(-1);
     } //works
@@ -85,6 +88,8 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         beaconRight.setPosition(1);
     } //works
     public void changeSide(int newSide) {
+        currTopLeft.setDirection(DcMotor.Direction.FORWARD);
+        currTopRight.setDirection(DcMotor.Direction.FORWARD);
         switch(newSide){
             case BALL_INTAKE:
                 currTopLeft = botRight;
@@ -115,6 +120,8 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
                 side = BUTTON_PUSH;
                 break;
         }
+        currTopLeft.setDirection(DcMotor.Direction.REVERSE);
+        currTopRight.setDirection(DcMotor.Direction.REVERSE);
     } // test
     public void doTilLine() throws InterruptedException { //waits until white line
         double lightStore;
@@ -147,10 +154,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         } while (lightStore > 0.09);
     } //test
     public void driveForward(double power){
-        currTopLeft.setPower(-power);
-        currTopRight.setPower(power);
-        currBotLeft.setPower(-power);
-        currBotRight.setPower(power);
+        drive(90, power);
     } //test
     public void driveForward(double power, int time) throws InterruptedException{
         driveForward(power);
@@ -158,26 +162,23 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         resetWheels();
     } //test
     public void strafe180(double power) { //goes to the right with positive power //test
-        currTopLeft.setPower(-power);
-        currTopRight.setPower(-power);
-        currBotLeft.setPower(power);
-        currBotRight.setPower(power);
+        drive(0, power);
     } //test
+    public void drive(double angle, double fullPow) {
+        double workAngle = angle + Math.PI/4.0;
+        currTopLeft.setPower(Math.cos(workAngle)*fullPow);
+        currTopRight.setPower(Math.sin(workAngle)*fullPow);
+        currBotLeft.setPower(Math.sin(workAngle)*fullPow);
+        currBotRight.setPower(Math.cos(workAngle)*fullPow);
+    } //radians
+    public void spin(double power) {
+        setMotors(power, power, -power, -power); //clockwise
+    }
     public void strafe180(double power, int time) throws InterruptedException{
         strafe180(power);
         Thread.sleep(time);
         resetWheels();
     } //test
- //   public void runIntake(boolean forwards){
-    //    if(forwards) {
-    //        intake.setPower(1);
-    //    }else{
-    //        intake.setPower(-1);
-     //   }
-  //  }
- //   public void stopIntake(){
-    //    intake.setPower(0);
-  //  }
     public void setServo(boolean left){
         if(left){
             beaconLeft.setPosition(0.5);
@@ -196,6 +197,36 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     public void setMotors(double all){
         setMotors(all, all, all, all);
     }
+    public void pushButton() throws InterruptedException{
+        if((cs.blue() > cs.red() && team.equals("blue")) || (cs.red()>cs.blue() && team.equals("red"))) {
+            setServo((team.equals("red") ? true : false));
+            drive((team.equals("red") ? Math.PI : 0), 0.2);
+            Thread.sleep(500);
+            resetWheels();
+            Thread.sleep(200);
+            drive((team.equals("blue") ? Math.PI : 0), 0.2);
+            doTilDistance(8);
+            resetWheels();
+        }
+    }
+    public double[] colorClose(){
+        int[] currColor = {cs.red(), cs.green(), cs.blue()};
 
+        double closeToRed =   Math.sqrt( Math.pow(currColor[0]-255,2) + Math.pow(currColor[1], 2) + Math.pow(currColor[2], 2) );
+        double closeToGreen = Math.sqrt( Math.pow(currColor[0],2) + Math.pow(currColor[1]-255, 2) + Math.pow(currColor[2], 2) );
+        double closeToBlue =  Math.sqrt( Math.pow(currColor[0],2) + Math.pow(currColor[1], 2) + Math.pow(currColor[2]-255, 2) );
+        double[] ret = {closeToRed, closeToGreen, closeToBlue};
+        return ret;
+    } //ready to test
+/*   public void runIntake(boolean forwards){
+        if(forwards) {
+            intake.setPower(1);
+        }else{
+            intake.setPower(-1);
+        }
+}*/
+/*public void stopIntake(){
+    intake.setPower(0);
+}*/
 
 }

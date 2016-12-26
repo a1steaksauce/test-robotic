@@ -23,24 +23,19 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
             logToTelemetry();
         }
         while(opModeIsActive()){
-            //TODO: add crab drive code
             //left stick drives, right stick turns. add compass or gyro!!!!! for turning. or not
 
-            if(Math.abs(gamepad1.right_stick_x) > DEAD_ZONE){
-                setMotors(gamepad1.right_stick_x);
+            if(Math.abs(gamepad1.right_stick_y) > DEAD_ZONE || Math.abs(gamepad1.right_stick_x) > DEAD_ZONE){ //crab drive
+                drive(Math.atan2(gamepad1.right_stick_y, gamepad1.right_stick_x), Math.sqrt(Math.pow(gamepad1.right_stick_x, 2) + Math.pow(gamepad1.right_stick_y , 2)));
             }
-            if(Math.abs(gamepad1.left_stick_y) > DEAD_ZONE || Math.abs(gamepad1.left_stick_x) > DEAD_ZONE){
-                double angle = Math.atan2(gamepad1.left_stick_y,gamepad1.left_stick_x);
-                if(angle >= 0 && angle < Math.PI/2.0){ //quad 1
-
-                } else if (angle >= Math.PI/2.0 && angle < Math.PI){ //quad 2
-
-                } else if (angle >= Math.PI && angle < 3*Math.PI/2.0){ //quad 3
-
-                } else { //quad 4
-
-                }
+            if(Math.abs(gamepad1.left_stick_x) > DEAD_ZONE){
+                spin(gamepad1.left_stick_x);
             }
+            if(Math.abs(gamepad1.right_stick_x) < DEAD_ZONE && Math.abs(gamepad1.right_stick_y) < DEAD_ZONE && Math.abs(gamepad1.left_stick_x) < 0){
+                resetWheels();
+            }
+
+
             if(gamepad1.y){
                 //runIntake(true);
             } else if(gamepad1.x){
