@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 
+
 /**
  * hi iit is Eliezer in 12
  */
@@ -23,7 +24,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     private DcMotor topLeft, topRight, botLeft, botRight;
     private DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
 
-    private DcMotor intake, release;
+   // private DcMotor intake, release;
     private UltrasonicSensor ultrason;
     private Servo beaconLeft, beaconRight;
     private ColorSensor cs;
@@ -41,8 +42,8 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         currBotLeft = botLeft;
         currBotRight = botRight;
 
-        intake = hardwareMap.dcMotor.get("intake");
-        release = hardwareMap.dcMotor.get("release");
+       // intake = hardwareMap.dcMotor.get("intake");
+      //  release = hardwareMap.dcMotor.get("release");
         ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
         beaconLeft = hardwareMap.servo.get("beaconLeft");
         beaconRight = hardwareMap.servo.get("beaconRight");
@@ -50,7 +51,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         line = hardwareMap.lightSensor.get("line");
 
         beaconLeft.setPosition(1);
-        beaconRight.setPosition(1);
+        beaconRight.setPosition(-1);
     } //works
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
@@ -167,21 +168,34 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         Thread.sleep(time);
         resetWheels();
     } //test
-    public void runIntake(boolean forwards){
-        if(forwards) {
-            intake.setPower(1);
-        }else{
-            intake.setPower(-1);
-        }
-    }
-    public void stopIntake(){
-        intake.setPower(0);
-    }
-    public void setServo(boolean left, double location){
+ //   public void runIntake(boolean forwards){
+    //    if(forwards) {
+    //        intake.setPower(1);
+    //    }else{
+    //        intake.setPower(-1);
+     //   }
+  //  }
+ //   public void stopIntake(){
+    //    intake.setPower(0);
+  //  }
+    public void setServo(boolean left){
         if(left){
-            beaconLeft.setPosition(location);
+            beaconLeft.setPosition(0.5);
         } else {
-            beaconRight.setPosition(location);
+            beaconRight.setPosition(0.5);
         }
     }
+    public void setMotors(double tl, double tr, double bl, double br){
+        DcMotor[] list = {currTopLeft, currTopRight, currBotLeft, currBotRight};
+        double[] powers = {tl, tr, bl, br};
+        for(int i =0; i<4; i++){
+            if(powers[i] != 180.4)
+                list[i].setPower(powers[i]);
+        }
+    }
+    public void setMotors(double all){
+        setMotors(all, all, all, all);
+    }
+
+
 }

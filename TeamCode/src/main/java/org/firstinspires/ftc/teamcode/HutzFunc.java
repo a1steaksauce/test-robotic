@@ -103,6 +103,7 @@ public abstract class HutzFunc extends LinearOpMode {
             lightStore = line.getLightDetected();
         } while (lightStore > finalFloorVal-0.021);
     }
+
     public void strafe180 (double power) {
         topLeft.setPower(power);
         topRight.setPower(-power);

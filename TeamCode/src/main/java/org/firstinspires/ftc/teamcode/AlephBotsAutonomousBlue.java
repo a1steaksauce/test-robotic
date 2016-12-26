@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by aaronkbutler on 10/21/16.
  */
 
-@Autonomous(name="Aleph Bots: Blue Right Short", group="Autonomous")
+@Autonomous(name="Aleph Bots: Blue Right Short 2", group="Autonomous")
 public class AlephBotsAutonomousBlue extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo ButtonPresser = null, LTouchServo = null, RTouchServo = null, LHolderServo = null, RHolderServo = null;
