@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
@@ -24,6 +25,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     int side = BLANK;
     DcMotor topLeft, topRight, botLeft, botRight;
     DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
+    DcMotor release;
 
    // private DcMotor intake, release;
     UltrasonicSensor ultrason;
@@ -37,15 +39,14 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         topRight = hardwareMap.dcMotor.get("topRight");
         botLeft = hardwareMap.dcMotor.get("botLeft");
         botRight = hardwareMap.dcMotor.get("botRight");
-
         currTopLeft = topLeft;
         currTopRight = topRight;
         currBotLeft = botLeft;
         currBotRight = botRight;
 
-       // intake = hardwareMap.dcMotor.get("intake");
-      //  release = hardwareMap.dcMotor.get("release");
-        ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
+        // intake = hardwareMap.dcMotor.get("intake");
+        //release = hardwareMap.dcMotor.get("release");
+        //ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
         beaconLeft = hardwareMap.servo.get("beaconLeft");
         beaconRight = hardwareMap.servo.get("beaconRight");
         cs = hardwareMap.colorSensor.get("cs");
@@ -58,7 +59,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     } //works
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
-        telemetry.addData("ultrason: ", ultrason.getUltrasonicLevel());
+       // telemetry.addData("ultrason: ", ultrason.getUltrasonicLevel());
         telemetry.addData("cs: ", cs.argb());
         switch(side){
             case BALL_INTAKE:
@@ -218,6 +219,29 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         double[] ret = {closeToRed, closeToGreen, closeToBlue};
         return ret;
     } //ready to test
+    public void launch() throws InterruptedException{
+        release.setPower(0.2);
+        Thread.sleep(100);
+        release.setPower(-0.2);
+        Thread.sleep(100);
+        release.setPower(0);
+    }
+    /*
+
+    public double getAngle(){  //
+        //let there be a gyro sensor called gyro
+        //and a compass sensor called compass
+
+
+
+    }
+    public double integrateGyro(){
+        final float timeStep = 0.01;
+        gyro
+    }
+
+
+     */
 /*   public void runIntake(boolean forwards){
         if(forwards) {
             intake.setPower(1);

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 /**
  * Created by Eliezer Pearl on 9/9/2016.
  */
-@TeleOp(name="Hutzbots Teleop crab 2")
+@TeleOp(name="Basic driving code")
 //@Disabled //uncomment to disable, comment to enable
 public class TeleOpHutzMK2 extends HutzFuncMK2 {
     final double NONE = 180.4;
@@ -36,13 +36,7 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
             }
 
 
-            if(gamepad1.y){
-                //runIntake(true);
-            } else if(gamepad1.x){
-                //runIntake(false);
-            } else {
-              //  stopIntake();
-            } //run intake
+
 
             if(gamepad1.left_bumper){
                 setServo(true);
