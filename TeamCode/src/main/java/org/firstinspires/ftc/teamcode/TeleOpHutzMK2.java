@@ -37,14 +37,26 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
 
 
 
-
+            boolean downL = false;
+            boolean downR = false;
             if(gamepad1.left_bumper){
-                setServo(true);
-            } else if(gamepad1.right_bumper){   //could make em independent but no need
-                setServo(false);
-            } else {
-                resetServos();
-            } //run pushers
+                if(!downL) {
+                    beaconLeft.setPosition(0.6);
+                    downL = true;
+                } else {
+                    beaconLeft.setPosition(1);
+                    downL = false;
+                }
+            }
+            if(gamepad1.right_bumper){   //could make em independent but no need
+                if(!downR){
+                    beaconRight.setPosition(0.6);
+                    downR = true;
+                } else {
+                    beaconRight.setPosition(0);
+                    downR = false;
+                }
+            }
 
             //TODO: add ball launching code
 

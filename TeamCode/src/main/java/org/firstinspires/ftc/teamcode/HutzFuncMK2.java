@@ -180,11 +180,12 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         Thread.sleep(time);
         resetWheels();
     } //test
+    @Deprecated
     public void setServo(boolean left){
         if(left){
             beaconLeft.setPosition(0.6);
         } else {
-            beaconRight.setPosition(0.4);
+            beaconRight.setPosition(0.6);
         }
     }
     public void setMotors(double tl, double tr, double bl, double br){
