@@ -26,7 +26,7 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
             //left stick drives, right stick turns. add compass or gyro!!!!! for turning. or not
 
             if(Math.abs(gamepad1.right_stick_y) > DEAD_ZONE || Math.abs(gamepad1.right_stick_x) > DEAD_ZONE){ //crab drive
-                drive(Math.atan2(gamepad1.right_stick_y, gamepad1.right_stick_x), Math.sqrt(Math.pow(gamepad1.right_stick_x, 2) + Math.pow(gamepad1.right_stick_y , 2)));
+                drive(Math.atan2(gamepad1.right_stick_y, gamepad1.right_stick_x), Math.sqrt(Math.pow(gamepad1.right_stick_x, 2) + Math.pow(gamepad1.right_stick_y , 2)) );
             }
             if(Math.abs(gamepad1.left_stick_x) > DEAD_ZONE){
                 spin(gamepad1.left_stick_x);

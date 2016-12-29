@@ -55,7 +55,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         currTopLeft.setDirection(DcMotor.Direction.REVERSE);
         currTopRight.setDirection(DcMotor.Direction.REVERSE);
         beaconLeft.setPosition(1);
-        beaconRight.setPosition(-1);
+        beaconRight.setPosition(0);
     } //works
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
@@ -86,7 +86,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     } //works
     public void resetServos() {
         beaconLeft.setPosition(1);
-        beaconRight.setPosition(1);
+        beaconRight.setPosition(0);
     } //works
     public void changeSide(int newSide) {
         currTopLeft.setDirection(DcMotor.Direction.FORWARD);
@@ -182,9 +182,9 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     } //test
     public void setServo(boolean left){
         if(left){
-            beaconLeft.setPosition(0.5);
+            beaconLeft.setPosition(0.6);
         } else {
-            beaconRight.setPosition(0.5);
+            beaconRight.setPosition(0.4);
         }
     }
     public void setMotors(double tl, double tr, double bl, double br){
