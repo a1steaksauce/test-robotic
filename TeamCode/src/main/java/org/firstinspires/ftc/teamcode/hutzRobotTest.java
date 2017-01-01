@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * hi iit is Eliezer in 12
  */
-@TeleOp(name="hutztest", group = "3c")
+@TeleOp(name="Teleop Test Hutzbots", group = "hutzTele")
 public class hutzRobotTest extends LinearOpMode {
     DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
     public void runOpMode(){

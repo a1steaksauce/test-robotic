@@ -25,7 +25,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     int side = BLANK;
     DcMotor topLeft, topRight, botLeft, botRight;
     DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
-    DcMotor release;
+    //DcMotor release;
 
    // private DcMotor intake, release;
     UltrasonicSensor ultrason;
@@ -180,12 +180,11 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         Thread.sleep(time);
         resetWheels();
     } //test
-    @Deprecated
     public void setServo(boolean left){
         if(left){
-            beaconLeft.setPosition(0.6);
+            beaconLeft.setPosition(0.5);
         } else {
-            beaconRight.setPosition(0.6);
+            beaconRight.setPosition(0.3);
         }
     }
     public void setMotors(double tl, double tr, double bl, double br){
@@ -201,15 +200,18 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     }
     public void pushButton() throws InterruptedException{
         if((cs.blue() > cs.red() && team.equals("blue")) || (cs.red()>cs.blue() && team.equals("red"))) {
-            setServo((team.equals("red") ? true : false));
-            drive((team.equals("red") ? Math.PI : 0), 0.2);
-            Thread.sleep(500);
-            resetWheels();
-            Thread.sleep(200);
-            drive((team.equals("blue") ? Math.PI : 0), 0.2);
-            doTilDistance(8);
-            resetWheels();
+            setServo(team.equals("red"));
+        } else {
+            setServo(team.equals("blue")); //opposite of above
         }
+        drive((team.equals("red") ? Math.PI : 0), 0.2);
+        Thread.sleep(500);
+        resetWheels();
+        Thread.sleep(200);
+        drive((team.equals("blue") ? Math.PI : 0), 0.2);
+        doTilDistance(8);
+        resetWheels();
+        resetServos();
     }
     public double[] colorClose(){
         int[] currColor = {cs.red(), cs.green(), cs.blue()};
@@ -220,13 +222,13 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         double[] ret = {closeToRed, closeToGreen, closeToBlue};
         return ret;
     } //ready to test
-    public void launch() throws InterruptedException{
-        release.setPower(0.2);
-        Thread.sleep(100);
-        release.setPower(-0.2);
-        Thread.sleep(100);
-        release.setPower(0);
-    }
+  //  public void launch() throws InterruptedException{
+  //      release.setPower(0.2);
+  //      Thread.sleep(100);
+  //      release.setPower(-0.2);
+  //      Thread.sleep(100);
+  //      release.setPower(0);
+  //  }
     /*
 
     public double getAngle(){  //

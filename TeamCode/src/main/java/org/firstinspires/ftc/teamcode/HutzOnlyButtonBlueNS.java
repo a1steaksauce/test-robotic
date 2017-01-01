@@ -5,19 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 /**
  * hi iit is Eliezer in 12
  */
-@Autonomous(name="hutz blue button only no shoot", group="hutzAuto")
+@Autonomous(name="Blue buttons no shoot hutzbots", group="hutzAuto")
 
 public class HutzOnlyButtonBlueNS extends HutzFuncMK2 {
     @Override
     public void runOpMode() throws InterruptedException {
         initializeHardware("blue");
-        resetServos();
         while (!isStarted()) {
-            logToTelemetry();
+            logToTelemetry(); //comment out when no longer needed
         }
 
         while(opModeIsActive()) {
-            //todo: write code here
             drive(Math.PI/4.0, 0.75);
             doTilDistance(8); //cm
             resetWheels();
@@ -29,10 +27,6 @@ public class HutzOnlyButtonBlueNS extends HutzFuncMK2 {
                 Thread.sleep(500);
                 pushButton();
             }
-            //Thread.sleep(500);
-           // drive(5*Math.PI/4.0, 0.75);
-           // doTilPlatform(8);
-           // resetWheels();
             idle();
         }
     }
