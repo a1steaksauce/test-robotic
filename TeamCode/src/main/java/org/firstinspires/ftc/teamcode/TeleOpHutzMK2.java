@@ -16,6 +16,9 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 public class TeleOpHutzMK2 extends HutzFuncMK2 {
     final double NONE = 180.4;
     final double DEAD_ZONE = 0.05; //TODO: CHANGE THIS THROUGH DEBUGGING
+    boolean downL = false;
+    boolean downR = false;
+    long currTime = 0;
     @Override
     public void runOpMode(){
         initializeHardware("lol doesn't matter");
@@ -37,11 +40,11 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
 
 
 
-            boolean downL = false;
-            boolean downR = false;
+            boolean isBusy = false;
+            //do something with time elapsed
             if(gamepad1.left_bumper){
                 if(!downL) {
-                    beaconLeft.setPosition(0.6);
+                    beaconLeft.setPosition(0.5);
                     downL = true;
                 } else {
                     beaconLeft.setPosition(1);
@@ -50,7 +53,7 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
             }
             if(gamepad1.right_bumper){   //could make em independent but no need
                 if(!downR){
-                    beaconRight.setPosition(0.6);
+                    beaconRight.setPosition(0.3);
                     downR = true;
                 } else {
                     beaconRight.setPosition(0);
@@ -58,6 +61,7 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
                 }
             }
 
+            //TODO: add ball intake code
             //TODO: add ball launching code
 
         }
