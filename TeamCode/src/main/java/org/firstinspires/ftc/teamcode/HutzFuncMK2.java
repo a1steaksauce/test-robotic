@@ -44,9 +44,9 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         currBotLeft = botLeft;
         currBotRight = botRight;
 
-        // intake = hardwareMap.dcMotor.get("intake");
+        intake = hardwareMap.dcMotor.get("intake");
         //release = hardwareMap.dcMotor.get("release");
-        //ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
+        ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
         beaconLeft = hardwareMap.servo.get("beaconLeft");
         beaconRight = hardwareMap.servo.get("beaconRight");
         cs = hardwareMap.colorSensor.get("cs");
@@ -55,13 +55,15 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         currTopLeft.setDirection(DcMotor.Direction.REVERSE);
         currTopRight.setDirection(DcMotor.Direction.REVERSE);
         intake.setDirection(DcMotor.Direction.REVERSE);
+        cs.enableLed(false);
         beaconLeft.setPosition(1);
         beaconRight.setPosition(0);
     } //works
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
-       // telemetry.addData("ultrason: ", ultrason.getUltrasonicLevel());
-        telemetry.addData("cs: ", cs.argb());
+        telemetry.addData("ultrason: ", ultrason.getUltrasonicLevel());
+        telemetry.addData("cs b: ", cs.blue());
+        telemetry.addData("cs r: ", cs.red());
         switch(side){
             case BALL_INTAKE:
                 telemetry.addData("Ball intake side is front", ".");
@@ -135,7 +137,6 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;
         do {
-            Thread.sleep(50);
             ultrasonStore = ultrason.getUltrasonicLevel();
         } while (ultrasonStore > distance && ultrasonStore != 0);
     } //ready to test
@@ -168,10 +169,10 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     } //test
     public void drive(double angle, double fullPow) {
         double workAngle = angle + Math.PI/4.0;
-        currTopLeft.setPower(Math.cos(workAngle)*fullPow);
-        currTopRight.setPower(Math.sin(workAngle)*fullPow);
-        currBotLeft.setPower(Math.sin(workAngle)*fullPow);
-        currBotRight.setPower(Math.cos(workAngle)*fullPow);
+        currTopLeft.setPower(Math.sin(workAngle)*fullPow);
+        currTopRight.setPower(Math.cos(workAngle)*fullPow);
+        currBotLeft.setPower(Math.cos(workAngle)*fullPow);
+        currBotRight.setPower(Math.sin(workAngle)*fullPow);
     } //radians
     public void spin(double power) {
         setMotors(power, power, -power, -power); //clockwise
@@ -185,7 +186,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         if(left){
             beaconLeft.setPosition(0.5);
         } else {
-            beaconRight.setPosition(0.3);
+            beaconRight.setPosition(0.5);
         }
     }
     public void setMotors(double tl, double tr, double bl, double br){

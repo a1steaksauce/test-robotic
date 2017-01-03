@@ -25,6 +25,7 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
     boolean isBusyL = false;
     boolean isBusyR = false;
     long currTimeL = 0;
+
     long currTimeR = 0;
     @Override
     public void runOpMode(){
