@@ -166,7 +166,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     } //test
     public void strafe180(double power) { //goes to the right with positive power //test
         drive(0, power);
-    } //test
+    } //testk
     public void drive(double angle, double fullPow) {
         double workAngle = angle + Math.PI/4.0;
         currTopLeft.setPower(Math.sin(workAngle)*fullPow);
