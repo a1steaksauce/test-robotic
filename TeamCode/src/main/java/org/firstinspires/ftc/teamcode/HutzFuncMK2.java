@@ -137,8 +137,9 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;
         do {
+            sleep(50);
             ultrasonStore = ultrason.getUltrasonicLevel();
-        } while (ultrasonStore > distance && ultrasonStore != 0);
+        } while (ultrasonStore != distance && ultrasonStore != distance+1 && ultrasonStore != distance-1);
     } //ready to test
     public void doTilPlatform (double distance) throws InterruptedException{ //waits until robot is on platform
         double lightStore;

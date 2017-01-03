@@ -22,8 +22,7 @@ public class HutzAutonomousTest extends HutzFuncMK2{
          //   currBotRight.setPower(1);
             drive(3*Math.PI/4.0, 0.2);
             doTilDistance(15.0);
-            resetWheels();
-            idle();
+            requestOpModeStop();
 //            drive(3*Math.PI/4, 0.5);
 //            sleep(500);
 //            drive(Math.PI/4, 0.5);
