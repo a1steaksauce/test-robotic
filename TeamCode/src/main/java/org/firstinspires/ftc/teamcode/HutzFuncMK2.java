@@ -26,7 +26,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     DcMotor topLeft, topRight, botLeft, botRight;
     DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
     //DcMotor release;
-
+    DcMotor intake;
    // private DcMotor intake, release;
     UltrasonicSensor ultrason;
     Servo beaconLeft, beaconRight;
@@ -54,6 +54,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
 
         currTopLeft.setDirection(DcMotor.Direction.REVERSE);
         currTopRight.setDirection(DcMotor.Direction.REVERSE);
+        intake.setDirection(DcMotor.Direction.REVERSE);
         beaconLeft.setPosition(1);
         beaconRight.setPosition(0);
     } //works

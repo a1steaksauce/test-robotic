@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 //@Disabled //uncomment to disable, comment to enable
 public class TeleOpHutzMK2 extends HutzFuncMK2 {
     final double NONE = 180.4;
-    final double DEAD_ZONE = 0.05; //TODO: CHANGE THIS THROUGH DEBUGGING
+    final double DEAD_ZONE = 0.07; //TODO: CHANGE THIS THROUGH DEBUGGING
     final long TIME_DELAY = 500000000L; //The window of time where a controller CANNOT adjust beacon pushers after hitting it once
     //The goal of the time window is so that a human can reasonably toggle on a button pusher without having to be incredibly precise
     //with timing. Earlier, the code runs through the same boolean determining whether to lower a beacon pusher many times per second.
@@ -28,6 +28,8 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
     long currTimeR = 0;
     @Override
     public void runOpMode(){
+        boolean driving = false;
+        boolean turning = false;
         initializeHardware("lol doesn't matter");
         while(!isStarted()){
             logToTelemetry();
@@ -37,11 +39,17 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
 
             if(Math.abs(gamepad1.right_stick_y) > DEAD_ZONE || Math.abs(gamepad1.right_stick_x) > DEAD_ZONE){ //crab drive
                 drive(Math.atan2(gamepad1.right_stick_y, gamepad1.right_stick_x), Math.sqrt(Math.pow(gamepad1.right_stick_x, 2) + Math.pow(gamepad1.right_stick_y , 2)) );
+                driving = true;
+            } else {
+                driving = false;
             }
             if(Math.abs(gamepad1.left_stick_x) > DEAD_ZONE){
                 spin(gamepad1.left_stick_x);
+                turning = true;
+            } else {
+                turning = false;
             }
-            if(Math.abs(gamepad1.right_stick_x) < DEAD_ZONE && Math.abs(gamepad1.right_stick_y) < DEAD_ZONE && Math.abs(gamepad1.left_stick_x) < 0){
+            if(!driving && !turning){
                 resetWheels();
             }
 
