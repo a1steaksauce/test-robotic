@@ -148,7 +148,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
             ultrasonStore = ultrason.getUltrasonicLevel();
-        } while (lightStore > 0.09 || (ultrasonStore > distance && ultrasonStore != 0)); //TODO: TEST!
+        } while (lightStore > 0.09 || (ultrasonStore != distance && ultrasonStore != distance+1 && ultrasonStore != distance-1)); //TODO: TEST!
     } //ready to test
     public void doTilPlatform () throws InterruptedException{
         double lightStore;
