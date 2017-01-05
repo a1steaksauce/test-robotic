@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.GyroSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.LightSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
@@ -32,7 +32,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     Servo beaconLeft, beaconRight;
     ColorSensor cs;
     LightSensor line;
-    GyroSensor gyro;
+    CompassSensor compass;
 //.O
 //O.
 
@@ -54,7 +54,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         beaconRight = hardwareMap.servo.get("beaconRight");
         cs = hardwareMap.colorSensor.get("cs");
         line = hardwareMap.lightSensor.get("line");
-        gyro = hardwareMap.gyroSensor.get("gyro");
+        compass = hardwareMap.compassSensor.get("compass");
 
         currTopLeft.setDirection(DcMotor.Direction.REVERSE);
         currTopRight.setDirection(DcMotor.Direction.REVERSE);
@@ -62,17 +62,13 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         cs.enableLed(false);
         beaconLeft.setPosition(1);
         beaconRight.setPosition(0);
-        gyro.resetZAxisIntegrator();
-        gyro.calibrate();
-        while(gyro.isCalibrating()){
-            //dont do anything
-        }
     } //works
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
         telemetry.addData("ultrason: ", ultrason.getUltrasonicLevel());
         telemetry.addData("cs b: ", cs.blue());
         telemetry.addData("cs r: ", cs.red());
+        telemetry.addData("compass", compass.getDirection());
         switch(side){
             case BALL_INTAKE:
                 telemetry.addData("Ball intake side is front", ".");
@@ -139,27 +135,34 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     public void doTilLine() throws InterruptedException { //waits until white line
         double lightStore;
         do {
+            sleep(50);
             lightStore = line.getLightDetected();
         } while (lightStore < 0.12); //drives until white line
     } //ready to test
     public void doTilLineWithCorrection() throws InterruptedException { //waits until white line
         double lightStore;
-        gyro.calibrate();
-        while(gyro.isCalibrating()){
-            telemetry.addLine("GYRO IS CALIBR8NG DONT TOUCH :D");
-            updateTelemetry(telemetry);
-        }
-        double gyroHeading = gyro.getHeading();
-        telemetry.addData("Gyro heading", gyroHeading);
+        double compassHeading = compass.getDirection();
+        telemetry.addData("compass direction", compassHeading);
         do {
             lightStore = line.getLightDetected();
-          //  gyro.resetZAxisIntegrator();
-            if(gyro.getHeading() > gyroHeading) //leaning right from current trajectory so
+            if(compass.getDirection() > compassHeading) //leaning right from current trajectory so
                 setMotors(currTopLeft.getPower()+0.04, currTopRight.getPower()-0.04, currBotLeft.getPower()-0.04, currBotRight.getPower()+0.04);
-            else if(gyro.getHeading() < gyroHeading) // leaning left from current trajectory
+            else if(compass.getDirection() < compassHeading) // leaning left from current trajectory
                 setMotors(currTopLeft.getPower()-0.04, currTopRight.getPower()+0.04, currBotLeft.getPower()+0.04, currBotRight.getPower()-0.04);
         } while (lightStore < 0.12); //drives until white line
     } //why would this possibly work
+    public void correctTilX(){
+        double compassHeading = compass.getDirection();
+
+        do {
+            telemetry.addData("compass direction", compassHeading);
+            updateTelemetry(telemetry);
+            if(compass.getDirection() > compassHeading) //leaning right from current trajectory so
+                setMotors(currTopLeft.getPower()+0.04, currTopRight.getPower()-0.04, currBotLeft.getPower()-0.04, currBotRight.getPower()+0.04);
+            else if(compass.getDirection() < compassHeading) // leaning left from current trajectory
+                setMotors(currTopLeft.getPower()-0.04, currTopRight.getPower()+0.04, currBotLeft.getPower()+0.04, currBotRight.getPower()-0.04);
+        } while (!gamepad1.x); //drives until white line
+    }
     public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;
         do {
@@ -171,6 +174,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         double lightStore;
         double ultrasonStore;
         do {
+            sleep(50);
             lightStore = line.getLightDetected();
             ultrasonStore = ultrason.getUltrasonicLevel();
         } while (lightStore > 0.09 || (ultrasonStore != distance && ultrasonStore != distance+1 && ultrasonStore != distance-1)); //TODO: TEST!
@@ -183,7 +187,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         } while (lightStore > 0.09);
     } //test
     public void driveForward(double power){
-        drive(90, power);
+        drive(Math.PI/2, power);
     } //test
     public void driveForward(double power, int time) throws InterruptedException{
         driveForward(power);
@@ -204,7 +208,11 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         currBotRight.setPower(Math.sin(workAngle)*fullPow);  //crab drive code; makes assumptions that the top left and right are reversed
     } //WORKZ
     public void spin(double power) {
-        setMotors(-power, -power, power, power); //clockwise
+        setMotors(-power, -power, power, power);
+        currTopLeft.setPower(-power);
+        currTopRight.setPower(-power);
+        currBotLeft.setPower(power);
+        currBotRight.setPower(power);//clockwise
     }
     public void strafe180(double power, int time) throws InterruptedException{
         strafe180(power);
