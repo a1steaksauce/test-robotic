@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @Autonomous(name="Test for autonomous", group="3c")
 public class HutzAutonomousTest extends HutzFuncMK2{
 
-    DcMotor currBotRight;
     public void runOpMode() throws InterruptedException{
         //currBotRight = hardwareMap.dcMotor.get("botRight");
         initializeHardware("any");
@@ -21,7 +20,16 @@ public class HutzAutonomousTest extends HutzFuncMK2{
          //   currBotLeft.setPower(1);
          //   currBotRight.setPower(1);
             drive(3*Math.PI/4.0, 0.2);
-            doTilDistance(15.0);
+            doTilDistance(20.0);
+            resetWheels();
+            sleep(500);
+
+            driveForward(0.25);
+            doTilLineWithCorrection();
+            resetWheels();
+            while(!gamepad1.x){
+                logToTelemetry();
+            }
             requestOpModeStop();
 //            drive(3*Math.PI/4, 0.5);
 //            sleep(500);

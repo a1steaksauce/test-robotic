@@ -32,6 +32,9 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     Servo beaconLeft, beaconRight;
     ColorSensor cs;
     LightSensor line;
+    GyroSensor gyro;
+//.O
+//O.
 
     public void initializeHardware(String teamName) {
         team = teamName;
@@ -51,6 +54,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         beaconRight = hardwareMap.servo.get("beaconRight");
         cs = hardwareMap.colorSensor.get("cs");
         line = hardwareMap.lightSensor.get("line");
+        gyro = hardwareMap.gyroSensor.get("gyro");
 
         currTopLeft.setDirection(DcMotor.Direction.REVERSE);
         currTopRight.setDirection(DcMotor.Direction.REVERSE);
@@ -58,6 +62,11 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         cs.enableLed(false);
         beaconLeft.setPosition(1);
         beaconRight.setPosition(0);
+        gyro.resetZAxisIntegrator();
+        gyro.calibrate();
+        while(gyro.isCalibrating()){
+            //dont do anything
+        }
     } //works
     public void logToTelemetry() {
         telemetry.addData("line: ", line.getLightDetected());
@@ -130,10 +139,27 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     public void doTilLine() throws InterruptedException { //waits until white line
         double lightStore;
         do {
-            Thread.sleep(50);
             lightStore = line.getLightDetected();
-        } while (lightStore > 0.12); //drives until white line
+        } while (lightStore < 0.12); //drives until white line
     } //ready to test
+    public void doTilLineWithCorrection() throws InterruptedException { //waits until white line
+        double lightStore;
+        gyro.calibrate();
+        while(gyro.isCalibrating()){
+            telemetry.addLine("GYRO IS CALIBR8NG DONT TOUCH :D");
+            updateTelemetry(telemetry);
+        }
+        double gyroHeading = gyro.getHeading();
+        telemetry.addData("Gyro heading", gyroHeading);
+        do {
+            lightStore = line.getLightDetected();
+          //  gyro.resetZAxisIntegrator();
+            if(gyro.getHeading() > gyroHeading) //leaning right from current trajectory so
+                setMotors(currTopLeft.getPower()+0.04, currTopRight.getPower()-0.04, currBotLeft.getPower()-0.04, currBotRight.getPower()+0.04);
+            else if(gyro.getHeading() < gyroHeading) // leaning left from current trajectory
+                setMotors(currTopLeft.getPower()-0.04, currTopRight.getPower()+0.04, currBotLeft.getPower()+0.04, currBotRight.getPower()-0.04);
+        } while (lightStore < 0.12); //drives until white line
+    } //why would this possibly work
     public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;
         do {
@@ -145,7 +171,6 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         double lightStore;
         double ultrasonStore;
         do {
-            Thread.sleep(50);
             lightStore = line.getLightDetected();
             ultrasonStore = ultrason.getUltrasonicLevel();
         } while (lightStore > 0.09 || (ultrasonStore != distance && ultrasonStore != distance+1 && ultrasonStore != distance-1)); //TODO: TEST!
@@ -169,14 +194,17 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         drive(0, power);
     } //test
     public void drive(double angle, double fullPow) {
+        //.O
+        //O.
         double workAngle = angle + Math.PI/4.0;
+
         currTopLeft.setPower(Math.sin(workAngle)*fullPow);
         currTopRight.setPower(Math.cos(workAngle)*fullPow);
         currBotLeft.setPower(Math.cos(workAngle)*fullPow);
         currBotRight.setPower(Math.sin(workAngle)*fullPow);  //crab drive code; makes assumptions that the top left and right are reversed
     } //WORKZ
     public void spin(double power) {
-        setMotors(power, power, -power, -power); //clockwise
+        setMotors(-power, -power, power, power); //clockwise
     }
     public void strafe180(double power, int time) throws InterruptedException{
         strafe180(power);
