@@ -20,14 +20,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Autonomous(name="Aleph Bots: Drive Straight", group="Autonomous")
 public class AlephBotsAutonomousDriveStraight extends LinearOpMode{
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
-    Servo LButtonPresser = null, RButtonPresser = null,/*ButtonPresser = null, LTouchServo = null, RTouchServo = null,*/
-            LHolderServo = null, RHolderServo = null;
+    Servo LButtonPresser = null, RButtonPresser = null, LHolderServo = null, RHolderServo = null;
     OpticalDistanceSensor GroundColorSensor =  null;
     ColorSensor BeaconColorSensor = null;
-    //TouchSensor LTouchSensor = null;
-    //TouchSensor RTouchSensor = null;
     GyroSensor Gyro = null;
-    //TouchSensor BeaconTouchSensor = null;
     UltrasonicSensor UltraSensor;
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -80,8 +76,6 @@ public class AlephBotsAutonomousDriveStraight extends LinearOpMode{
         }
         LHolderServo.setPosition(0.6);
         RHolderServo.setPosition(0.5);
-
-        Boolean running = true;
 
         driveStraight(FORWARD_SPEED);
         runtime.reset();
