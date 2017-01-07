@@ -11,18 +11,15 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 /**
- * Created by aaronkbutler on 10/21/16.
+ * Created by JacobDavoudgoleh on 1/7/17.
  */
-
-@Autonomous(name="Aleph Bots: Blue", group="Autonomous")
-public class AlephBotsAutonomousBlue extends LinearOpMode{
+@Autonomous(name="Aleph Bots: Red", group="Autonomous")
+public class AlephBotsAutonomousRed extends LinearOpMode {
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo LButtonPresser = null, RButtonPresser = null,/*ButtonPresser = null, LTouchServo = null, RTouchServo = null,*/
             LHolderServo = null, RHolderServo = null;
-    OpticalDistanceSensor GroundColorSensor =  null;
+    OpticalDistanceSensor GroundColorSensor = null;
     ColorSensor BeaconColorSensor = null;
     //TouchSensor LTouchSensor = null;
     //TouchSensor RTouchSensor = null;
@@ -31,25 +28,25 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
     UltrasonicSensor UltraSensor;
 
     private ElapsedTime runtime = new ElapsedTime();
-    static final long     NEXT_BEACON_TURN_TIME = 2000;
-    static final double     FORWARD_SPEED  = 0.75;
-    static final double     FORWARD2_SPEED = 0.06;
-    static final double     TURN_SPEED    = 0.2;
-    static final double     END_TURN_SPEED    = 0.3;
-    static final double     WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
-    static final int        HIT_MAX = 100;
+    static final long NEXT_BEACON_TURN_TIME = 2000;
+    static final double FORWARD_SPEED = 0.75;
+    static final double FORWARD2_SPEED = 0.06;
+    static final double TURN_SPEED = 0.2;
+    static final double END_TURN_SPEED = 0.3;
+    static final double WHITE_THRESHOLD = 0.04;  // spans between 0.1 - 0.5 from dark to light
+    static final int HIT_MAX = 100;
 
     int xVal, yVal, zVal = 0;     // Gyro rate Values
     int heading = 0;              // The Gyro integrated heading
     int angleZ = 0;
     boolean lastResetState = false;
-    boolean curResetState  = false;
+    boolean curResetState = false;
 
     String blueLevelS, redLevelS;
     int blueLevelI, redLevelI;
 
     @Override
-    public void runOpMode() throws InterruptedException{
+    public void runOpMode() throws InterruptedException {
         LButtonPresser = hardwareMap.servo.get("LButtonPresser");
         RButtonPresser = hardwareMap.servo.get("RButtonPresser");
         /*ButtonPresser = hardwareMap.servo.get("ButtonPresser");
@@ -101,7 +98,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
         Gyro.calibrate();
 
         // make sure the gyro is calibrated.
-        while (Gyro.isCalibrating())  {
+        while (Gyro.isCalibrating()) {
             Thread.sleep(50);
             idle();
         }
@@ -124,10 +121,10 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
         RHolderServo.setPosition(0.5);
         Boolean running = true;
         int step = 0;
-        while (opModeIsActive() && running){
+        while (opModeIsActive() && running) {
             telemetry.addData("Step: ", step);
             telemetry.update();
-            if(step == 0) { //Drive to line
+            if (step == 0) { //Drive to line
                 driveStraight(FORWARD_SPEED);
 
                 // run until the white line is seen OR the driver presses STOP;
@@ -152,10 +149,10 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                 stopDrive();
                 sleep(150);
             }
-            if(step == 2) { //Line up with the line
+            if (step == 2) { //Line up with the line
                 while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) {
 
-                    turnRight(TURN_SPEED);
+                    turnLeft(TURN_SPEED);
 
                     telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
                     telemetry.update();
@@ -167,7 +164,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                 while (opModeIsActive() && hitAmount < HIT_MAX /*&& runtime.seconds() < 2.0*/) {
                     if (GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD) {
                         driveStraightLeft(0.2);
-                        if(UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0){
+                        if (UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -178,7 +175,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                         telemetry.update();
                     } else {
                         driveStraightRight(0.2);
-                        if(UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0){
+                        if (UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -195,7 +192,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                 telemetry.addData("Hit Amount: ", hitAmount);
                 telemetry.update();
             }
-            if (step == 4){ //Reading Color and hitting
+            if (step == 4) { //Reading Color and hitting
                 runtime.reset();
                 LButtonPresser.setPosition(0.1); //Board facing straight up
                 RButtonPresser.setPosition(1.0); //Board facing straight up
@@ -215,9 +212,9 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                     telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
                     telemetry.addData("Red Level Calc:", redLevelI);
                     telemetry.addData("Blue Level Calc:", blueLevelI);
-                    if(redLevelI > blueLevelI) {
+                    if (redLevelI > blueLevelI) {
                         telemetry.addData("Color found:", "Red");
-                    } else if(blueLevelI > redLevelI) {
+                    } else if (blueLevelI > redLevelI) {
                         telemetry.addData("Color found:", "Blue");
                     } else {
                         telemetry.addData("Color found", "Undecided (Equal values)");
@@ -230,7 +227,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                     idle();
                 }
                 stopDrive();
-                if (blueLevelI > redLevelI) {
+                if (blueLevelI < redLevelI) {
                     LButtonPresser.setPosition(0.72); //Left Down Value
                     RButtonPresser.setPosition(1.0); //Right Up Value
                 } else {
@@ -250,29 +247,29 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                 RButtonPresser.setPosition(1.0);
 
             }
-            if(step == 5){ //Turn 90
+            if (step == 5) { //Turn 90
                 telemetry.addData(">", "Gyro Calibrating. Do Not move!");
                 telemetry.update();
                 Gyro.calibrate();
 
                 // make sure the gyro is calibrated.
-                while (Gyro.isCalibrating())  {
+                while (Gyro.isCalibrating()) {
                     Thread.sleep(50);
                     idle();
                 }
                 heading = Gyro.getHeading();
                 turnLeft(TURN_SPEED);
-                while (opModeIsActive() && ((heading <= 5) || (heading >= 285))) {
+                while (opModeIsActive() && (heading <= 80)) {
 
                     // Display the light level while we are looking for the line
                     heading = Gyro.getHeading();
-                    telemetry.addData("Heading:",  heading);
+                    telemetry.addData("Heading:", heading);
                     telemetry.update();
                     idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
                 }
                 stopDrive();
             }
-            if(step == 6){ //Go until Line 2
+            if (step == 6) { //Go until Line 2
                 driveStraight(1);
                 // run until the white line is seen OR the driver presses STOP;
                 while (opModeIsActive() && (GroundColorSensor.getLightDetected() < WHITE_THRESHOLD)) {
@@ -286,17 +283,17 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                 // Stop all motors//
                 stopDrive();
             }
-            if(step == 7){
+            if (step == 7) {
                 driveStraight(FORWARD_SPEED / 2);
 
                 sleep(75);//
                 stopDrive();
                 sleep(150);
             }
-            if(step == 8) { //Line up with the line
+            if (step == 8) { //Line up with the line
                 while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) {
 
-                    turnRight(TURN_SPEED);
+                    turnLeft(TURN_SPEED);
 
                     telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
                     telemetry.update();
@@ -308,7 +305,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                 while (opModeIsActive() && hitAmount < HIT_MAX /*&& runtime.seconds() < 2.0*/) {
                     if (GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD) {
                         driveStraightLeft(0.2);
-                        if(UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0){
+                        if (UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -319,7 +316,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                         telemetry.update();
                     } else {
                         driveStraightRight(0.2);
-                        if(UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0){
+                        if (UltraSensor.getUltrasonicLevel() <= 17.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -336,7 +333,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                 telemetry.addData("Hit Amount: ", hitAmount);
                 telemetry.update();
             }
-            if (step == 10){ //Reading Color and hitting
+            if (step == 10) { //Reading Color and hitting
                 runtime.reset();
                 LButtonPresser.setPosition(0.1); //Board facing straight up
                 RButtonPresser.setPosition(1.0); //Board facing straight up
@@ -356,9 +353,9 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                     telemetry.addData("Path", "Leg 4: %2.5f S Elapsed", runtime.seconds());
                     telemetry.addData("Red Level Calc:", redLevelI);
                     telemetry.addData("Blue Level Calc:", blueLevelI);
-                    if(redLevelI > blueLevelI) {
+                    if (redLevelI > blueLevelI) {
                         telemetry.addData("Color found:", "Red");
-                    } else if(blueLevelI > redLevelI) {
+                    } else if (blueLevelI > redLevelI) {
                         telemetry.addData("Color found:", "Blue");
                     } else {
                         telemetry.addData("Color found", "Undecided (Equal values)");
@@ -371,7 +368,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
                     idle();
                 }
                 stopDrive();
-                if (blueLevelI > redLevelI) {
+                if (blueLevelI < redLevelI) {
                     LButtonPresser.setPosition(0.72); //Left Down Value
                     RButtonPresser.setPosition(1.0); //Right Up Value
                 } else {
@@ -394,12 +391,14 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
         }
 
     }
+
     public void driveStraight(double power) {
         LF.setPower(-power);
         LB.setPower(-power);
         RF.setPower(-power);
         RB.setPower(-power);
     }
+
     public void driveStraightLeft(double power) {
         //LF.setPower(-(power/3.0));
         //LB.setPower(-(power/3.0));
@@ -408,6 +407,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
         RF.setPower(-power);
         RB.setPower(-power);
     }
+
     public void driveStraightRight(double power) {
         LF.setPower(-power);
         LB.setPower(-power);
@@ -416,6 +416,7 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
         RF.setPower(0);
         RB.setPower(0);
     }
+
     public void turnLeft(double power) {
         LF.setPower(power);
         LB.setPower(power);
@@ -435,9 +436,5 @@ public class AlephBotsAutonomousBlue extends LinearOpMode{
         LB.setPower(0);
         RF.setPower(0);
         RB.setPower(0);
-    }
-
-    public void moveServo(double location) {
-        //ButtonPresser.setPosition(location);
     }
 }

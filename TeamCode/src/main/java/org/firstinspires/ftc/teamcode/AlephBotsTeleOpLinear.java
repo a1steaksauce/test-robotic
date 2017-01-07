@@ -19,11 +19,11 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
     //DECLARING MOTORS, SERVOS, and DRIVE
     AlephBotsRobotDriving drive;
     DcMotor RF, LF, RB, LB, Lift;
-    Servo ButtonPresser, LTouchServo, RTouchServo, LHolderServo, RHolderServo;
+    Servo /*ButtonPresser, LTouchServo, RTouchServo,*/ LHolderServo, RHolderServo, LButtonPresser, RButtonPresser;
     OpticalDistanceSensor GroundColorSensor;
     ColorSensor BeaconColorSensor;
-    TouchSensor LTouchSensor;
-    TouchSensor RTouchSensor;
+    //TouchSensor LTouchSensor;
+    //TouchSensor RTouchSensor;
     //TouchSensor BeaconTouchSensor;
     UltrasonicSensor UltraSensor;
 
@@ -44,16 +44,17 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
         //INITIALIZING EVERYTHING
         drive = new AlephBotsRobotDriving(hardwareMap.dcMotor.get("LF"), hardwareMap.dcMotor.get("LB"),
                 hardwareMap.dcMotor.get("RF"), hardwareMap.dcMotor.get("RB"));
-        ButtonPresser = hardwareMap.servo.get("ButtonPresser");
+        LButtonPresser = hardwareMap.servo.get("LButtonPresser");
+        RButtonPresser = hardwareMap.servo.get("RButtonPresser");
 
-        LTouchServo = hardwareMap.servo.get("LTouchServo");
-        RTouchServo = hardwareMap.servo.get("RTouchServo");
+        //LTouchServo = hardwareMap.servo.get("LTouchServo");
+        //RTouchServo = hardwareMap.servo.get("RTouchServo");
         LHolderServo = hardwareMap.servo.get("LHolderServo");
         RHolderServo = hardwareMap.servo.get("RHolderServo");
         GroundColorSensor = hardwareMap.opticalDistanceSensor.get("GroundColorSensor");
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
-        LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
-        RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
+        //LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
+        //RTouchSensor = hardwareMap.touchSensor.get("RTouchSensor");
         UltraSensor = hardwareMap.ultrasonicSensor.get("UltraSensor");
         //BeaconTouchSensor = hardwareMap.touchSensor.get("BeaconTouchSensor");
 
@@ -64,13 +65,14 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
         Lift = hardwareMap.dcMotor.get("Lift");
         //RF.setDirection(DcMotor.Direction.REVERSE);
         //RB.setDirection(DcMotor.Direction.REVERSE);
-        ButtonPresser.setPosition(0.35);
+        LButtonPresser.setPosition(0.0);
+        RButtonPresser.setPosition(1.0);
 
-        LTouchServo.setPosition(1.0);
-        RTouchServo.setPosition(0.0);
+        //LTouchServo.setPosition(1.0);
+        //RTouchServo.setPosition(0.0);
 
-        LHolderServo.setPosition(0.65);
-        RHolderServo.setPosition(0.3);
+        LHolderServo.setPosition(0.6);
+        RHolderServo.setPosition(0.5);
 
         GroundColorSensor.enableLed(true);
         BeaconColorSensor.enableLed(true);
@@ -84,16 +86,15 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             drive.changeDriveSpeed(gamepad1.dpad_up, gamepad1.dpad_down);
 
             //BUTTON PUSHER
-            if (gamepad1.x && ButtonPresser.getPosition() < 1.0) {
-                ButtonPresser.setPosition(ButtonPresser.getPosition() + 0.01);
-            } else if (gamepad1.b && ButtonPresser.getPosition() > 0.0) {
-                ButtonPresser.setPosition(ButtonPresser.getPosition() - 0.01);
+            if (gamepad1.x) {
+                LButtonPresser.setPosition(0.72);
+            } else if (gamepad1.b) {
+                RButtonPresser.setPosition(0.2);
             }
-
             //LIFT
-            if (gamepad1.right_bumper) {
+            if (gamepad1.left_bumper) {
                 Lift.setPower(0.7); //SEVEN TENTHS OF THE POWER
-            } else if (gamepad1.left_bumper) {
+            } else if (gamepad1.right_bumper) {
                 Lift.setPower(-0.1); //TENTH OF THE POWER
             }
             else {
@@ -107,21 +108,24 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             }
             //LIFT TOUCH SENSOR SERVOS
             if (gamepad1.y){
-                ButtonPresser.setPosition(0.35);
+                LButtonPresser.setPosition(0.0);
+                RButtonPresser.setPosition(1.0);
 
-                RTouchServo.setPosition(0.0);
-                LTouchServo.setPosition(1.0);
+                //RTouchServo.setPosition(0.0);
+                //LTouchServo.setPosition(1.0);
 
-                LHolderServo.setPosition(0.65);
-                RHolderServo.setPosition(0.3);
+                LHolderServo.setPosition(0.6);
+                RHolderServo.setPosition(0.5);
             }
             //TELEMETRY
             telemetry.addData("Aleph Bots Robot:", "Running!");
             telemetry.addData("Driving Mode:", drive.getDriveMode());
             telemetry.addData("Driving Speed:", drive.getDriveSpeed());
-            telemetry.addData("ButtonPresser position:", ButtonPresser.getPosition());
-            telemetry.addData("LTouchServo position:", LTouchServo.getPosition());
-            telemetry.addData("RTouchServo position:", RTouchServo.getPosition());
+            telemetry.addData("LButtonPresser position:", LButtonPresser.getPosition());
+            telemetry.addData("RButtonPresser position:", RButtonPresser.getPosition());
+            telemetry.addData("Distance:", UltraSensor.getUltrasonicLevel());
+            telemetry.addData("LHolderServo position:", LHolderServo.getPosition());
+            telemetry.addData("RHolderServo position:", RHolderServo.getPosition());
             telemetry.update();
         }
 
@@ -190,7 +194,7 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
 
                 }
 
-            // Stop all motors
+                // Stop all motors
                 stopDrive();
             }
             if (step == 1) {
@@ -221,10 +225,10 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
             if (step == 3) {
                 int hitAmount = 0;
                 runtime.reset();
-                while (opModeIsActive() && hitAmount < 10 /*&& runtime.seconds() < 2.0*/) {
+                while (opModeIsActive() && hitAmount < 100 /*&& runtime.seconds() < 2.0*/) {
                     if (GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD) {
                         driveStraightLeft(0.2);
-                        if(UltraSensor.getUltrasonicLevel() <= 9.0){
+                        if(UltraSensor.getUltrasonicLevel() <= 17.0){
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -235,7 +239,7 @@ public class AlephBotsTeleOpLinear extends LinearOpMode{
                         telemetry.update();
                     } else {
                         driveStraightRight(0.2);
-                        if(UltraSensor.getUltrasonicLevel() <= 9.0){
+                        if(UltraSensor.getUltrasonicLevel() <= 17.0){
                             hitAmount++;
                         } else {
                             hitAmount = 0;
