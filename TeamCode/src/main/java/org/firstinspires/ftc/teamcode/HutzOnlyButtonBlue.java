@@ -5,37 +5,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 /**
  * hi iit is Eliezer in 12
  */
-@Autonomous(name="hutz blue button only", group="hutzAuto")
+@Autonomous(name="Hutzbots blue with shooting and buttons", group="hutzAuto")
 
-public class HutzOnlyButtonBlue extends HutzFunc {
+public class HutzOnlyButtonBlue extends HutzFuncMK2 {
     @Override
     public void runOpMode() throws InterruptedException {
-        initializeTeam("blue");
-        initializeHardware();
-        reset();
-        beacon.setPosition(0.5);
+
+        initializeHardware("blue");
         while (!isStarted()) {
-            logToTelemetry();
         }
 
         while(opModeIsActive()) {
             //todo: write code here
-            shootOnce();
-            strafeRight45(0.75);
-            doTilDistance(8); //cm
-            reset();
-            for (int i = 0; i < 2; i++) {
-                Thread.sleep(500);
-                driveStraight(0.5);
-                doTilLine();
-                reset();
-                Thread.sleep(500);
-                pushButton();
-            }
-            Thread.sleep(500);
-            strafeLeft45(-0.75);
-            doTilPlatform(8);
-            reset();
+            idle();
         }
     }
 }
