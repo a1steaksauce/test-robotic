@@ -105,13 +105,17 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
                 intake.setPower(0);
             }
 
-            if(gamepad1.x){
-                release.setPower(-0.2);
+            if(gamepad1.right_trigger >0.02){
+                release.setPower(-gamepad1.right_trigger /3);
+            } else {
+                release.setPower(0);
+            }
+            if(gamepad1.left_trigger >0.02){
+                release.setPower(gamepad1.left_trigger /3);
             } else {
                 release.setPower(0);
             }
             //TODO: maybe add another controller
-
         }
     }
 }
