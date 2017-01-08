@@ -105,7 +105,7 @@ public class TeleOpHutzMK2 extends HutzFuncMK2 {
                 intake.setPower(0);
             }
 
-            if(gamepad1.a){
+            if(gamepad1.x){
                 release.setPower(-0.2);
             } else {
                 release.setPower(0);
