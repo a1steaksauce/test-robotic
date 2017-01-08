@@ -16,17 +16,52 @@ public class HutzOnlyButtonBlueNS extends HutzFuncMK2 {
         }
 
         while(opModeIsActive()) {
-            drive(Math.PI/4.0, 0.75);
-            doTilDistance(8); //cm
+//            driveForward(0.1, 500);
+//            spin(0.2);
+//            double desiredAngle = (compass.getDirection() + 180) % 360;
+//            double track;
+//            do {
+//                sleep(50);
+//                track=compass.getDirection();
+//            } while(! (track > desiredAngle + 5 && track < desiredAngle - 5) );
+//            resetWheels();
+            currTopLeft = botRight;
+            currTopRight = botLeft;
+            currBotLeft = topRight;
+            currBotRight = topLeft;
+
+            drive(Math.PI/4.0, 0.2);
+            doTilDistance(20.0);
             resetWheels();
-            for (int i = 0; i < 2; i++) {
-                Thread.sleep(500);
-                driveForward(0.5);
+            sleep(500);
+            driveForward(0.2);
+            doTilLine();
+            resetWheels();
+            sleep(500);
+            if(line.getLightDetected() < 0.12){
+                drive(3*Math.PI/2, 0.1);
                 doTilLine();
                 resetWheels();
-                Thread.sleep(500);
-                pushButton();
             }
+            pushButton();
+            driveForward(0.2);
+            sleep(300);
+            doTilLine();
+            resetWheels();
+            sleep(500);
+            if(line.getLightDetected() < 0.12){
+                drive(3*Math.PI/2, 0.1);
+                doTilLine();
+                resetWheels();
+            }
+            pushButton();
+            drive(Math.PI, 0.1);
+            doTilDistance(35.0);
+            drive(3*Math.PI/2, 0.2);
+            doTilLine();
+            sleep(500);
+            resetWheels();
+            requestOpModeStop();
             idle();
         }
     }
