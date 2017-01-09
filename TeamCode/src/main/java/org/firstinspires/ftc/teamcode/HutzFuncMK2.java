@@ -25,7 +25,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     int side = BLANK;
     DcMotor topLeft, topRight, botLeft, botRight;
     DcMotor currTopLeft, currTopRight, currBotLeft, currBotRight;
-    //DcMotor release;
+    DcMotor release;
     DcMotor intake;
    // private DcMotor intake, release;
     UltrasonicSensor ultrason;
@@ -48,7 +48,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         currBotRight = botRight;
 
         intake = hardwareMap.dcMotor.get("intake");
-        //release = hardwareMap.dcMotor.get("release");
+        release = hardwareMap.dcMotor.get("release");
         ultrason = hardwareMap.ultrasonicSensor.get("ultrason");
         beaconLeft = hardwareMap.servo.get("beaconLeft");
         beaconRight = hardwareMap.servo.get("beaconRight");
@@ -149,7 +149,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
                 setMotors(currTopLeft.getPower()+0.04, currTopRight.getPower()-0.04, currBotLeft.getPower()-0.04, currBotRight.getPower()+0.04);
             else if(compass.getDirection() < compassHeading) // leaning left from current trajectory
                 setMotors(currTopLeft.getPower()-0.04, currTopRight.getPower()+0.04, currBotLeft.getPower()+0.04, currBotRight.getPower()-0.04);
-        } while (lightStore < 0.12); //drives until white line
+        } while (lightStore < 0.11); //drives until white line
     } //why would this possibly work
     public void correctTilX(){
         double compassHeading = compass.getDirection();
@@ -238,19 +238,26 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         setMotors(all, all, all, all);
     }
     public void pushButton() throws InterruptedException{
-        if((cs.blue() > cs.red() && team.equals("blue")) || (cs.red()>cs.blue() && team.equals("red"))) {
+        double blue = cs.blue();
+        double red = cs.red();
+        sleep(500);
+        drive((team.equals("blue") ? Math.PI : 0), 0.2);
+        sleep(1000);
+        resetWheels();
+        if((blue > red && team.equals("blue")) || (red>blue && team.equals("red"))) {
             setServo(team.equals("red"));
         } else {
             setServo(team.equals("blue")); //opposite of above
         }
         drive((team.equals("red") ? Math.PI : 0), 0.2);
-        Thread.sleep(500);
+        Thread.sleep(1500);
         resetWheels();
-        Thread.sleep(200);
+        Thread.sleep(400);
         drive((team.equals("blue") ? Math.PI : 0), 0.2);
-        doTilDistance(8);
+        sleep(500);
         resetWheels();
         resetServos();
+        sleep(500);
     }
     public double[] colorClose(){
         int[] currColor = {cs.red(), cs.green(), cs.blue()};

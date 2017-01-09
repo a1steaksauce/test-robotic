@@ -48,7 +48,7 @@ public class hutzRobotTest extends LinearOpMode {
                 currBotRight.setPower(0);
             }
             if(gamepad1.a){
-                intake.setPower(-0.5);
+                intake.setPower(-0.2);
             } else {
                 intake.setPower(0);
             }
