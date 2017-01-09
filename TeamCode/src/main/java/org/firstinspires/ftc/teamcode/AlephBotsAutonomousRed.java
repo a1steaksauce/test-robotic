@@ -262,7 +262,6 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 turnRight(TURN_SPEED);
                 while (opModeIsActive() && ((heading >= 355) ||  (heading <= 75))) {
 
-                    // Display the light level while we are looking for the line
                     heading = Gyro.getHeading();
                     telemetry.addData("Heading:", heading);
                     telemetry.update();
