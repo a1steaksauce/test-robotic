@@ -11,11 +11,14 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.hardware.UltrasonicSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**
- * Created by JacobDavoudgoleh on 1/7/17.
+ * Created by aaronkbutler on 10/21/16.
  */
-@Autonomous(name="Aleph Bots: Red", group="Autonomous")
-public class AlephBotsAutonomousRed extends LinearOpMode {
+
+@Autonomous(name = "Aleph Bots: Blue With Ramp", group = "Autonomous")
+public class AlephBotsAutonomousBlueWithRamp extends LinearOpMode {
     DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
     Servo LButtonPresser = null, RButtonPresser = null,/*ButtonPresser = null, LTouchServo = null, RTouchServo = null,*/
             LHolderServo = null, RHolderServo = null;
@@ -102,10 +105,11 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
             Thread.sleep(50);
             idle();
         }
+
         heading = Gyro.getHeading();
 
         while (!isStarted()) {
-            telemetry.addData("Gyro: ", Gyro.getHeading());
+
             telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
             telemetry.addData("RGB Level:", BeaconColorSensor.argb());
             telemetry.addData("Red Value:", BeaconColorSensor.red());
@@ -152,7 +156,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
             if (step == 2) { //Line up with the line
                 while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) {
 
-                    turnLeft(TURN_SPEED);
+                    turnRight(TURN_SPEED);
 
                     telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
                     telemetry.update();
@@ -227,7 +231,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                     idle();
                 }
                 stopDrive();
-                if (blueLevelI < redLevelI) {
+                if (blueLevelI > redLevelI) {
                     LButtonPresser.setPosition(0.72); //Left Down Value
                     RButtonPresser.setPosition(1.0); //Right Up Value
                 } else {
@@ -258,9 +262,10 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                     Thread.sleep(50);
                     idle();
                 }
+
                 heading = Gyro.getHeading();
-                turnRight(TURN_SPEED);
-                while (opModeIsActive() && ((heading >= 355) ||  (heading <= 75))) {
+                turnLeft(TURN_SPEED);
+                while (opModeIsActive() && ((heading <= 5) || (heading >= 285))) {
 
                     // Display the light level while we are looking for the line
                     heading = Gyro.getHeading();
@@ -272,7 +277,6 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 telemetry.addData("Heading:", heading);
                 telemetry.update();
                 sleep(1500);
-
             }
             if (step == 6) { //Go until Line 2
                 driveStraight(1);
@@ -286,9 +290,9 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                     idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
 
                 }
-                // Stop all motors//
-                stopDrive();
             }
+            // Stop all motors//
+            stopDrive();
             if (step == 7) {
                 driveStraight(FORWARD_SPEED / 2);
 
@@ -299,7 +303,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
             if (step == 8) { //Line up with the line
                 while (opModeIsActive() && GroundColorSensor.getLightDetected() < WHITE_THRESHOLD) {
 
-                    turnLeft(TURN_SPEED);
+                    turnRight(TURN_SPEED);
 
                     telemetry.addData("Light Level:", GroundColorSensor.getLightDetected());
                     telemetry.update();
@@ -374,7 +378,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                     idle();
                 }
                 stopDrive();
-                if (blueLevelI < redLevelI) {
+                if (blueLevelI > redLevelI) {
                     LButtonPresser.setPosition(0.72); //Left Down Value
                     RButtonPresser.setPosition(1.0); //Right Up Value
                 } else {
@@ -390,12 +394,42 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 sleep(200);
                 stopDrive();
                 stopDrive();
+
+            }
+            if(step == 11){
+
+                telemetry.addData(">", "Gyro Calibrating. Do Not move!");
+                telemetry.update();
+                Gyro.resetZAxisIntegrator();
+                Gyro.calibrate();
+
+                // make sure the gyro is calibrated.
+                while (Gyro.isCalibrating()) {
+                    Thread.sleep(50);
+                    idle();
+                }
+
+                heading = Gyro.getHeading();
+                driveStraightRight(-0.25);
+                while (opModeIsActive() && ((heading <= 5) || (heading >= 330))) {
+
+                    // Display the light level while we are looking for the line
+                    heading = Gyro.getHeading();
+                    telemetry.addData("Heading:", heading);
+                    telemetry.update();
+                    idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+                }
+                stopDrive();
+                telemetry.addData("Heading:", heading);
+                telemetry.update();
+                sleep(200);
+                driveStraight(-0.5);
+                sleep(3000);
+                stopDrive();
                 running = false;
             }
             step++;
-
         }
-
     }
 
     public void driveStraight(double power) {
@@ -442,5 +476,9 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
         LB.setPower(0);
         RF.setPower(0);
         RB.setPower(0);
+    }
+
+    public void moveServo(double location) {
+        //ButtonPresser.setPosition(location);
     }
 }
