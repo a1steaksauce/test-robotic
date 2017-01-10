@@ -17,32 +17,29 @@ public class HutzOnlyButtonRedNS extends HutzFuncMK2 {
 
         while(opModeIsActive()) {
             //todo: write code here
-            drive(3*Math.PI/4.0, 0.2);
-            doTilDistance(20.0);
+            drive(3*Math.PI/4.0, 0.23);
+            doTilDistance(25.0);
             resetWheels();
             sleep(500);
             driveForward(0.2);
             doTilLine();
             resetWheels();
             sleep(500);
-            if(line.getLightDetected() < 0.11){
-                drive(3*Math.PI/2, 0.1);
-                doTilLine();
-            }
+//            if(line.getLightDetected() < 0.11){
+//                drive(3*Math.PI/2, 0.13);
+//                doTilLine();
+//            }
             pushButton();
-            driveForward(0.2);
+            driveForward(0.3);
             sleep(500);
             doTilLine();
             resetWheels();
             sleep(500);
-            if(line.getLightDetected() < 0.11){
-                drive(3*Math.PI/2, 0.1);
-                doTilLine();
-            }
+//            if(line.getLightDetected() < 0.11){
+//                drive(3*Math.PI/2, 0.13);
+//                doTilLine();
+//            }
             pushButton();
-            while(!gamepad1.x){
-                logToTelemetry();
-            }
             requestOpModeStop();
             idle();
         }

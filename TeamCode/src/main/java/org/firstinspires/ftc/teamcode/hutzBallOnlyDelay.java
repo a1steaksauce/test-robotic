@@ -14,7 +14,10 @@ public class hutzBallOnlyDelay extends HutzFuncMK2 {
         }
         while(opModeIsActive()){
             sleep(20000);
-            driveForward(1, 3000);
+            driveForward(0.5);
+            doTilPlatform();
+            resetWheels();
+            requestOpModeStop();
             idle();
         }
     }

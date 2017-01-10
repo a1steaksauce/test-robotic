@@ -13,7 +13,10 @@ public class hutzBallOnly extends HutzFuncMK2 {
         while(!isStarted()) {
         }
         while(opModeIsActive()){
-            driveForward(1,3000);
+            driveForward(0.5);
+            doTilPlatform();
+            resetWheels();
+            requestOpModeStop();
             idle();
         }
     }

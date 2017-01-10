@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 /**
  * hi iit is Eliezer in 12
@@ -29,38 +30,43 @@ public class HutzOnlyButtonBlueNS extends HutzFuncMK2 {
             currTopRight = botLeft;
             currBotLeft = topRight;
             currBotRight = topLeft;
+            currTopLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+            currTopRight.setDirection(DcMotorSimple.Direction.REVERSE);
+            currBotLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+            currBotRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-            drive(Math.PI/4.0, 0.2);
-            doTilDistance(20.0);
+            drive(Math.PI/4.0, 0.23);
+            doTilDistance(25.0);
             resetWheels();
             sleep(500);
-            driveForward(0.2);
+            driveForward(0.3);
+            sleep(500);
             doTilLine();
             resetWheels();
             sleep(500);
-            if(line.getLightDetected() < 0.12){
-                drive(3*Math.PI/2, 0.1);
-                doTilLine();
-                resetWheels();
-            }
+//            if(line.getLightDetected() < 0.12){
+//                drive(3*Math.PI/2, 0.13);
+//                doTilLine();
+//                resetWheels();
+//            }
             pushButton();
             driveForward(0.2);
             sleep(300);
             doTilLine();
             resetWheels();
             sleep(500);
-            if(line.getLightDetected() < 0.12){
-                drive(3*Math.PI/2, 0.1);
-                doTilLine();
-                resetWheels();
-            }
+//            if(line.getLightDetected() < 0.12){
+//                drive(3*Math.PI/2, 0.13);
+//                doTilLine();
+//                resetWheels();
+//            }
             pushButton();
-            drive(Math.PI, 0.1);
-            doTilDistance(35.0);
-            drive(3*Math.PI/2, 0.2);
-            doTilLine();
-            sleep(500);
-            resetWheels();
+//            drive(Math.PI, 0.1);
+//            doTilDistance(35.0);
+//            drive(3*Math.PI/2, 0.2);
+//            doTilLine();
+//            sleep(500);
+//            resetWheels();
             requestOpModeStop();
             idle();
         }

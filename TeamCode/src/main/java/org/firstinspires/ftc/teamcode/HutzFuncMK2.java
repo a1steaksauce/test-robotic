@@ -137,7 +137,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         do {
             sleep(50);
             lightStore = line.getLightDetected();
-        } while (lightStore < 0.12); //drives until white line
+        } while (lightStore < 0.14); //drives until white line
     } //ready to test
     public void doTilLineWithCorrection() throws InterruptedException { //waits until white line
         double lightStore;
@@ -166,9 +166,11 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
     public void doTilDistance (double distance) throws InterruptedException{ //waits until robot is a certain distance from a thing in cm
         double ultrasonStore;
         do {
-            sleep(50);
+           // sleep(50);
             ultrasonStore = ultrason.getUltrasonicLevel();
-        } while (ultrasonStore != distance && ultrasonStore != distance+1 && ultrasonStore != distance-1);
+            telemetry.addData("ult,", ultrasonStore);
+            updateTelemetry(telemetry);
+        } while (ultrasonStore == 0 || ultrasonStore != distance+1 && ultrasonStore != distance +2 && ultrasonStore != distance && ultrasonStore != distance -1 && ultrasonStore != distance -2 && ultrasonStore > distance);
     } //ready to test
     public void doTilPlatform (double distance) throws InterruptedException{ //waits until robot is on platform
         double lightStore;
@@ -184,7 +186,7 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         do {
             Thread.sleep(50);
             lightStore = line.getLightDetected();
-        } while (lightStore > 0.09);
+        } while (lightStore > 0.06);
     } //test
     public void driveForward(double power){
         drive(Math.PI/2, power);
@@ -238,6 +240,9 @@ public abstract class HutzFuncMK2 extends LinearOpMode {
         setMotors(all, all, all, all);
     }
     public void pushButton() throws InterruptedException{
+        drive((team.equals("red") ? Math.PI : 0), 0.2);
+        sleep(500);
+        resetWheels();
         double blue = cs.blue();
         double red = cs.red();
         sleep(500);
