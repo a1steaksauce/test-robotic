@@ -16,9 +16,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 @Autonomous(name="Aleph Bots: Red", group="Autonomous")
 public class AlephBotsAutonomousRed extends LinearOpMode {
-    DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null;
+    DcMotor RF = null, LF = null, RB = null, LB = null, Lift = null, Shooter = null;
     Servo LButtonPresser = null, RButtonPresser = null,/*ButtonPresser = null, LTouchServo = null, RTouchServo = null,*/
-            LHolderServo = null, RHolderServo = null;
+            LHolderServo = null, RHolderServo = null, ShooterServo = null;
     OpticalDistanceSensor GroundColorSensor = null;
     ColorSensor BeaconColorSensor = null;
     //TouchSensor LTouchSensor = null;
@@ -54,11 +54,13 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
         RTouchServo = hardwareMap.servo.get("RTouchServo");*/
         LHolderServo = hardwareMap.servo.get("LHolderServo");
         RHolderServo = hardwareMap.servo.get("RHolderServo");
+        ShooterServo = hardwareMap.servo.get("ShooterServo");
         RF = hardwareMap.dcMotor.get("RF");
         LF = hardwareMap.dcMotor.get("LF");
         RB = hardwareMap.dcMotor.get("RB");
         LB = hardwareMap.dcMotor.get("LB");
         Lift = hardwareMap.dcMotor.get("Lift");
+        Shooter = hardwareMap.dcMotor.get("Shooter");
         GroundColorSensor = hardwareMap.opticalDistanceSensor.get("GroundColorSensor");
         BeaconColorSensor = hardwareMap.colorSensor.get("BeaconColorSensor");
         //LTouchSensor = hardwareMap.touchSensor.get("LTouchSensor");
@@ -79,6 +81,8 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
 
         LHolderServo.setPosition(0.9);
         RHolderServo.setPosition(0.2);
+
+        ShooterServo.setPosition(0.0);
 
         GroundColorSensor.enableLed(true);
         BeaconColorSensor.enableLed(false);
@@ -164,7 +168,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 while (opModeIsActive() && hitAmount < HIT_MAX /*&& runtime.seconds() < 2.0*/) {
                     if (GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD) {
                         driveStraightLeft(0.2);
-                        if (UltraSensor.getUltrasonicLevel() <= 18.0 && UltraSensor.getUltrasonicLevel() != 0) {
+                        if (UltraSensor.getUltrasonicLevel() <= 19.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -175,7 +179,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                         telemetry.update();
                     } else {
                         driveStraightRight(0.2);
-                        if (UltraSensor.getUltrasonicLevel() <= 18.0 && UltraSensor.getUltrasonicLevel() != 0) {
+                        if (UltraSensor.getUltrasonicLevel() <= 19.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -246,6 +250,24 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 LButtonPresser.setPosition(0.0);
                 RButtonPresser.setPosition(1.0);
 
+                Shooter.setPower(-1.0);
+                sleep(1000);
+                Shooter.setPower(0);
+
+                ShooterServo.setPosition(0.7);
+                sleep(500);
+                ShooterServo.setPosition(0.0);
+                sleep(150);
+
+                Shooter.setPower(0.75);
+                sleep(500);
+                Shooter.setPower(0);
+                sleep(150);
+
+                Shooter.setPower(-1.0);
+                sleep(1000);
+                Shooter.setPower(0);
+
             }
             if (step == 5) { //Turn 90
                 telemetry.addData(">", "Gyro Calibrating. Do Not move!");
@@ -260,18 +282,18 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 }
                 heading = Gyro.getHeading();
                 turnRight(TURN_SPEED);
-                while (opModeIsActive() && ((heading >= 355) ||  (heading <= 75))) {
+                while (opModeIsActive() && ((heading >= 355) ||  (heading <= 85))) {
 
+                    // Display the light level while we are looking for the line
                     heading = Gyro.getHeading();
                     telemetry.addData("Heading:", heading);
                     telemetry.update();
-                    idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
+                    idle(); // Always call idle() at the bottom of your while(opMakba kb4odeIsActive()) loop
                 }
                 stopDrive();
                 telemetry.addData("Heading:", heading);
                 telemetry.update();
                 sleep(1500);
-
             }
             if (step == 6) { //Go until Line 2
                 driveStraight(1);
@@ -310,7 +332,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 while (opModeIsActive() && hitAmount < HIT_MAX /*&& runtime.seconds() < 2.0*/) {
                     if (GroundColorSensor.getLightDetected() >= WHITE_THRESHOLD) {
                         driveStraightLeft(0.2);
-                        if (UltraSensor.getUltrasonicLevel() <= 18.0 && UltraSensor.getUltrasonicLevel() != 0) {
+                        if (UltraSensor.getUltrasonicLevel() <= 19.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -321,7 +343,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                         telemetry.update();
                     } else {
                         driveStraightRight(0.2);
-                        if (UltraSensor.getUltrasonicLevel() <= 18.0 && UltraSensor.getUltrasonicLevel() != 0) {
+                        if (UltraSensor.getUltrasonicLevel() <= 19.0 && UltraSensor.getUltrasonicLevel() != 0) {
                             hitAmount++;
                         } else {
                             hitAmount = 0;
@@ -392,9 +414,7 @@ public class AlephBotsAutonomousRed extends LinearOpMode {
                 running = false;
             }
             step++;
-
         }
-
     }
 
     public void driveStraight(double power) {

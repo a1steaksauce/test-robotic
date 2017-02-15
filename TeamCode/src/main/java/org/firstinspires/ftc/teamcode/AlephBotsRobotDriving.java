@@ -17,6 +17,8 @@ public class AlephBotsRobotDriving {
     private Boolean normalDrive = true;
     private Boolean normalSpeed = true;
 
+    double quarterPI = Math.PI / 4;
+
     public AlephBotsRobotDriving(DcMotor LF, DcMotor LB, DcMotor RF, DcMotor RB){
     //Creates what an instance of this class should look like
 
@@ -30,6 +32,51 @@ public class AlephBotsRobotDriving {
 
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDriveB.setDirection(DcMotor.Direction.REVERSE);
+    }
+
+    public double atan2(double x, double y){
+        double phi = 0;   //phi=radians;
+
+        if (x>0) {phi=Math.atan(y/x);}
+        else
+        if ((x<0)&&(y>=0))  {phi=Math.PI+Math.atan(y/x);}
+        else
+        if ((x<0)&&(y<0))   {phi=-Math.PI+Math.atan(y/x);}
+        else
+        if ((x==0)&&(y>0))  {phi=Math.PI/2;}
+        else
+        if ((x==0)&&(y<0))  {phi=-Math.PI/2;}
+        else
+        if ((x==0)&&(y==0)) {phi=0;}
+        return phi;
+    }
+    public void mechanumDrive(double speed, double theta, double factor, double rotate) {
+        leftDrive.setPower(speed * -Math.sin(theta + quarterPI) * factor - (rotate * factor));
+        rightDriveB.setPower(speed * -Math.sin(theta + quarterPI) * factor + (rotate * factor));
+        rightDrive.setPower(speed * + Math.cos(theta + quarterPI) * factor + (rotate * factor));
+        leftDriveB.setPower(speed * + Math.cos(theta + quarterPI) * factor - (rotate * factor));
+    }
+
+    public void mechanumDrive(Gamepad gamepad) {
+        double speed, theta;
+        double rotate;
+        int DrivingScale = 1;
+        speed = (Math.sqrt(Math.pow(gamepad.left_stick_x, 2) + Math.pow(gamepad.left_stick_y, 2)));
+        if (speed > 10){
+            theta = atan2(gamepad.left_stick_y,gamepad.left_stick_x);
+        }
+        else // The joystick values are small enough to fail
+        {
+            theta = 0; speed = 0;
+        }
+        if (Math.abs(gamepad.right_stick_x) > 10){
+            rotate = gamepad.right_stick_x;
+        }
+        else // No rotation is detected
+        {
+            rotate = 0;
+        }
+        mechanumDrive(speed, theta, DrivingScale, rotate);
     }
     public void tankDrive(double leftPower, double rightPower){ //Function for driving with parameters leftDrive and RightDrive
         leftPower = Range.clip(leftPower, -1, 1); //Clip the values
