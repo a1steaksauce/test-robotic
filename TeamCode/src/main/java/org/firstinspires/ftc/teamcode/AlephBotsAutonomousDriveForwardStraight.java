@@ -21,7 +21,7 @@ public class AlephBotsAutonomousDriveForwardStraight extends LinearOpMode {
             LHolderServo = null, RHolderServo = null, ShooterServo = null;
     OpticalDistanceSensor GroundColorSensor = null;
     ColorSensor BeaconColorSensor = null;
-    //TouchSensor LTouchSensor = null;
+    //TouchSensor LTouchSensor = null
     //TouchSensor RTouchSensor = null;
     GyroSensor Gyro = null;
     //TouchSensor BeaconTouchSensor = null;
